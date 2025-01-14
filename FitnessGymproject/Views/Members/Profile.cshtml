@@ -1,0 +1,173 @@
+﻿@model FitnessGymproject.Models.Member
+
+@{
+
+        Layout = "~/Views/Shared/Home_Layout.cshtml";
+
+}
+
+
+
+<section class="vh-100" style=" padding:200px;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-lg-8 mb-4 mb-lg-0">
+                <div class="card admin-profile-card" style="border-radius: 1rem; overflow: hidden;">
+                    <div class="row g-0">
+                        <!-- Profile Section -->
+                        <div class="col-md-4 gradient-custom text-center text-white d-flex flex-column align-items-center justify-content-center">
+                            
+                                <img src="@Url.Content("~/images/" + ViewData["ImageProfileUrl"])" class="img-fluid my-4 rounded-circle" style="width: 120px; height: 120px; object-fit: cover;" />
+                            
+                         
+                            <h5 class="mt-3">@ViewData["FullName"]</h5>
+                            <p class="mb-2">@ViewData["Gender"]</p>
+                            <a asp-action="UpadtaMemberProfile" asp-route-id="@Model.MemberId" class="text-white btn btn-outline-light btn-sm">
+                                <i class="far fa-edit"></i> Edit
+                            </a>
+                        </div>
+
+                        <!-- Information Section -->
+                        <div class="col-md-8">
+                            <div class="card-body p-5">
+                                <h6 class="text-primary mb-3">Personal Information</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <h6>Address</h6>
+                                        <p class="text-muted">@ViewData["Address"]</p>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <h6>Phone Number</h6>
+                                        <p class="text-muted">@ViewData["PhoneNumber"]</p>
+                                    </div>
+                                </div>
+                                <h6 class="text-primary mt-4 mb-3">Subscription Details</h6>
+                                <hr class="mt-0 mb-4">
+                                
+                                  
+                                <h6 class="text-primary mt-4 mb-3">Subscriptions</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        @if (Model.Subscriptions != null && Model.Subscriptions.Any())
+                                        {
+                                            <ul class="list-unstyled">
+                                                @foreach (var subscription in Model.Subscriptions)
+                                                {
+                                                    <li>@subscription.PlanName</li>
+                                                }
+                                            </ul>
+                                        }
+                                    </div>
+                                </div>
+                                @* <div class="d-flex justify-content-start mt-4"> *@
+                                @*     <a asp-action="Details" asp-route-id="@Model.MemberId" class="btn btn-outline-primary me-3 text-white"> *@
+                                @*         <i class="mdi mdi-information-outline"></i> Details *@
+                                @*     </a> *@
+
+                                @*     <a asp-action="Delete" asp-route-id="@Model.MemberId" class="btn btn-outline-danger"> *@
+                                @*         <i class="mdi mdi-delete"></i> Delete *@
+                                @*     </a> *@
+                                @* </div> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .admin-profile-card {
+        width: 100%;
+        margin: 0 auto;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        border-radius: 1rem;
+    }
+
+    .gradient-custom {
+        background: linear-gradient(to right bottom, #ff0000, #8b0000); /* Dark Red and Red */
+        min-height: 100%;
+    }
+
+    .admin-profile-card img {
+        border: 3px solid white;
+    }
+
+    .admin-profile-card h5 {
+        font-weight: bold;
+        color: #8b0000; /* Dark Red for headings */
+    }
+
+    .admin-profile-card p {
+        font-size: 14px;
+        margin: 0;
+        color: #000; /* Black for text */
+    }
+
+    .btn-outline-light {
+        border-color: #8b0000; /* Dark Red */
+        color: #8b0000; /* Dark Red */
+    }
+
+        .btn-outline-light:hover {
+            background-color: #8b0000; /* Dark Red background on hover */
+            color: white;
+        }
+
+    .btn-outline-primary {
+        border-color: #ff0000; /* Red border */
+        color: #ff0000; /* Red text */
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #ff0000; /* Red background on hover */
+            color: white;
+        }
+
+    /* Layout adjustments */
+    .container {
+        max-width: 100%; /* Make the container take up the full width */
+        margin: 0 auto;
+        padding: 40px; /* Increase padding to create more space */
+    }
+
+    .card-body {
+        padding: 3rem; /* Increase the padding inside the card */
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .col-6 {
+        width: 48%;
+        margin-bottom: 20px; /* Increase margin for better spacing */
+    }
+
+    .social-link {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .social-link a {
+            color: #8b0000;
+            margin: 0 10px;
+            font-size: 1.5rem;
+        }
+
+            .social-link a:hover {
+                color: #ff0000; /* Red color on hover */
+            }
+</style>
+
+@* @section Scripts { *@
+@*     @{ *@
+@*         await Html.RenderPartialAsync("_ValidationScriptsPartial"); *@
+@*     } *@
+@* }00 *@

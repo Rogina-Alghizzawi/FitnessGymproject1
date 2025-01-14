@@ -1,0 +1,74 @@
+﻿@model FitnessGymproject.Models.Admin
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<form asp-action="Edit" enctype="multipart/form-data" class="forms-sample" style="margin-top: 20px;">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="AdminId" />
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label for="FullName">Full Name</label>
+            <input asp-for="FullName" class="form-control" id="FullName" placeholder="Full Name" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label for="Email">Email Address</label>
+            <input asp-for="Email" class="form-control" id="Email" placeholder="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label for="Password">Password</label>
+            <input asp-for="Password" class="form-control" id="Password" placeholder="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label for="CreatedAt">Created At</label>
+            <input asp-for="CreatedAt" class="form-control" id="CreatedAt" placeholder="Created At" />
+            <span asp-validation-for="CreatedAt" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label for="UpdatedAt">Updated At</label>
+            <input asp-for="UpdatedAt" class="form-control" id="UpdatedAt" placeholder="Updated At" />
+            <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label for="Gender">Gender</label>
+            <input asp-for="Gender" class="form-control" id="Gender" placeholder="Gender" />
+            <span asp-validation-for="Gender" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label for="ImageFile">Image</label>
+            <input asp-for="ImageFile" type="file" class="form-control" id="ImageFile" />
+            <span asp-validation-for="ImageFile" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+    <button type="button" class="btn btn-light" onclick="window.location.href='@Url.Action("Index")'">Cancel</button>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

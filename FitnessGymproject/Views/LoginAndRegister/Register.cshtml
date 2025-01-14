@@ -1,0 +1,161 @@
+﻿@model FitnessGymproject.Models.Member
+
+@{
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
+}
+
+<div class="contact-form-main mt-100 mb-100">
+    <div class="container">
+        <div class="row justify-content-between">
+            <!-- Image Section -->
+            <div class="col-xl-5 col-lg-5 d-flex justify-content-center align-items-center mb-30">
+                <div class="form-image">
+                    <img src="~/HomeDesign/assets/img/gallery/contact_form.png" alt="Sign Up Image" class="img-fluid" />
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <div class="col-xl-7 col-lg-7">
+                <div class="form-wrapper">
+                    <!--Section Title-->
+                    <div class="form-tittle">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-10 col-sm-10">
+                                <div class="section-tittle">
+                                    <span>Sign Up Form</span>
+                                    <h2>Feel Free to Register with Us!</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="Register" asp-controller="LoginAndRegister" method="post" class="register-form" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <!-- Full Name -->
+                        <div class="form-group">
+                            <label asp-for="FullName"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                            <input asp-for="FullName" type="text" placeholder="Your Full Name" class="form-control form-large" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label asp-for="Email"><i class="zmdi zmdi-email"></i></label>
+                            <input asp-for="Email" type="email" placeholder="Your Email" class="form-control form-large" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label asp-for="Password"><i class="zmdi zmdi-lock"></i></label>
+                            <input asp-for="Password" type="password" placeholder="Password" class="form-control form-large" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber"><i class="zmdi zmdi-phone"></i></label>
+                            <input asp-for="PhoneNumber" type="text" placeholder="Your Phone Number" class="form-control form-large" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="form-group">
+                            <label asp-for="Address"><i class="zmdi zmdi-home"></i></label>
+                            <input asp-for="Address" type="text" placeholder="Your Address" class="form-control form-large" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label asp-for="Gender" class="form-label" style="font-weight: bold; font-size: 16px; padding-bottom:50px;">Gender</label>
+                            <select asp-for="Gender" class="form-control" style="border: 1px solid #DF1683; border-radius: 8px; padding: 10px; background-color: #f8f9fa;">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger" style="font-size: 14px; margin-top: 5px;"></span>
+                        </div>
+
+                        <!-- Profile Picture -->
+                        <div class="form-group">
+                            <label asp-for="ImageFile"><i class="zmdi zmdi-camera"></i></label>
+                            <input asp-for="ImageFile" type="file" class="form-control-file" />
+                            <span asp-validation-for="ImageFile" class="text-danger"></span>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="form-group">
+                            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" required />
+                            <label for="agree-term" class="label-agree-term">
+                                <span><span></span></span>I agree to all statements in
+                                <a href="#" class="term-service">Terms of Service</a>
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-group form-button">
+                            <input type="submit" name="signup" id="signup" class="form-submit" value="Register" />
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="~/LoginAndRegisterDesign/vendor/jquery/jquery.min.js"></script>
+<script src="~/LoginAndRegisterDesign/js/main.js"></script>
+
+<!-- Add custom styles -->
+<style>
+    .form-control.form-large {
+        height: 50px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+
+    .form-wrapper .row {
+        margin-bottom: 20px;
+    }
+
+    .form-image img {
+        width: 1000px;
+        height: 600px;
+    }
+
+    /* Optional: Ensure columns are aligned properly */
+    .form-wrapper .row {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-submit {
+        background-color: #FF0000; /* Red */
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 15px;
+        width: 100%;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+        .form-submit:hover {
+            background-color: #8B0000; /* Dark Red */
+        }
+
+        .form-submit:active {
+            background-color: #000000; 
+        }
+
+    .agree-term {
+        margin-right: 10px;
+    }
+</style>

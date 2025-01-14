@@ -1,0 +1,39 @@
+﻿@model IEnumerable<FitnessGymproject.Models.Workoutplan>
+
+@{
+    ViewData["Title"] = "Available Workout Plans";
+}
+
+<h2>Available Workout Plans</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Plan Name</th>
+            <th>Exercises</th>
+            <th>Schedule</th>
+            <th>Goals</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var plan in Model)
+        {
+            <tr>
+                <td>@plan.PlanName</td>
+                <td>@plan.Exercises</td>
+                <td>@plan.Schedule</td>
+                <td>@plan.Goals</td>
+                <td>@plan.Price</td>
+                <td>
+                    <form asp-action="SubscribeToPlan" method="post">
+                        <input type="hidden" name="workoutPlanId" value="@plan.WorkoutPlanId" />
+                        <input type="hidden" name="memberId" value="@ViewData["MemberId"]" />
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

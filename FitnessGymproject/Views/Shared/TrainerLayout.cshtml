@@ -1,0 +1,203 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Quantum Able Bootstrap 4 Admin Dashboard Template</title>
+    <!-- HTML5 Shim and Respond.js IE9 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" href="~/TrainerDesign/assets/images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="~/TrainerDesign/assets/images/favicon.ico" type="image/x-icon">
+
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
+
+    <!-- themify -->
+    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/icon/themify-icons/themify-icons.css">
+
+    <!-- iconfont -->
+    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/icon/icofont/css/icofont.css">
+
+    <!-- simple line icon -->
+    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/icon/simple-line-icons/css/simple-line-icons.css">
+
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/plugins/bootstrap/css/bootstrap.min.css">
+
+    <!-- Chartlist chart css -->
+    <link rel="stylesheet" href="~/TrainerDesign/assets/plugins/chartist/dist/chartist.css" type="text/css" media="all">
+
+    <!-- Weather css -->
+    <link href="~/TrainerDesign/assets/css/svg-weather.css" rel="stylesheet">
+
+
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/css/main.css">
+
+    <!-- Responsive.css-->
+    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/css/responsive.css">
+    <style>
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f8f9fa; /* Adjust as needed */
+            padding: 10px 20px; /* Adjust padding */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ensure it stays on top */
+        }
+    </style>
+</head>
+<body class="sidebar-mini fixed">
+    <div class="loader-bg">
+        <div class="loader-bar">
+        </div>
+    </div>
+    <div class="wrapper">
+        <!-- Navbar-->
+        <header class="main-header-top hidden-print">
+            <a href="index.html" class="logo"><img class="img-fluid able-logo" src="~/TrainerDesign/assets/images/logo.png" alt="Theme-logo"></a>
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
+                    <ul class="top-nav">
+                      
+                     
+
+                        <!-- window screen -->
+                        <li class="pc-rheader-submenu">
+                            <a href="#!" class="drop icon-circle" onclick="javascript:toggleFullScreen()">
+                                <i class="icon-size-fullscreen"></i>
+                            </a>
+
+                        </li>
+                        <!-- User Menu-->
+                        <li class="dropdown">
+                            <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
+                                <span>John <b>Doe</b> <i class=" icofont icofont-simple-down"></i></span>
+
+                            </a>
+                            <ul class="dropdown-menu settings-menu">
+                             
+                            <li> <a class="nav-link" asp-action="TrainerProfile" asp-controller="TrainerPage"><i class="icon-user"></i>Profile</a></li>
+
+                                <li class="p-0">
+                                    <div class="dropdown-divider m-0"></div>
+                                </li>
+<li>                            <a  class="icon-logout" href="@Url.Action("Logout", "LoginAndRegister")">
+                                Logout
+                            </a>
+                            </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    </div>
+            </nav>
+        </header>
+        <!-- Side-Nav-->
+        <aside class="main-sidebar hidden-print ">
+            <section class="sidebar" id="sidebar-scroll">
+                <!-- Sidebar Menu-->
+                <ul class="sidebar-menu">
+                    <li class="nav-level">--- Navigation</li>
+                    <li class="active treeview">
+                    <a class="nav-link" asp-controller="TrainerPage" asp-action="Index">
+                        <i class="icon-speedometer"></i><span> Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-level">Components</li>
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="#!"><i class="icon-briefcase"></i><span>Member</span><i class="icon-arrow-down"></i></a>
+                        <ul class="treeview-menu">
+                          <li> <a class="waves-effect waves-dark" asp-action="ViewMembers" asp-controller="TrainerPage"><i class="icon-arrow-right"></i>Member list</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a class="waves-effect waves-dark" href="#!"><i class="icon-chart"></i><span>WorkOut</span><span class="label label-success menu-caption">New</span><i class="icon-arrow-down"></i></a>
+                        <ul class="treeview-menu">
+                        <li> <a class="waves-effect waves-dark" asp-action="Create" asp-controller="Workoutplans"><i class="icon-arrow-right"></i>Create Workout plane</a></li>
+                        <li> <a class="waves-effect waves-dark" asp-action="Index" asp-controller="Workoutplans"><i class="icon-arrow-right"></i>Workout Plans</a></li>
+
+
+                        </ul>
+                    </li>
+
+                    
+            </section>
+        </aside>
+        @RenderBody()
+    <footer>
+        <div class="container text-center">
+            <p>&copy; 2025 Your Company Name. All rights reserved.</p>
+        </div>
+    </footer>
+        <!-- Required Jqurey -->
+        <script src="~/TrainerDesign/assets/plugins/Jquery/dist/jquery.min.js"></script>
+        <script src="~/TrainerDesign/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <script src="~/TrainerDesign/assets/plugins/tether/dist/js/tether.min.js"></script>
+
+        <!-- Required Fremwork -->
+        <script src="~/TrainerDesign/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Scrollbar JS-->
+        <script src="~/TrainerDesign/assets/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+        <script src="~/TrainerDesign/assets/plugins/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+
+        <!--classic JS-->
+        <script src="~/TrainerDesign/assets/plugins/classie/classie.js"></script>
+
+        <!-- notification -->
+        <script src="~/TrainerDesign/assets/plugins/notification/js/bootstrap-growl.min.js"></script>
+
+        <!-- Sparkline charts -->
+        <script src="~/TrainerDesign/assets/plugins/jquery-sparkline/dist/jquery.sparkline.js"></script>
+
+        <!-- Counter js  -->
+        <script src="~/TrainerDesign/assets/plugins/waypoints/jquery.waypoints.min.js"></script>
+        <script src="~/TrainerDesign/assets/plugins/countdown/js/jquery.counterup.js"></script>
+
+        <!-- Echart js -->
+        <script src="~/TrainerDesign/assets/plugins/charts/echarts/js/echarts-all.js"></script>
+
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+
+        <!-- custom js -->
+        <script type="text/javascript" src="~/TrainerDesign/assets/js/main.min.js"></script>
+        <script type="text/javascript" src="~/TrainerDesign/assets/pages/dashboard.js"></script>
+        <script type="text/javascript" src="~/TrainerDesign/assets/pages/elements.js"></script>
+        <script src="~/TrainerDesign/assets/js/menu.min.js"></script>
+        <script>
+            var $window = $(window);
+            var nav = $('.fixed-button');
+            $window.scroll(function(){
+                if ($window.scrollTop() >= 200) {
+                   nav.addClass('active');
+                }
+                else {
+                   nav.removeClass('active');
+                }
+            });
+        </script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+
+</html>

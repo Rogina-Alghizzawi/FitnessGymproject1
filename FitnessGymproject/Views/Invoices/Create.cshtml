@@ -1,0 +1,51 @@
+﻿@model FitnessGymproject.Models.Invoice
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Invoice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SubscriptionId" class="control-label"></label>
+                <select asp-for="SubscriptionId" class ="form-control" asp-items="ViewBag.SubscriptionId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label"></label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentStatus" class="control-label"></label>
+                <input asp-for="PaymentStatus" class="form-control" />
+                <span asp-validation-for="PaymentStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InvoicePdf" class="control-label"></label>
+                <input asp-for="InvoicePdf" class="form-control" />
+                <span asp-validation-for="InvoicePdf" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentId" class="control-label"></label>
+                <select asp-for="PaymentId" class ="form-control" asp-items="ViewBag.PaymentId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,40 @@
+﻿@model FitnessGymproject.Models.Testimonial
+
+@{
+    ViewData["Title"] = "Create Testimonial";
+}
+
+<h1>Submit Your Testimonial</h1>
+
+<h4>We'd love to hear your feedback about our gym!</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <!-- Display Validation Errors -->
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <!-- Display the MemberId as a read-only field -->
+            <div class="form-group">
+                <label asp-for="MemberId" class="control-label">Member ID</label>
+                <input asp-for="MemberId" class="form-control" readonly value="@ViewData["MemberId"]" />
+            </div>
+
+            <!-- Content Field -->
+            <div class="form-group">
+                <label asp-for="Content" class="control-label">Your Feedback</label>
+                <textarea asp-for="Content" class="form-control" rows="4"></textarea>
+                <!-- Display validation message for Content -->
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to Testimonials</a>
+</div>

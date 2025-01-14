@@ -1,0 +1,70 @@
+﻿@model FitnessGymproject.Models.Subscription
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Subscription Details</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Plan Name</td>
+                                <td>@Html.DisplayFor(model => model.PlanName)</td>
+                            </tr>
+                            <tr>
+                                <td>Start Date</td>
+                                <td>@Html.DisplayFor(model => model.StartDate)</td>
+                            </tr>
+                            <tr>
+                                <td>End Date</td>
+                                <td>@Html.DisplayFor(model => model.EndDate)</td>
+                            </tr>
+                            <tr>
+                                <td>Total Payment</td>
+                                <td>@Html.DisplayFor(model => model.TotalPayment)</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>@Html.DisplayFor(model => model.Status)</td>
+                            </tr>
+                            <tr>
+                                <td>Created At</td>
+                                <td>@Html.DisplayFor(model => model.CreatedAt)</td>
+                            </tr>
+                            <tr>
+                                <td>Payment Status</td>
+                                <td>@Html.DisplayFor(model => model.PaymentStatus)</td>
+                            </tr>
+                            <tr>
+                                <td>Member</td>
+                                <td>@Html.DisplayFor(model => model.Member.FullName)</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>Payment</td>
+                                <td>@Html.DisplayFor(model => model.Payment.PaymentId)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    @* <a asp-action="Edit" asp-route-id="@Model?.SubscriptionId" class="btn btn-warning">Edit</a> *@
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

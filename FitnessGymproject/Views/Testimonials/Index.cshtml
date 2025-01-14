@@ -1,0 +1,38 @@
+﻿@model IEnumerable<FitnessGymproject.Models.Testimonial>
+
+@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Member</th>
+            <th>Content</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Member.FullName</td>
+                <td>@item.Content</td>
+                <td>@item.Status</td>
+                <td>
+                    @if (item.Status == "Pending")
+                    {
+                        <form asp-action="Approve" asp-route-id="@item.TestimonialId" method="post">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+                        <form asp-action="Reject" asp-route-id="@item.TestimonialId" method="post">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

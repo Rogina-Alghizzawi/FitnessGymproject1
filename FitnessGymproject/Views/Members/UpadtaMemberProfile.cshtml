@@ -1,0 +1,166 @@
+﻿@model FitnessGymproject.Models.Member
+@{
+    ViewData["Title"] = "Update Member Profile";
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
+}
+
+<div class="contact-form-main mt-100 mb-100 d-flex justify-content-center align-items-center">
+    <div class="form-container shadow-lg border rounded p-5 bg-white">
+        <div class="form-wrapper">
+            <!-- Section Title -->
+            <div class="form-tittle text-center mb-5">
+                <h2>Update Your Information</h2>
+            </div>
+            <!-- End Section Title -->
+            <form asp-action="UpadtaMemberProfile" enctype="multipart/form-data" class="forms-sample">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="MemberId" />
+
+                <div class="row mb-4">
+                    <div class="col-lg-6 col-md-6 form-group">
+                        <div class="form-box user-icon">
+                            <label for="FullName" class="form-label">Full Name</label>
+                            <input asp-for="FullName" class="form-control form-control-lg" id="FullName" placeholder="Full Name" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 form-group">
+                        <div class="form-box email-icon">
+                            <label for="Email" class="form-label">Email Address</label>
+                            <input asp-for="Email" class="form-control form-control-lg" id="Email" placeholder="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-lg-6 col-md-6 form-group">
+                        <div class="form-box password-icon">
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <input asp-for="Password" class="form-control form-control-lg" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 form-group">
+                        <div class="form-box phone-icon">
+                            <label for="PhoneNumber" class="form-label">Phone Number</label>
+                            <input asp-for="PhoneNumber" class="form-control form-control-lg" id="PhoneNumber" placeholder="Phone Number" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-lg-6 col-md-6 form-group">
+                        <div class="form-box address-icon">
+                            <label for="Address" class="form-label">Address</label>
+                            <input asp-for="Address" class="form-control form-control-lg" id="Address" placeholder="Address" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 form-group">
+                        <div class="form-box image-icon">
+                            <label for="ImageFile" class="form-label">Image</label>
+                            <input asp-for="ImageFile" type="file" class="form-control form-control-lg" id="ImageFile" />
+                            <span asp-validation-for="ImageFile" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-lg-6 col-md-6 form-group">
+                        <div class="form-box gender-icon">
+                            <label for="Gender" class="form-label d-block">Gender</label>
+                            <select asp-for="Gender" class="form-control form-control-lg" id="Gender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="submit-info text-center mt-4">
+                    <button type="submit" class="btn btn-gradient-primary btn-lg me-2">Submit</button>
+                    <button class="btn btn-light btn-lg">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+
+
+<style>
+    .form-container {
+        max-width: 700px;
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        border: 1px solid #ccc;
+        border-radius: 12px;
+    }
+
+    .contact-form-main {
+        min-height: 100vh;
+        background-color: #f9f9f9;
+    }
+
+    .form-tittle h2 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group label {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-control-lg {
+        font-size: 16px;
+        padding: 15px 30px;
+    }
+
+    .submit-info button {
+        width: 120px;
+        font-size: 16px;
+    }
+
+    select.form-control-lg {
+        height: 55px;
+    }
+
+    .text-center a.btn {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+
+    input[type="file"].form-control-lg {
+        height: auto;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .form-box {
+        display: flex;
+        flex-direction: column;
+    }
+
+    input[type="file"] {
+        padding: 10px;
+        margin-top: 5px;
+    }
+
+</style>

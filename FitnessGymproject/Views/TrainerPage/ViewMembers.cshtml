@@ -1,0 +1,66 @@
+﻿@model IEnumerable<FitnessGymproject.Models.Member>
+
+@{
+    ViewData["Title"] = "Member List";
+    Layout = "~/Views/Shared/TrainerLayout.cshtml";
+}
+
+<style>
+    body {
+        background-color: white;
+    }
+
+    .centered-card {
+        margin: 0 auto;
+        width: 100%;
+        margin-top: 80px;
+        margin-left: 400px; 
+    }
+</style>
+
+<div class="card centered-card">
+    <div class="card-header">
+        <h5 class="card-header-text">Member List</h5>
+    </div>
+    <div class="card-block">
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-8">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Phone Number</th>
+                                <th>Gender</th>
+                                <th>Profile Image</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="@(item.Gender == "Female" ? "table-success" : item.Gender == "Male" ? "table-info" : "")">
+                                    <td>@item.FullName</td>
+                                    <td>@item.PhoneNumber</td>
+                                    <td>@item.Gender</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Imageprofileurl))
+                                        {
+                                            <img src="@Url.Content("~/Images/" + item.Imageprofileurl)" alt="Profile Image" class="img-sm rounded-circle" style="width: 50px; height: 50px;" />
+                                        }
+                                        else
+                                        {
+                                            <span>No Image</span>
+                                        }
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

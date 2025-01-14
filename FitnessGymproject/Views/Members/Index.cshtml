@@ -1,0 +1,56 @@
+﻿@model IEnumerable<FitnessGymproject.Models.Member>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Member List</h4>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th> Full Name </th>
+                                <th> Phone Number </th>
+                                <th> Gender </th>
+                                <th> Profile Image </th>
+                                <th> Actions </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td> @item.FullName </td>
+                                    <td> @item.PhoneNumber </td>
+                                    <td> @item.Gender </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Imageprofileurl))
+                                        {
+                                            <img src="@Url.Content("~/Images/" + item.Imageprofileurl)" alt="Profile Image" class="img-sm rounded-circle" />
+                                        }
+                                        else
+                                        {
+                                            <span>No Image</span>
+                                        }
+                                    </td>
+                            
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.MemberId" class="btn btn-sm btn-warning">Edit</a>
+                                        <a asp-action="Details" asp-route-id="@item.MemberId" class="btn btn-sm btn-info">Details</a>
+                                        <a asp-action="Delete" asp-route-id="@item.MemberId" class="btn btn-sm btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

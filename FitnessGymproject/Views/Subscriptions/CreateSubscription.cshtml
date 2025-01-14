@@ -1,0 +1,33 @@
+﻿@model FitnessGymproject.Models.Subscription
+
+@{
+    ViewData["Title"] = "Create Subscription";
+}
+
+<h2>Create Subscription</h2>
+
+<form asp-action="CreateSubscription" method="post">
+    <div class="form-group">
+        <label for="PlanName">Plan Name</label>
+        <input type="text" class="form-control" id="PlanName" name="PlanName" value="@Model.PlanName" />
+    </div>
+    <div class="form-group">
+        <label for="StartDate">Start Date</label>
+        <input type="date" class="form-control" id="StartDate" name="StartDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="form-group">
+        <label for="EndDate">End Date</label>
+        <input type="date" class="form-control" id="EndDate" name="EndDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="form-group">
+        <label for="TotalPayment">Total Payment</label>
+        <input type="number" class="form-control" id="TotalPayment" name="TotalPayment" value="@Model.TotalPayment" />
+    </div>
+    <div class="form-group">
+        <label for="Status">Status</label>
+        <input type="text" class="form-control" id="Status" name="Status" value="@Model.Status" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Create Subscription</button>
+    </div>
+</form>
