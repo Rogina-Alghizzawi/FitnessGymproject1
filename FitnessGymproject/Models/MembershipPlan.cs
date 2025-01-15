@@ -8,7 +8,6 @@ public partial class MembershipPlan
     public decimal MembershipPlanId { get; set; }
 
     public string PlanName { get; set; } = null!;
-
     public string PlanDescription { get; set; } = null!;
 
     public string? IncludedServices { get; set; }

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<FitnessGymproject.Models.MembershipPlan>
+
+<h1>Subscribed Membership Plans</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var plan in Model)
+        {
+            <tr>
+                <td>@plan.PlanName</td>
+                <td>@plan.PlanDescription</td>
+                <td>@plan.Price</td>
+                <td>@plan.DurationDays days</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@model IEnumerable<FitnessGymproject.Models.MembershipPlan>
+
+<h1>Subscribed Membership Plans</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var plan in Model)
+        {
+            <tr>
+                <td>@plan.PlanName</td>
+                <td>@plan.PlanDescription</td>
+                <td>@plan.Price</td>
+                <td>@plan.DurationDays days</td>
+            </tr>
+        }
+    </tbody>
+</table>

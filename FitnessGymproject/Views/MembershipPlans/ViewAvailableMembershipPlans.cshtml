@@ -1,0 +1,35 @@
+﻿
+    
+
+@model IEnumerable<FitnessGymproject.Models.MembershipPlan>
+
+<h1>Membership Plans</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Duration</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var plan in Model)
+        {
+            <tr>
+                <td>@plan.PlanName</td>
+                <td>@plan.PlanDescription</td>
+                <td>@plan.Price</td>
+                <td>@plan.DurationDays days</td>
+                <td>
+                    <form method="post" asp-action="SubscribeToMembershipPlan">
+                        <input type="hidden" name="membershipPlanId" value="@plan.MembershipPlanId" />
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
