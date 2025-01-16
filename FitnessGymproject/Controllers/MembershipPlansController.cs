@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessGymproject.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace FitnessGymproject.Controllers
 {
     public class MembershipPlansController : Controller
     {
         private readonly ModelContext _context;
+        private readonly IConfiguration _configuration;
 
-        public MembershipPlansController(ModelContext context)
+        public MembershipPlansController(ModelContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+
         }
 
         // GET: MembershipPlans

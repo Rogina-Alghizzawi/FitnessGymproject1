@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessGymproject.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FitnessGymproject.Controllers
 {
@@ -21,9 +22,22 @@ namespace FitnessGymproject.Controllers
         // GET: Invoices
         public async Task<IActionResult> Index()
         {
-            var modelContext = _context.Invoices.Include(i => i.Payment).Include(i => i.Subscription);
-            return View(await modelContext.ToListAsync());
+            var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+            if (loggedInMemberId == null)
+            {
+                return RedirectToAction("Login", "LoginAndRegister");  // Redirect to login page if no user is logged in
+            }
+
+            var memberId = Convert.ToDecimal(loggedInMemberId);  // Assuming MemberId is decimal, adjust if necessary
+
+            var invoices = _context.Invoices
+                                    .Where(i => i.Subscription.MemberId == memberId)  // Filter invoices by the logged-in user
+                                    .Include(i => i.Payment)
+                                    .Include(i => i.Subscription);
+
+            return View(await invoices.ToListAsync());
         }
+
 
         // GET: Invoices/Details/5
         public async Task<IActionResult> Details(decimal? id)
