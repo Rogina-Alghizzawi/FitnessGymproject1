@@ -1,25 +1,36 @@
-﻿@model IEnumerable<FitnessGymproject.Models.MembershipPlan>
+﻿@model IEnumerable<dynamic>
 
-<h1>Subscribed Membership Plans</h1>
+<h2>Subscribed Membership Plans</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Duration</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var plan in Model)
-        {
+@if (!Model.Any())
+{
+    <p>No subscribed membership plans at the moment.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <td>@plan.PlanName</td>
-                <td>@plan.PlanDescription</td>
-                <td>@plan.Price</td>
-                <td>@plan.DurationDays days</td>
+                <th>Plan Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Invoice ID</th>
+                <th>Total Amount</th>
+                <th>Payment Status</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PlanName</td>
+                    <td>@item.StartDate?.ToShortDateString()</td>
+                    <td>@item.EndDate?.ToShortDateString()</td>
+                    <td>@item.InvoiceId</td>
+                    <td>@item.TotalAmount.ToString("C")</td>
+                    <td>@item.PaymentStatus</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

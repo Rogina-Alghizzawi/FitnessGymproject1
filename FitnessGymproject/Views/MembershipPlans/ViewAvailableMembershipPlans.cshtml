@@ -1,35 +1,49 @@
-﻿
-    
+﻿@model IEnumerable<MembershipPlan>
 
-@model IEnumerable<FitnessGymproject.Models.MembershipPlan>
+@{
+    ViewData["Title"] = "Available Membership Plans";
+}
 
-<h1>Membership Plans</h1>
+<h2>Available Membership Plans</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Duration</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var plan in Model)
-        {
+@if (!Model.Any())
+{
+    <p>No available membership plans at the moment.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@plan.PlanName</td>
-                <td>@plan.PlanDescription</td>
-                <td>@plan.Price</td>
-                <td>@plan.DurationDays days</td>
-                <td>
-                    <form method="post" asp-action="SubscribeToMembershipPlan">
-                        <input type="hidden" name="membershipPlanId" value="@plan.MembershipPlanId" />
-                        <button type="submit">Subscribe</button>
-                    </form>
-                </td>
+                <th>Plan Name</th>
+                <th>Duration (Days)</th>
+                <th>Total Payment</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var plan in Model)
+            {
+                <tr>
+                    <td>@plan.PlanName</td>
+                    <td>@plan.DurationDays</td>
+                    <td>@plan.Price</td>
+                    <td>
+                        <form asp-action="SubscribeToMembershipPlan" method="post">
+                            <input type="hidden" name="membershipPlanId" value="@plan.MembershipPlanId" />
+                            <label for="paymentMethod">Payment Method:</label>
+                            <select name="paymentMethod" required>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Visa">Visa</option>
+                                <option value="MasterCard">MasterCard</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />

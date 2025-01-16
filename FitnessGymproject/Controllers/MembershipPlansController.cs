@@ -154,32 +154,85 @@ namespace FitnessGymproject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //public async Task<IActionResult> ViewAvailableMembershipPlans()
+        //{
+        //    var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+
+        //    if (loggedInMemberId == null)
+        //    {
+        //        return RedirectToAction("Login","LoginAndRegister"); // Redirect to login page if not logged in
+        //    }
+
+        //    decimal memberId = Convert.ToDecimal(loggedInMemberId);
+
+        //    // Fetch available membership plans (where MemberId is null in the Subscription table)
+        //    var availablePlans = await _context.MembershipPlans
+        //                                       .Where(mp => mp.Subscriptions.All(s => s.MemberId == null)) // No member subscribed
+        //                                       .ToListAsync();  // Ensure you're awaiting the async operation
+
+        //    // Pass the memberId to the view through ViewData
+        //    ViewData["MemberId"] = memberId;
+
+
+        //    return View();  
+        //}
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId)
+        //{
+        //    var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
+
+        //    if (string.IsNullOrEmpty(memberIdString))
+        //    {
+        //        return RedirectToAction("Login", "LoginAndRegister");
+        //    }
+
+        //    var memberId = decimal.Parse(memberIdString);
+
+        //    var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
+        //    if (membershipPlan != null)
+        //    {
+        //        var subscription = new Subscription
+        //        {
+        //            MemberId = memberId,
+        //            MembershipPlanId = membershipPlanId,
+        //            CreatedAt = DateTime.Now
+        //        };
+
+        //        // Add the subscription and save changes
+        //        _context.Subscriptions.Add(subscription);
+        //        await _context.SaveChangesAsync();
+        //    }
+
+        //    return RedirectToAction("ViewSubscribedMembershipPlans");
+        //}
+
+
+
         public async Task<IActionResult> ViewAvailableMembershipPlans()
         {
             var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
 
             if (loggedInMemberId == null)
             {
-                return RedirectToAction("Login"); // Redirect to login page if not logged in
+                return RedirectToAction("Login");
             }
 
             decimal memberId = Convert.ToDecimal(loggedInMemberId);
 
-            // Fetch available membership plans (where MemberId is null in the Subscription table)
+            // Fetch available membership plans
             var availablePlans = await _context.MembershipPlans
-                                               .Where(mp => mp.Subscriptions.All(s => s.MemberId == null)) // No member subscribed
-                                               .ToListAsync();  // Ensure you're awaiting the async operation
+                                               .Where(mp => mp.Subscriptions.All(s => s.MemberId == null))
+                                               .ToListAsync();
 
-            // Pass the memberId to the view through ViewData
             ViewData["MemberId"] = memberId;
 
-            // Return the view with available plans
-            return View();  // Pass the awaited result
+            return View(availablePlans);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId)
+        public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod)
         {
             var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
 
@@ -188,60 +241,95 @@ namespace FitnessGymproject.Controllers
                 return RedirectToAction("Login", "LoginAndRegister");
             }
 
-            var memberId = decimal.Parse(memberIdString);
+            decimal memberId = decimal.Parse(memberIdString);
 
             var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
+
             if (membershipPlan != null)
             {
-                // Assuming you have a Subscription model to handle member subscriptions to plans
+                // Check if the member already has an active subscription
+                var existingSubscription = _context.Subscriptions
+                                                   .FirstOrDefault(s => s.MemberId == memberId && s.MembershipPlanId == membershipPlanId);
+
+                if (existingSubscription != null)
+                {
+                    ViewBag.Message = "You are already subscribed to this plan.";
+                    return RedirectToAction("ViewSubscribedMembershipPlans");
+                }
+
+                // Create a new subscription
                 var subscription = new Subscription
                 {
                     MemberId = memberId,
                     MembershipPlanId = membershipPlanId,
+                    CreatedAt = DateTime.Now,
+                    Status = "Active",
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays)
+                };
+
+                _context.Subscriptions.Add(subscription);
+
+                // Create a payment record
+                var payment = new Payment
+                {
+                    MemberId = memberId,
+                    SubscriptionId = subscription.SubscriptionId,
+                    PaymentDate = DateTime.Now,
+                    PaymentStatus = "Completed",
+                    Amount = membershipPlan.Price,
+                    PaymentMethod = paymentMethod,
                     CreatedAt = DateTime.Now
                 };
 
-                // Add the subscription and save changes
-                _context.Subscriptions.Add(subscription);
+                _context.Payments.Add(payment);
+
+                // Create an invoice
+                var invoice = new Invoice
+                {
+                    SubscriptionId = subscription.SubscriptionId,
+                    InvoiceDate = DateTime.Now,
+                    TotalAmount = membershipPlan.Price,
+                    PaymentStatus = "Paid",
+                    PaymentId = payment.PaymentId
+                };
+
+                _context.Invoices.Add(invoice);
+
                 await _context.SaveChangesAsync();
+
+                return RedirectToAction("ViewSubscribedMembershipPlans");
             }
 
-            return RedirectToAction("ViewSubscribedMembershipPlans");
+            return RedirectToAction("ViewAvailableMembershipPlans");
         }
-
-        public IActionResult ViewSubscribedMembershipPlans()
+        public async Task<IActionResult> ViewSubscribedMembershipPlans()
         {
-            // Retrieve the member ID from the session
-            string memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
+            var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
 
             if (string.IsNullOrEmpty(memberIdString))
             {
-                // If no member is logged in, handle appropriately (e.g., redirect to login page)
                 return RedirectToAction("Login", "LoginAndRegister");
             }
 
-            // Convert the string to a decimal (since MemberId is decimal)
-            decimal memberId = Convert.ToDecimal(memberIdString);
+            decimal memberId = decimal.Parse(memberIdString);
 
-            // Query the database for all membership plans the member is subscribed to
-            var membershipPlans = _context.Subscriptions
-                                          .Where(s => s.MemberId == memberId)
-                                          .Include(s => s.MembershipPlan)  // Include the MembershipPlan details
-                                          .Select(s => s.MembershipPlan)
-                                          .ToList();
+            var result = from subscription in _context.Subscriptions
+                         join invoice in _context.Invoices
+                         on subscription.SubscriptionId equals invoice.SubscriptionId
+                         where subscription.MemberId == memberId
+                         select new
+                         {
+                             subscription.PlanName,
+                             subscription.StartDate,
+                             subscription.EndDate,
+                             invoice.InvoiceId,
+                             invoice.TotalAmount,
+                             invoice.PaymentStatus
+                         };
 
-            if (membershipPlans == null || !membershipPlans.Any())
-            {
-                // Handle case where no membership plans are subscribed (e.g., show a message)
-                ViewBag.Message = "No membership plans subscribed.";
-                return View();
-            }
-
-            // Return the list of membership plans to the view
-            return View(membershipPlans);
+            return View(await result.ToListAsync());
         }
-
-
 
 
         private bool MembershipPlanExists(decimal id)
