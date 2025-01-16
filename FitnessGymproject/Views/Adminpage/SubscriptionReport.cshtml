@@ -4,7 +4,6 @@
 
 
 
-<!-- Monthly and Annual Reports -->
 <div class="row">
     <div class="col-md-6">
         <h3>Monthly Report</h3>
@@ -18,7 +17,6 @@
     </div>
 </div>
 
-<!-- Data Table for Subscriptions -->
 <table id="example" class="table table-striped">
     <thead>
         <tr>
@@ -43,10 +41,8 @@
     </tbody>
 </table>
 
-<!-- Add a chart to display revenue data -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- DataTables CSS and JS -->
 <link href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -59,14 +55,13 @@
 
 <script>
     $(document).ready(function () {
-        // Initialize DataTable with export options
         $('#example').DataTable({
-            dom: 'Bfrtip',  // Add buttons
+            dom: 'Bfrtip', 
             buttons: [
-                'copyHtml5', // Copy data to clipboard
-                'excelHtml5', // Export to Excel
-                'csvHtml5', // Export to CSV
-                'pdfHtml5' // Export to PDF
+                'copyHtml5', 
+                'excelHtml5', 
+                'csvHtml5', 
+                'pdfHtml5' 
             ]
         });
     });

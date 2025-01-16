@@ -27,50 +27,42 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Display Logged-In Member's Name -->
             <div class="form-group">
                 <label>Member Name</label>
                 <input type="text" class="form-control" value="@ViewBag.MemberName" readonly />
             </div>
 
-            <!-- Hidden Field for MemberId -->
             <input type="hidden" asp-for="MemberId" value="@ViewBag.MemberId" />
 
-            <!-- Plan Name -->
             <div class="form-group">
                 <label asp-for="PlanName" class="control-label"></label>
                 <input asp-for="PlanName" class="form-control" />
                 <span asp-validation-for="PlanName" class="text-danger"></span>
             </div>
 
-            <!-- Start Date -->
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
                 <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
 
-            <!-- End Date -->
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
 
-            <!-- Total Payment -->
             <div class="form-group">
                 <label asp-for="TotalPayment" class="control-label"></label>
                 <input asp-for="TotalPayment" class="form-control" />
                 <span asp-validation-for="TotalPayment" class="text-danger"></span>
             </div>
 
-            <!-- Payment Method -->
             <div class="form-group">
                 <label asp-for="PaymentId" class="control-label"></label>
                 <select asp-for="PaymentId" class="form-control" asp-items="ViewBag.PaymentId"></select>
             </div>
 
-            <!-- Submit Button -->
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

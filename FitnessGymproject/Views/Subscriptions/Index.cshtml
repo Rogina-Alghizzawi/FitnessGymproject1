@@ -8,7 +8,6 @@
 
 
 
-<!-- Subscriptions Table -->
 <div class="table-responsive ">
 
     <form method="get" asp-action="Index" class="row g-3">
@@ -45,9 +44,7 @@
                     <td>@Html.DisplayFor(modelItem => item.PaymentStatus)</td>
                     <td>@Html.DisplayFor(modelItem => item.Member.FullName)</td>
                     <td class="text-center">
-                        @* <a asp-action="Edit" asp-route-id="@item.SubscriptionId" class="btn btn-warning btn-sm me-1"> *@
-                        @*     <i class="bi bi-pencil-fill"></i> Edit *@
-                        @* </a> *@
+                     
                         <a asp-action="Details" asp-route-id="@item.SubscriptionId" class="btn btn-info btn-sm me-1">
                             <i class="bi bi-info-circle-fill"></i> Details
                         </a>

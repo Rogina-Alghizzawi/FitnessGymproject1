@@ -1,27 +1,4 @@
-﻿@* @model FitnessGymproject.Models.Workoutplan
-
-<h2>Workout Plan</h2>
-
-@if (Model != null)
-{
-    <div>
-        <h3>@Model.PlanName</h3>
-        <p><strong>Exercises:</strong> @Model.Exercises</p>
-        <p><strong>Schedule:</strong> @Model.Schedule</p>
-        <p><strong>Goals:</strong> @Model.Goals</p>
-        <p><strong>Price:</strong> @Model.Price</p>
-        <p><strong>Created At:</strong> @Model.CreatedAt</p>
-        <p><strong>Updated At:</strong> @Model.UpdatedAt</p>
-    </div>
-}
-else
-{
-    <p>No workout plan assigned.</p>
-}
- *@
-
-
- @model IEnumerable<FitnessGymproject.Models.Workoutplan>
+﻿@model IEnumerable<FitnessGymproject.Models.Workoutplan>
 
 <h2>Workout Plans</h2>
 

@@ -5,14 +5,12 @@
 }
 
 <style>
-    /* Make the entire page white */
     body {
         background-color: white;
     }
 
-    /* Center the section */
     section {
-        margin-top: 100px; /* Adjusted margin for better positioning */
+        margin-top: 100px; 
         padding: 20px;
     }
 
@@ -25,10 +23,9 @@
 
     .card-body {
         width: 100%;
-        max-width: 900px; /* Optional: Limits the width of the content */
+        max-width: 900px; 
     }
 
-    /* Optional: Make the text and other elements more readable */
     h5 {
         font-size: 1.5rem;
         color: #333;
@@ -40,19 +37,16 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="card mb-4 border-0">
-                    <!-- Adjusted width and padding -->
                     <div class="card-body">
                         <div class="row">
-                            <!-- Trainer Image and Name -->
                             <div class="col-lg-4 text-center">
                                 <img src="@Model.Imageprofileurl"
                                      alt="Avatar" class="img-fluid my-4 rounded-circle" style="width: 120px; height: 120px; object-fit: cover;" />
-                                <h5 class="my-3">@ViewData["TrainerName"]</h5> <!-- Increased font size -->
+                                <h5 class="my-3">@ViewData["TrainerName"]</h5> 
                                 <p class="text-muted mb-1">@ViewData["TrainerSpecialization"]</p>
 
                                 <a asp-controller="TrainerPage" asp-action="Edit">Edit Trainer</a>
                             </div>
-                            <!-- Trainer Details -->
                             <div class="col-lg-8">
                                 <hr>
                                 <div class="row mb-3">

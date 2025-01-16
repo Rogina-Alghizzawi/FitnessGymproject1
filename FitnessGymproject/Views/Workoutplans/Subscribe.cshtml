@@ -24,7 +24,7 @@
                         <td>@plan.Goals</td>
                         <td>@plan.Price</td>
                         <td>
-                            @if (plan.MemberId == null)  // Display button only for unassigned plans
+                            @if (plan.MemberId == null)  
                             {
                                 <button type="submit" name="workoutPlanId" value="@plan.WorkoutPlanId" class="btn btn-primary">Subscribe</button>
                             }

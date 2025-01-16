@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,28 +16,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Retrieve the processed annual subscription data from ViewData
             const annualRevenueData = @Html.Raw(Json.Serialize(ViewData["AnnualRevenueData"]));
+            const years = Object.keys(annualRevenueData);
+            const counts = Object.values(annualRevenueData);
 
-            // Extract years and counts from the data
-            const years = Object.keys(annualRevenueData); // Keys (years)
-            const counts = Object.values(annualRevenueData); // Values (subscription counts)
-
-            // Ensure the canvas element exists before creating the chart
             const ctx = document.getElementById('annualChart')?.getContext('2d');
             if (!ctx) {
                 console.error('Chart context not found. Ensure the canvas element exists in your HTML.');
                 return;
             }
 
-            // Initialize the Chart.js chart
             const chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: years, // Use the years as labels for the x-axis
+                    labels: years,
                     datasets: [{
                         label: 'Annual Subscription Counts',
-                        data: counts, // Subscription counts for each year
+                        data: counts,
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
@@ -54,6 +48,5 @@
             });
         });
     </script>
-
 </body>
 </html>

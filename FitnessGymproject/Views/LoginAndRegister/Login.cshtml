@@ -121,17 +121,14 @@
     <div class="contact-form-main mt-100 mb-100">
         <div class="container">
             <div class="row justify-content-between">
-                <!-- Image Section -->
                 <div class="col-xl-5 col-lg-5 d-flex justify-content-center align-items-center mb-30">
                     <div class="form-image">
                         <img src="~/HomeDesign/assets/img/gallery/contact_form.png" alt="Sign Up Image" class="img-fluid" />
                     </div>
                 </div>
 
-                <!-- Form Section -->
                 <div class="col-xl-7 col-lg-7">
                     <div class="form-wrapper">
-                        <!-- Section Title -->
                         <div class="form-tittle">
                             <div class="row">
                                 <div class="col-lg-11 col-md-10 col-sm-10">
@@ -153,7 +150,6 @@
                                 <input type="password" name="password" id="password" placeholder="Password" class="form-control" required />
                             </div>
 
-                            <!-- Display Error Message -->
                             @if (ViewBag.Error != null)
                             {
                                 <div class="alert alert-danger" style="color: red;">
@@ -168,7 +164,6 @@
 
                        
 
-                        <!-- Create Account Link -->
                         <div class="create-account-link">
                             <a asp-action="Register" asp-controller="LoginAndRegister" class="signup-image-link">Create an account</a>
                         </div>

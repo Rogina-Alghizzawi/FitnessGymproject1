@@ -14,7 +14,6 @@
             <div class="col-12 col-lg-8 mb-4 mb-lg-0">
                 <div class="card admin-profile-card" style="border-radius: 1rem; overflow: hidden;">
                     <div class="row g-0">
-                        <!-- Profile Section -->
                         <div class="col-md-4 gradient-custom text-center text-white d-flex flex-column align-items-center justify-content-center">
                             
                                 <img src="@Url.Content("~/images/" + ViewData["ImageProfileUrl"])" class="img-fluid my-4 rounded-circle" style="width: 120px; height: 120px; object-fit: cover;" />
@@ -27,7 +26,6 @@
                             </a>
                         </div>
 
-                        <!-- Information Section -->
                         <div class="col-md-8">
                             <div class="card-body p-5">
                                 <h6 class="text-primary mb-3">Personal Information</h6>
@@ -61,10 +59,7 @@
                                         }
                                     </div>
                                 </div>
-                                @* <div class="d-flex justify-content-start mt-4"> *@
-                                @*     <a asp-action="Details" asp-route-id="@Model.MemberId" class="btn btn-outline-primary me-3 text-white"> *@
-                                @*         <i class="mdi mdi-information-outline"></i> Details *@
-                                @*     </a> *@
+                            
 
                                 @*     <a asp-action="Delete" asp-route-id="@Model.MemberId" class="btn btn-outline-danger"> *@
                                 @*         <i class="mdi mdi-delete"></i> Delete *@
@@ -88,7 +83,7 @@
     }
 
     .gradient-custom {
-        background: linear-gradient(to right bottom, #ff0000, #8b0000); /* Dark Red and Red */
+        background: linear-gradient(to right bottom, #ff0000, #8b0000);
         min-height: 100%;
     }
 
@@ -98,44 +93,43 @@
 
     .admin-profile-card h5 {
         font-weight: bold;
-        color: #8b0000; /* Dark Red for headings */
+        color: #8b0000; 
     }
 
     .admin-profile-card p {
         font-size: 14px;
         margin: 0;
-        color: #000; /* Black for text */
+        color: #000; 
     }
 
     .btn-outline-light {
-        border-color: #8b0000; /* Dark Red */
-        color: #8b0000; /* Dark Red */
+        border-color: #8b0000; 
+        color: #8b0000; 
     }
 
         .btn-outline-light:hover {
-            background-color: #8b0000; /* Dark Red background on hover */
+            background-color: #8b0000; 
             color: white;
         }
 
     .btn-outline-primary {
-        border-color: #ff0000; /* Red border */
-        color: #ff0000; /* Red text */
+        border-color: #ff0000; 
+        color: #ff0000; 
     }
 
         .btn-outline-primary:hover {
-            background-color: #ff0000; /* Red background on hover */
+            background-color: #ff0000; 
             color: white;
         }
 
-    /* Layout adjustments */
     .container {
-        max-width: 100%; /* Make the container take up the full width */
+        max-width: 100%; 
         margin: 0 auto;
-        padding: 40px; /* Increase padding to create more space */
+        padding: 40px; 
     }
 
     .card-body {
-        padding: 3rem; /* Increase the padding inside the card */
+        padding: 3rem; 
     }
 
     .row {
@@ -146,7 +140,7 @@
 
     .col-6 {
         width: 48%;
-        margin-bottom: 20px; /* Increase margin for better spacing */
+        margin-bottom: 20px; 
     }
 
     .social-link {
@@ -162,12 +156,7 @@
         }
 
             .social-link a:hover {
-                color: #ff0000; /* Red color on hover */
+                color: #ff0000; 
             }
 </style>
 
-@* @section Scripts { *@
-@*     @{ *@
-@*         await Html.RenderPartialAsync("_ValidationScriptsPartial"); *@
-@*     } *@
-@* }00 *@
