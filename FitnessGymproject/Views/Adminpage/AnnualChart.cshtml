@@ -1,0 +1,59 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Revenue Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h2>Annual Revenue by Plan</h2>
+    <div style="width: 80%; margin: 0 auto;">
+        <canvas id="annualChart" width="400" height="200"></canvas>
+    </div>
+
+    <h3>Total Annual Revenue: @ViewData["TotalAnnualRevenue"]</h3>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Retrieve the processed annual subscription data from ViewData
+            const annualRevenueData = @Html.Raw(Json.Serialize(ViewData["AnnualRevenueData"]));
+
+            // Extract years and counts from the data
+            const years = Object.keys(annualRevenueData); // Keys (years)
+            const counts = Object.values(annualRevenueData); // Values (subscription counts)
+
+            // Ensure the canvas element exists before creating the chart
+            const ctx = document.getElementById('annualChart')?.getContext('2d');
+            if (!ctx) {
+                console.error('Chart context not found. Ensure the canvas element exists in your HTML.');
+                return;
+            }
+
+            // Initialize the Chart.js chart
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: years, // Use the years as labels for the x-axis
+                    datasets: [{
+                        label: 'Annual Subscription Counts',
+                        data: counts, // Subscription counts for each year
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

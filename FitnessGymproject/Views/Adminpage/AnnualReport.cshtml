@@ -1,7 +1,8 @@
 ﻿@model dynamic
 @{
-   
     Layout = "~/Views/Shared/AdminLayout.cshtml";
+    var annualSubscriptions = ViewData["AnnualSubscriptions"] as List<FitnessGymproject.Models.Subscription>;
+    var annualRevenue = ViewData["AnnualRevenue"] as decimal?;
 }
 
 <h2>Annual Subscription Report</h2>
@@ -14,26 +15,42 @@
             <th>Member Status</th>
             <th>Total Payment</th>
             <th>Payment Status</th>
-            <th>Total Annual Revenue</th> 
         </tr>
     </thead>
     <tbody>
-        @foreach (var subscription in Model.AnnualSubscriptions)
+        @if (annualSubscriptions != null && annualSubscriptions.Any())
+        {
+            foreach (var subscription in annualSubscriptions)
+            {
+                <tr>
+                    <td>@subscription.PlanName</td>
+                    <td>@subscription.Member?.FullName</td>
+                    <td>@subscription.Status</td>
+                    <td>@subscription.TotalPayment?.ToString("C")</td>
+                    <td>@subscription.PaymentStatus</td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@subscription.PlanName</td>
-                <td>@subscription.Member.FullName</td>
-                <td>@subscription.Status</td>
-                <td>@subscription.TotalPayment</td>
-                <td>@subscription.PaymentStatus</td>
-                <td>@Model.AnnualRevenue</td>
+                <td colspan="5" style="text-align: center;">No subscriptions found for the year @DateTime.Now.Year.</td>
             </tr>
         }
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" style="text-align: right; font-weight: bold;">Total Annual Revenue:</td>
+            <td colspan="2">@annualRevenue?.ToString("C")</td>
+        </tr>
+    </tfoot>
 </table>
 
+<!-- Include DataTables CSS -->
 <link href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+<!-- Include jQuery and DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js" defer></script>
 <script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js" defer></script>
@@ -47,10 +64,22 @@
         $('#annualTable').DataTable({
             dom: 'Bfrtip',
             buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
+                {
+                    extend: 'copyHtml5',
+                    title: 'Annual Subscription Report'
+                },
+                {
+                    extend: 'excelHtml5',
+                    title: 'Annual Subscription Report'
+                },
+                {
+                    extend: 'csvHtml5',
+                    title: 'Annual Subscription Report'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    title: 'Annual Subscription Report'
+                }
             ]
         });
     });
