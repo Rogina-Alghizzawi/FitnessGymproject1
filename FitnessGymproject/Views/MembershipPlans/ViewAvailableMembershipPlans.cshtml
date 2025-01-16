@@ -6,6 +6,13 @@
 
 <h2>Available Membership Plans</h2>
 
+@if (ViewBag.AlertMessage != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.AlertMessage
+    </div>
+}
+
 @if (!Model.Any())
 {
     <p>No available membership plans at the moment.</p>
@@ -37,6 +44,9 @@ else
                                 <option value="Visa">Visa</option>
                                 <option value="MasterCard">MasterCard</option>
                             </select>
+
+                            @* Checking if payment method exists, redirecting if not *@
+                            @* If the user has no payment method, they will be redirected to the AddPaymentMethod page *@
                             <button type="submit" class="btn btn-primary">Subscribe</button>
                         </form>
                     </td>
@@ -45,5 +55,3 @@ else
         </tbody>
     </table>
 }
-
-<hr />

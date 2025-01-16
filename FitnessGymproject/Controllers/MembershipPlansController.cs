@@ -221,15 +221,20 @@ namespace FitnessGymproject.Controllers
 
             decimal memberId = Convert.ToDecimal(loggedInMemberId);
 
-            // Fetch available membership plans
+
+            ViewBag.AlertMessage = "Welcome! Please choose a membership plan.";
+
+            // Fetch available membership plans where no subscriptions exist or all subscriptions are inactive
             var availablePlans = await _context.MembershipPlans
-                                               .Where(mp => mp.Subscriptions.All(s => s.MemberId == null))
+                                               .Where(mp => !_context.Subscriptions
+                                                                   .Any(s => s.MembershipPlanId == mp.MembershipPlanId && s.MemberId != null && s.Status == "Active"))
                                                .ToListAsync();
 
             ViewData["MemberId"] = memberId;
 
             return View(availablePlans);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod)
@@ -242,6 +247,16 @@ namespace FitnessGymproject.Controllers
             }
 
             decimal memberId = decimal.Parse(memberIdString);
+
+            // Check if the member has a saved payment method
+            var paymentMethodExists = await _context.Payments
+                                                     .AnyAsync(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod));
+
+            if (!paymentMethodExists)
+            {
+                // Redirect to AddPaymentMethod if no saved payment method
+                return RedirectToAction("Create","Payments", new { membershipPlanId = membershipPlanId });
+            }
 
             var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
 
@@ -319,22 +334,38 @@ namespace FitnessGymproject.Controllers
 
             decimal memberId = decimal.Parse(memberIdString);
 
-            var result = from subscription in _context.Subscriptions
-                         join invoice in _context.Invoices
-                         on subscription.SubscriptionId equals invoice.SubscriptionId
-                         where subscription.MemberId == memberId
-                         select new
-                         {
-                             subscription.PlanName,
-                             subscription.StartDate,
-                             subscription.EndDate,
-                             invoice.InvoiceId,
-                             invoice.TotalAmount,
-                             invoice.PaymentStatus
-                         };
+            // Query to join Subscription, Invoice, and Payment
+            var result = await (from subscription in _context.Subscriptions
+                                join invoice in _context.Invoices
+                                on subscription.SubscriptionId equals invoice.SubscriptionId
+                                join payment in _context.Payments
+                                on subscription.SubscriptionId equals payment.SubscriptionId into paymentGroup
+                                from payment in paymentGroup.DefaultIfEmpty()  // Left join to include subscriptions without payments
+                                where subscription.MemberId == memberId
+                                select new
+                                {
+                                    subscription.PlanName,
+                                    subscription.StartDate,
+                                    subscription.EndDate,
+                                    invoice.InvoiceId,
+                                    invoice.TotalAmount,
+                                    invoice.PaymentStatus,  // Original PaymentStatus from the Invoice table
+                                    CustomPaymentStatus = payment == null ? "No Payment" : (payment.PaymentStatus == "Completed" ? "Paid" : "Pending") // Custom property to avoid duplicate name
+                                }).ToListAsync();
 
-            return View(await result.ToListAsync());
+            bool hasPendingPayments = result.Any(s => s.CustomPaymentStatus == "No Payment");
+
+            if (hasPendingPayments)
+            {
+                ViewBag.AlertMessage = "You have subscriptions without payments. Please complete the payment.";
+            }
+
+            return View(result);
         }
+
+   
+
+
 
 
         private bool MembershipPlanExists(decimal id)
