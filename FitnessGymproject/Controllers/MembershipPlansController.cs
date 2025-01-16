@@ -19,10 +19,8 @@ namespace FitnessGymproject.Controllers
         {
             _context = context;
             _configuration = configuration;
-
         }
 
-        // GET: MembershipPlans
         public async Task<IActionResult> Index()
         {
             return _context.MembershipPlans != null ?
@@ -30,7 +28,6 @@ namespace FitnessGymproject.Controllers
                         Problem("Entity set 'ModelContext.MembershipPlans'  is null.");
         }
 
-        // GET: MembershipPlans/Details/5
         public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null || _context.MembershipPlans == null)
@@ -48,15 +45,11 @@ namespace FitnessGymproject.Controllers
             return View(membershipPlan);
         }
 
-        // GET: MembershipPlans/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: MembershipPlans/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MembershipPlanId,PlanName,PlanDescription,IncludedServices,Price,DurationDays,CreatedAt,UpdatedAt")] MembershipPlan membershipPlan)
@@ -70,7 +63,6 @@ namespace FitnessGymproject.Controllers
             return View(membershipPlan);
         }
 
-        // GET: MembershipPlans/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
             if (id == null || _context.MembershipPlans == null)
@@ -86,9 +78,6 @@ namespace FitnessGymproject.Controllers
             return View(membershipPlan);
         }
 
-        // POST: MembershipPlans/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(decimal id, [Bind("MembershipPlanId,PlanName,PlanDescription,IncludedServices,Price,DurationDays,CreatedAt,UpdatedAt")] MembershipPlan membershipPlan)
@@ -121,7 +110,6 @@ namespace FitnessGymproject.Controllers
             return View(membershipPlan);
         }
 
-        // GET: MembershipPlans/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
         {
             if (id == null || _context.MembershipPlans == null)
@@ -139,7 +127,6 @@ namespace FitnessGymproject.Controllers
             return View(membershipPlan);
         }
 
-        // POST: MembershipPlans/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(decimal id)
@@ -157,62 +144,6 @@ namespace FitnessGymproject.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        //public async Task<IActionResult> ViewAvailableMembershipPlans()
-        //{
-        //    var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
-
-        //    if (loggedInMemberId == null)
-        //    {
-        //        return RedirectToAction("Login","LoginAndRegister"); // Redirect to login page if not logged in
-        //    }
-
-        //    decimal memberId = Convert.ToDecimal(loggedInMemberId);
-
-        //    // Fetch available membership plans (where MemberId is null in the Subscription table)
-        //    var availablePlans = await _context.MembershipPlans
-        //                                       .Where(mp => mp.Subscriptions.All(s => s.MemberId == null)) // No member subscribed
-        //                                       .ToListAsync();  // Ensure you're awaiting the async operation
-
-        //    // Pass the memberId to the view through ViewData
-        //    ViewData["MemberId"] = memberId;
-
-
-        //    return View();  
-        //}
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId)
-        //{
-        //    var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
-
-        //    if (string.IsNullOrEmpty(memberIdString))
-        //    {
-        //        return RedirectToAction("Login", "LoginAndRegister");
-        //    }
-
-        //    var memberId = decimal.Parse(memberIdString);
-
-        //    var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
-        //    if (membershipPlan != null)
-        //    {
-        //        var subscription = new Subscription
-        //        {
-        //            MemberId = memberId,
-        //            MembershipPlanId = membershipPlanId,
-        //            CreatedAt = DateTime.Now
-        //        };
-
-        //        // Add the subscription and save changes
-        //        _context.Subscriptions.Add(subscription);
-        //        await _context.SaveChangesAsync();
-        //    }
-
-        //    return RedirectToAction("ViewSubscribedMembershipPlans");
-        //}
-
-
 
         public async Task<IActionResult> ViewAvailableMembershipPlans()
         {
@@ -249,7 +180,6 @@ namespace FitnessGymproject.Controllers
             return View(availablePlans);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod)
         {
@@ -262,7 +192,6 @@ namespace FitnessGymproject.Controllers
 
             decimal memberId = decimal.Parse(memberIdString);
 
-            // Fetch the membership plan first
             var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
 
             if (membershipPlan == null)
@@ -270,7 +199,6 @@ namespace FitnessGymproject.Controllers
                 return RedirectToAction("ViewAvailableMembershipPlans");
             }
 
-            // Fetch the user's most recent payment record
             var currentPayment = await _context.Payments
                                                .Where(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod))
                                                .OrderByDescending(p => p.PaymentDate)
@@ -278,28 +206,20 @@ namespace FitnessGymproject.Controllers
 
             if (currentPayment == null)
             {
-                if (currentPayment == null)
-                {
-                    TempData["ErrorMessage"] = "Please add a payment method to proceed.";
-                    return RedirectToAction("Create", "Payments"); // Redirect to a proper action
-                }
-
+                TempData["ErrorMessage"] = "Please add a payment method to proceed.";
+                return RedirectToAction("Create", "Payments");
             }
 
-            // Check if the user has enough balance
             if (currentPayment.Amount < membershipPlan.Price)
             {
-                // If balance is insufficient, show an error message and stay on the same page
                 ViewBag.ErrorMessage = "Your payment balance is insufficient. Please add more funds to proceed.";
-                return View("ViewSubscribedMembershipPlans");  
+                return View("ViewSubscribedMembershipPlans");
             }
 
-            // Deduct the amount from the user's balance
             currentPayment.Amount -= membershipPlan.Price;
             _context.Payments.Update(currentPayment);
             await _context.SaveChangesAsync();
 
-            // Create a new subscription
             var subscription = new Subscription
             {
                 MemberId = memberId,
@@ -316,7 +236,6 @@ namespace FitnessGymproject.Controllers
             _context.Subscriptions.Add(subscription);
             await _context.SaveChangesAsync();
 
-            // Add the payment record
             var payment = new Payment
             {
                 MemberId = memberId,
@@ -331,7 +250,6 @@ namespace FitnessGymproject.Controllers
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            // Create an invoice record
             var invoice = new Invoice
             {
                 SubscriptionId = subscription.SubscriptionId,
@@ -347,8 +265,6 @@ namespace FitnessGymproject.Controllers
             return RedirectToAction("ViewSubscribedMembershipPlans");
         }
 
-
-
         public async Task<IActionResult> ViewSubscribedMembershipPlans()
         {
             var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
@@ -360,7 +276,6 @@ namespace FitnessGymproject.Controllers
 
             decimal memberId = decimal.Parse(memberIdString);
 
-            // Query to join Subscription, Invoice, and Payment
             var result = await (from subscription in _context.Subscriptions
                                 join invoice in _context.Invoices
                                 on subscription.SubscriptionId equals invoice.SubscriptionId
@@ -379,7 +294,6 @@ namespace FitnessGymproject.Controllers
                                     CustomPaymentStatus = payment == null ? "No Payment" : (payment.PaymentStatus == "Completed" ? "Paid" : "Pending")
                                 }).ToListAsync();
 
-            // Debugging: Check if result contains any data
             if (result.Count == 0)
             {
                 ViewBag.AlertMessage = "No subscriptions found for this member.";
@@ -396,16 +310,10 @@ namespace FitnessGymproject.Controllers
                 ViewBag.AlertMessage = "You have subscriptions without payments. Please complete the payment.";
             }
 
-            // Pass result to ViewData or ViewBag
             ViewBag.Subscriptions = result;
 
             return View();
         }
-
-
-
-
-
 
         private bool MembershipPlanExists(decimal id)
         {

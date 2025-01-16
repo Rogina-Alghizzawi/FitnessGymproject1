@@ -21,14 +21,12 @@ namespace FitnessGymproject.Controllers
             _webHostEnvironment = webHostEnvironment ?? throw new ArgumentNullException(nameof(webHostEnvironment));
         }
 
-        // GET: Members
         public async Task<IActionResult> Index()
         {
             var members = await _context.Members.ToListAsync();
             return View(members);
         }
 
-        // GET: Members/Details/5
         public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null)
@@ -50,7 +48,6 @@ namespace FitnessGymproject.Controllers
             return View();
         }
 
-        // POST: Members/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MemberId,FullName,Email,Password,PhoneNumber,Address,CreatedAt,UpdatedAt,Imageprofileurl,Gender,ImageFile")] Member member)
@@ -70,7 +67,6 @@ namespace FitnessGymproject.Controllers
                             await member.ImageFile.CopyToAsync(fileStream);
                         }
 
-                        // Delete old image if it exists
                         if (!string.IsNullOrEmpty(member.Imageprofileurl))
                         {
                             string oldImagePath = Path.Combine(wwwRootPath, "Images", member.Imageprofileurl);
@@ -96,7 +92,6 @@ namespace FitnessGymproject.Controllers
             return View(member);
         }
 
-        // GET: Members/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
             if (id == null || _context.Members == null)
@@ -112,9 +107,6 @@ namespace FitnessGymproject.Controllers
             return View(member);
         }
 
-        // POST: Members/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(decimal id, [Bind("MemberId,FullName,Email,Password,PhoneNumber,Address,CreatedAt,UpdatedAt,Imageprofileurl,Gender")] Member member)
@@ -146,7 +138,7 @@ namespace FitnessGymproject.Controllers
             }
             return View(member);
         }
-        // GET: Members/Delete/5
+
         public async Task<IActionResult> Delete(decimal? id)
         {
             if (id == null)
@@ -163,7 +155,6 @@ namespace FitnessGymproject.Controllers
             return View(member);
         }
 
-        // POST: Members/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(decimal id)
@@ -208,26 +199,22 @@ namespace FitnessGymproject.Controllers
 
             return View(member);
         }
+
         public IActionResult ViewAvailablePlans()
         {
-            // Get the memberId from the session
             var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
 
             if (loggedInMemberId == null)
             {
-                // Handle the case where the member is not logged in
-                return RedirectToAction("Login");  // Redirect to login page or show an error
+                return RedirectToAction("Login");
             }
 
             decimal memberId = Convert.ToDecimal(loggedInMemberId);
 
-            // Fetch available workout plans (where MemberId is null)
             var availablePlans = _context.Workoutplans.Where(wp => wp.MemberId == null).ToList();
 
-            // Pass the memberId to the view through ViewData
             ViewData["MemberId"] = memberId;
 
-            // Return the view with available plans
             return View(availablePlans);
         }
 
@@ -238,7 +225,7 @@ namespace FitnessGymproject.Controllers
 
             if (string.IsNullOrEmpty(memberIdString))
             {
-                return RedirectToAction("Login", "LoginAndRegister"); 
+                return RedirectToAction("Login", "LoginAndRegister");
             }
 
             var memberId = decimal.Parse(memberIdString);
@@ -254,42 +241,29 @@ namespace FitnessGymproject.Controllers
             return RedirectToAction("ViewSubscribedPlans", "Members");
         }
 
-
-
-
         public IActionResult ViewSubscribedPlans()
         {
-            // Retrieve the member ID from the session
             string memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
 
             if (string.IsNullOrEmpty(memberIdString))
             {
-                // If no member is logged in, handle appropriately (e.g., redirect to login page)
                 return RedirectToAction("Login", "LoginAndRegister");
-
             }
 
-            // Convert the string to a decimal (since MemberId is decimal)
             decimal memberId = Convert.ToDecimal(memberIdString);
 
-            // Query the database for all workout plans assigned to the member
             var workoutPlans = _context.Workoutplans
                                        .Where(wp => wp.MemberId == memberId)
                                        .ToList();
 
             if (workoutPlans == null || !workoutPlans.Any())
             {
-                // Handle case where no workout plans are assigned (e.g., show a message)
                 ViewBag.Message = "No workout plans assigned.";
                 return View();
             }
 
-            // Return the list of workout plans to the view
             return View(workoutPlans);
         }
-
-
-
 
         public async Task<IActionResult> UpadtaMemberProfile(decimal? id)
         {
@@ -306,7 +280,6 @@ namespace FitnessGymproject.Controllers
             return View(member);
         }
 
-        // POST: Members/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpadtaMemberProfile(decimal id, [Bind("MemberId,FullName,Email,Password,PhoneNumber,Address,CreatedAt,UpdatedAt,Imageprofileurl,Gender,ImageFile")] Member member)
@@ -331,7 +304,6 @@ namespace FitnessGymproject.Controllers
                             await member.ImageFile.CopyToAsync(fileStream);
                         }
 
-                        // Delete old image if it exists
                         if (!string.IsNullOrEmpty(member.Imageprofileurl))
                         {
                             string oldImagePath = Path.Combine(wwwRootPath, "Images", member.Imageprofileurl);
@@ -359,12 +331,10 @@ namespace FitnessGymproject.Controllers
                     }
                 }
                 return RedirectToAction("Profile", "Members");
-
             }
 
             return View(member);
         }
-
 
         private decimal? GetLoggedInMemberId()
         {
@@ -378,6 +348,3 @@ namespace FitnessGymproject.Controllers
         }
     }
 }
-
-
-

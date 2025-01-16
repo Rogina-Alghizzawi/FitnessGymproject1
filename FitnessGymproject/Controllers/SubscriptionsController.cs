@@ -14,14 +14,12 @@ namespace FitnessGymproject.Controllers
             _context = context;
         }
 
-        // GET: Subscriptions
         public async Task<IActionResult> Index(string searchString, DateTime? startDate, DateTime? endDate)
         {
             IQueryable<Subscription> subscriptions = _context.Subscriptions
-     .Include(s => s.Member)
-     .Include(s => s.MembershipPlan)
-     .Include(s => s.WorkoutPlan);
-
+                .Include(s => s.Member)
+                .Include(s => s.MembershipPlan)
+                .Include(s => s.WorkoutPlan);
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -36,7 +34,6 @@ namespace FitnessGymproject.Controllers
             return View(await subscriptions.ToListAsync());
         }
 
-        // GET: Subscriptions/Create
         public IActionResult Create()
         {
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "FullName");
@@ -45,7 +42,6 @@ namespace FitnessGymproject.Controllers
             return View();
         }
 
-        // POST: Subscriptions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SubscriptionId,MemberId,MembershipPlanId,WorkoutPlanId,StartDate,EndDate,TotalPayment,Status,PaymentStatus")] Subscription subscription)
@@ -62,7 +58,6 @@ namespace FitnessGymproject.Controllers
             return View(subscription);
         }
 
-        // GET: Subscriptions/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
             if (id == null)
@@ -81,7 +76,6 @@ namespace FitnessGymproject.Controllers
             return View(subscription);
         }
 
-        // POST: Subscriptions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(decimal id, [Bind("SubscriptionId,MemberId,MembershipPlanId,WorkoutPlanId,StartDate,EndDate,TotalPayment,Status,PaymentStatus")] Subscription subscription)
@@ -117,7 +111,6 @@ namespace FitnessGymproject.Controllers
             return View(subscription);
         }
 
-        // GET: Subscriptions/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
         {
             if (id == null)
@@ -139,7 +132,6 @@ namespace FitnessGymproject.Controllers
             return View(subscription);
         }
 
-        // POST: Subscriptions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(decimal id)
@@ -153,50 +145,38 @@ namespace FitnessGymproject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-
-        // GET: MembershipPlans/Subscribe/5
         public IActionResult Subscribe(decimal? id)
         {
-            // Check if the id is provided in the URL
             if (id == null)
             {
-                return NotFound(); // Return "Not Found" if no membership plan ID is passed
+                return NotFound();
             }
 
-            // Retrieve the membership plan based on the ID
             var membershipPlan = _context.MembershipPlans.FirstOrDefault(m => m.MembershipPlanId == id);
             if (membershipPlan == null)
             {
-                return NotFound(); // Return "Not Found" if no matching membership plan is found
+                return NotFound();
             }
 
-            // Retrieve the user's ID from the session
             var userIdString = HttpContext.Session.GetString("LoggedInMemberId");
             if (string.IsNullOrEmpty(userIdString))
             {
-                // If the user is not logged in, redirect them to the login page
                 return RedirectToAction("Login", "Account");
             }
 
-            // Convert the user ID from string to decimal (ensure it can be safely converted)
             decimal userId;
             if (!decimal.TryParse(userIdString, out userId))
             {
-                // Handle the case where user ID cannot be parsed
-                return RedirectToAction("Login", "Account");  // Redirect to login page if the user ID is invalid
+                return RedirectToAction("Login", "Account");
             }
 
-            // Check if the user already has an active subscription (optional check)
             var existingSubscription = _context.Subscriptions.FirstOrDefault(s => s.MemberId == userId && s.MembershipPlanId == membershipPlan.MembershipPlanId && s.EndDate > DateTime.Now);
             if (existingSubscription != null)
             {
-                // If the user already has an active subscription for this plan, inform them
                 TempData["Message"] = "You already have an active subscription for this plan!";
-                return RedirectToAction("Index", "MembershipPlans");  // Redirect to the membership plans page
+                return RedirectToAction("Index", "MembershipPlans");
             }
 
-            // Create the new subscription
             var subscription = new Subscription
             {
                 MembershipPlanId = membershipPlan.MembershipPlanId,
@@ -205,11 +185,9 @@ namespace FitnessGymproject.Controllers
                 EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays)
             };
 
-            // Add the subscription to the database
             _context.Add(subscription);
             _context.SaveChanges();
 
-            // Redirect to the subscriptions page with a success message
             TempData["Message"] = "Subscription successful!";
             return RedirectToAction("Index", "Subscriptions");
         }

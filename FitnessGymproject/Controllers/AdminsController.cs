@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessGymproject.Models;
 using Microsoft.AspNetCore.Hosting;
@@ -21,15 +20,11 @@ namespace FitnessGymproject.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: Admins
         public async Task<IActionResult> Index()
         {
-            return _context.Admins != null ?
-                        View(await _context.Admins.ToListAsync()) :
-                        Problem("Entity set 'ModelContext.Admins'  is null.");
+            return _context.Admins != null ? View(await _context.Admins.ToListAsync()) : Problem("Entity set 'ModelContext.Admins' is null.");
         }
 
-        // GET: Admins/Details/5
         public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null || _context.Admins == null)
@@ -37,8 +32,7 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(m => m.AdminId == id);
+            var admin = await _context.Admins.FirstOrDefaultAsync(m => m.AdminId == id);
             if (admin == null)
             {
                 return NotFound();
@@ -47,15 +41,11 @@ namespace FitnessGymproject.Controllers
             return View(admin);
         }
 
-        // GET: Admins/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admins/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AdminId,FullName,Email,Password,CreatedAt,UpdatedAt,Gender,Imageprofileurl,ImageFile")] Admin admin)
@@ -64,7 +54,6 @@ namespace FitnessGymproject.Controllers
             {
                 if (admin.ImageFile != null)
                 {
-                    // Save the uploaded image
                     string wwwRootPath = _webHostEnvironment.WebRootPath;
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(admin.ImageFile.FileName);
                     string path = Path.Combine(wwwRootPath + "/images/", fileName);
@@ -74,7 +63,6 @@ namespace FitnessGymproject.Controllers
                         await admin.ImageFile.CopyToAsync(fileStream);
                     }
 
-                    // Set the Imageprofileurl property
                     admin.Imageprofileurl = "/images/" + fileName;
                 }
 
@@ -85,10 +73,6 @@ namespace FitnessGymproject.Controllers
             return View(admin);
         }
 
-
-
-
-        // GET: Admins/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
             if (id == null || _context.Admins == null)
@@ -104,9 +88,6 @@ namespace FitnessGymproject.Controllers
             return View(admin);
         }
 
-        // POST: Admins/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(decimal id, [Bind("AdminId,FullName,Email,Password,CreatedAt,UpdatedAt,Gender,Imageprofileurl,ImageFile")] Admin admin)
@@ -122,7 +103,6 @@ namespace FitnessGymproject.Controllers
                 {
                     if (admin.ImageFile != null)
                     {
-                        // Save the uploaded image
                         string wwwRootPath = _webHostEnvironment.WebRootPath;
                         string fileName = Guid.NewGuid().ToString() + Path.GetExtension(admin.ImageFile.FileName);
                         string path = Path.Combine(wwwRootPath + "/images/", fileName);
@@ -132,7 +112,6 @@ namespace FitnessGymproject.Controllers
                             await admin.ImageFile.CopyToAsync(fileStream);
                         }
 
-                        // Set the Imageprofileurl property
                         admin.Imageprofileurl = "/images/" + fileName;
                     }
 
@@ -155,8 +134,6 @@ namespace FitnessGymproject.Controllers
             return View(admin);
         }
 
-
-        // GET: Admins/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
         {
             if (id == null || _context.Admins == null)
@@ -164,8 +141,7 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(m => m.AdminId == id);
+            var admin = await _context.Admins.FirstOrDefaultAsync(m => m.AdminId == id);
             if (admin == null)
             {
                 return NotFound();
@@ -174,14 +150,13 @@ namespace FitnessGymproject.Controllers
             return View(admin);
         }
 
-        // POST: Admins/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(decimal id)
         {
             if (_context.Admins == null)
             {
-                return Problem("Entity set 'ModelContext.Admins'  is null.");
+                return Problem("Entity set 'ModelContext.Admins' is null.");
             }
             var admin = await _context.Admins.FindAsync(id);
             if (admin != null)
@@ -192,9 +167,6 @@ namespace FitnessGymproject.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-
-
 
         private bool AdminExists(decimal id)
         {
