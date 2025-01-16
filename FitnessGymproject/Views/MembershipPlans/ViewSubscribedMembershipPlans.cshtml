@@ -1,36 +1,31 @@
-﻿@model IEnumerable<dynamic>
-
-<h2>Subscribed Membership Plans</h2>
-
-@if (!Model.Any())
-{
-    <p>No subscribed membership plans at the moment.</p>
+﻿@{
+    ViewData["Title"] = "Subscribed Membership Plans";
 }
-else
-{
-    <table class="table table-bordered">
-        <thead>
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Plan Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Invoice Id</th>
+            <th>Total Amount</th>
+            <th>Payment Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>Plan Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Invoice ID</th>
-                <th>Total Amount</th>
-                <th>Payment Status</th>
+                <td>@(item.PlanName ?? "N/A")</td>
+                <td>@(item.StartDate?.ToString("d") ?? "N/A")</td>
+                <td>@(item.EndDate?.ToString("d") ?? "N/A")</td>
+                <td>@(item.InvoiceId ?? 0)</td>
+                <td>@(item.TotalAmount?.ToString("C") ?? "N/A")</td>
+                <td>@(item.PaymentStatus ?? "N/A")</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.PlanName</td>
-                    <td>@item.StartDate?.ToShortDateString()</td>
-                    <td>@item.EndDate?.ToShortDateString()</td>
-                    <td>@item.InvoiceId</td>
-                    <td>@item.TotalAmount.ToString("C")</td>
-                    <td>@item.PaymentStatus</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+        }
+    </tbody>
+</table>

@@ -262,15 +262,19 @@ namespace FitnessGymproject.Controllers
                 {
                     MemberId = memberId,
                     MembershipPlanId = membershipPlanId,
-                    CreatedAt = DateTime.Now,
-                    Status = "Active",
+                    PlanName = membershipPlan.PlanName,
                     StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays)
+                    EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays),
+                    Status = "Active",
+                    CreatedAt = DateTime.Now,
+                    PaymentStatus = "Completed",
+                    TotalPayment = membershipPlan.Price
                 };
 
                 _context.Subscriptions.Add(subscription);
+                await _context.SaveChangesAsync();
 
-                // Create a payment record
+                // Create a payment record (PaymentId is needed in the invoice)
                 var payment = new Payment
                 {
                     MemberId = memberId,
@@ -283,19 +287,19 @@ namespace FitnessGymproject.Controllers
                 };
 
                 _context.Payments.Add(payment);
+                await _context.SaveChangesAsync();  // Save to get PaymentId
 
-                // Create an invoice
+                // Create an invoice record (ensure PaymentId and SubscriptionId are set)
                 var invoice = new Invoice
                 {
                     SubscriptionId = subscription.SubscriptionId,
                     InvoiceDate = DateTime.Now,
                     TotalAmount = membershipPlan.Price,
                     PaymentStatus = "Paid",
-                    PaymentId = payment.PaymentId
+                    PaymentId = payment.PaymentId  // Link the payment
                 };
 
                 _context.Invoices.Add(invoice);
-
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("ViewSubscribedMembershipPlans");
@@ -303,6 +307,7 @@ namespace FitnessGymproject.Controllers
 
             return RedirectToAction("ViewAvailableMembershipPlans");
         }
+
         public async Task<IActionResult> ViewSubscribedMembershipPlans()
         {
             var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
