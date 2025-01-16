@@ -1,31 +1,52 @@
 ﻿@{
-    ViewData["Title"] = "Subscribed Membership Plans";
+    ViewData["Title"] = "Your Subscribed Plans";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h2>@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Plan Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Invoice Id</th>
-            <th>Total Amount</th>
-            <th>Payment Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (ViewBag.AlertMessage != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.AlertMessage
+    </div>
+}
+
+@if (ViewBag.Subscriptions != null && ViewBag.Subscriptions.Count > 0)
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@(item.PlanName ?? "N/A")</td>
-                <td>@(item.StartDate?.ToString("d") ?? "N/A")</td>
-                <td>@(item.EndDate?.ToString("d") ?? "N/A")</td>
-                <td>@(item.InvoiceId ?? 0)</td>
-                <td>@(item.TotalAmount?.ToString("C") ?? "N/A")</td>
-                <td>@(item.PaymentStatus ?? "N/A")</td>
+                <th>Plan Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Amount</th>
+                <th>Payment Status</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Subscriptions)
+            {
+                <tr>
+                    <td>@item.PlanName</td>
+                    <td>@item.StartDate?.ToString("d")</td>
+                    <td>@item.EndDate?.ToString("d")</td>
+                    <td>@item.TotalAmount?.ToString("C")</td>
+                    <td>
+                        @if (item.CustomPaymentStatus == "Paid")
+                        {
+                            <span class="badge bg-success">@item.CustomPaymentStatus</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@item.CustomPaymentStatus</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No subscriptions found.</p>
+}

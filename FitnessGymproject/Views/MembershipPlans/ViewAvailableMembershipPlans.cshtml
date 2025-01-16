@@ -25,6 +25,7 @@ else
                 <th>Plan Name</th>
                 <th>Duration (Days)</th>
                 <th>Total Payment</th>
+                <th>Available Payment Methods</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -36,17 +37,13 @@ else
                     <td>@plan.DurationDays</td>
                     <td>@plan.Price</td>
                     <td>
+                        @* Display the payment methods text *@
+                        <p>@ViewData["UserPaymentMethodsText"]</p>
+                    </td>
+                    <td>
                         <form asp-action="SubscribeToMembershipPlan" method="post">
                             <input type="hidden" name="membershipPlanId" value="@plan.MembershipPlanId" />
-                            <label for="paymentMethod">Payment Method:</label>
-                            <select name="paymentMethod" required>
-                                <option value="Credit Card">Credit Card</option>
-                                <option value="Visa">Visa</option>
-                                <option value="MasterCard">MasterCard</option>
-                            </select>
 
-                            @* Checking if payment method exists, redirecting if not *@
-                            @* If the user has no payment method, they will be redirected to the AddPaymentMethod page *@
                             <button type="submit" class="btn btn-primary">Subscribe</button>
                         </form>
                     </td>

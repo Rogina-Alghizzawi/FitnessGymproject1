@@ -21,9 +21,9 @@ namespace FitnessGymproject.Controllers
         // GET: MembershipPlans
         public async Task<IActionResult> Index()
         {
-              return _context.MembershipPlans != null ? 
-                          View(await _context.MembershipPlans.ToListAsync()) :
-                          Problem("Entity set 'ModelContext.MembershipPlans'  is null.");
+            return _context.MembershipPlans != null ?
+                        View(await _context.MembershipPlans.ToListAsync()) :
+                        Problem("Entity set 'ModelContext.MembershipPlans'  is null.");
         }
 
         // GET: MembershipPlans/Details/5
@@ -149,7 +149,7 @@ namespace FitnessGymproject.Controllers
             {
                 _context.MembershipPlans.Remove(membershipPlan);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -220,17 +220,27 @@ namespace FitnessGymproject.Controllers
             }
 
             decimal memberId = Convert.ToDecimal(loggedInMemberId);
+            var userActiveSubscriptions = await _context.Subscriptions
+                                                        .Where(s => s.MemberId == memberId && s.Status == "Active")
+                                                        .Select(s => s.MembershipPlanId)
+                                                        .ToListAsync();
 
-
-            ViewBag.AlertMessage = "Welcome! Please choose a membership plan.";
-
-            // Fetch available membership plans where no subscriptions exist or all subscriptions are inactive
             var availablePlans = await _context.MembershipPlans
                                                .Where(mp => !_context.Subscriptions
-                                                                   .Any(s => s.MembershipPlanId == mp.MembershipPlanId && s.MemberId != null && s.Status == "Active"))
+                                                                      .Any(s => s.MembershipPlanId == mp.MembershipPlanId && s.MemberId == memberId && s.Status == "Active")
+                                                       && !userActiveSubscriptions.Contains(mp.MembershipPlanId))
                                                .ToListAsync();
 
+            var userPaymentMethods = await _context.Payments
+                                                   .Where(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod))
+                                                   .Select(p => p.PaymentMethod)
+                                                   .Distinct()
+                                                   .ToListAsync();
+
+            var paymentMethodsText = userPaymentMethods.Any() ? string.Join(", ", userPaymentMethods) : "No payment methods available";
+
             ViewData["MemberId"] = memberId;
+            ViewData["UserPaymentMethodsText"] = paymentMethodsText;
 
             return View(availablePlans);
         }
@@ -248,80 +258,92 @@ namespace FitnessGymproject.Controllers
 
             decimal memberId = decimal.Parse(memberIdString);
 
-            // Check if the member has a saved payment method
-            var paymentMethodExists = await _context.Payments
-                                                     .AnyAsync(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod));
-
-            if (!paymentMethodExists)
-            {
-                // Redirect to AddPaymentMethod if no saved payment method
-                return RedirectToAction("Create","Payments", new { membershipPlanId = membershipPlanId });
-            }
-
+            // Fetch the membership plan first
             var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
 
-            if (membershipPlan != null)
+            if (membershipPlan == null)
             {
-                // Check if the member already has an active subscription
-                var existingSubscription = _context.Subscriptions
-                                                   .FirstOrDefault(s => s.MemberId == memberId && s.MembershipPlanId == membershipPlanId);
-
-                if (existingSubscription != null)
-                {
-                    ViewBag.Message = "You are already subscribed to this plan.";
-                    return RedirectToAction("ViewSubscribedMembershipPlans");
-                }
-
-                // Create a new subscription
-                var subscription = new Subscription
-                {
-                    MemberId = memberId,
-                    MembershipPlanId = membershipPlanId,
-                    PlanName = membershipPlan.PlanName,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays),
-                    Status = "Active",
-                    CreatedAt = DateTime.Now,
-                    PaymentStatus = "Completed",
-                    TotalPayment = membershipPlan.Price
-                };
-
-                _context.Subscriptions.Add(subscription);
-                await _context.SaveChangesAsync();
-
-                // Create a payment record (PaymentId is needed in the invoice)
-                var payment = new Payment
-                {
-                    MemberId = memberId,
-                    SubscriptionId = subscription.SubscriptionId,
-                    PaymentDate = DateTime.Now,
-                    PaymentStatus = "Completed",
-                    Amount = membershipPlan.Price,
-                    PaymentMethod = paymentMethod,
-                    CreatedAt = DateTime.Now
-                };
-
-                _context.Payments.Add(payment);
-                await _context.SaveChangesAsync();  // Save to get PaymentId
-
-                // Create an invoice record (ensure PaymentId and SubscriptionId are set)
-                var invoice = new Invoice
-                {
-                    SubscriptionId = subscription.SubscriptionId,
-                    InvoiceDate = DateTime.Now,
-                    TotalAmount = membershipPlan.Price,
-                    PaymentStatus = "Paid",
-                    PaymentId = payment.PaymentId  // Link the payment
-                };
-
-                _context.Invoices.Add(invoice);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("ViewSubscribedMembershipPlans");
+                return RedirectToAction("ViewAvailableMembershipPlans");
             }
 
-            return RedirectToAction("ViewAvailableMembershipPlans");
+            // Fetch the user's most recent payment record
+            var currentPayment = await _context.Payments
+                                               .Where(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod))
+                                               .OrderByDescending(p => p.PaymentDate)
+                                               .FirstOrDefaultAsync();
+
+            if (currentPayment == null)
+            {
+                if (currentPayment == null)
+                {
+                    TempData["ErrorMessage"] = "Please add a payment method to proceed.";
+                    return RedirectToAction("Create", "Payments"); // Redirect to a proper action
+                }
+
+            }
+
+            // Check if the user has enough balance
+            if (currentPayment.Amount < membershipPlan.Price)
+            {
+                // If balance is insufficient, show an error message and stay on the same page
+                ViewBag.ErrorMessage = "Your payment balance is insufficient. Please add more funds to proceed.";
+                return View("ViewSubscribedMembershipPlans");  
+            }
+
+            // Deduct the amount from the user's balance
+            currentPayment.Amount -= membershipPlan.Price;
+            _context.Payments.Update(currentPayment);
+            await _context.SaveChangesAsync();
+
+            // Create a new subscription
+            var subscription = new Subscription
+            {
+                MemberId = memberId,
+                MembershipPlanId = membershipPlanId,
+                PlanName = membershipPlan.PlanName,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays),
+                Status = "Active",
+                CreatedAt = DateTime.Now,
+                PaymentStatus = "Completed",
+                TotalPayment = membershipPlan.Price
+            };
+
+            _context.Subscriptions.Add(subscription);
+            await _context.SaveChangesAsync();
+
+            // Add the payment record
+            var payment = new Payment
+            {
+                MemberId = memberId,
+                SubscriptionId = subscription.SubscriptionId,
+                PaymentDate = DateTime.Now,
+                PaymentStatus = "Completed",
+                Amount = membershipPlan.Price,
+                PaymentMethod = paymentMethod,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Payments.Add(payment);
+            await _context.SaveChangesAsync();
+
+            // Create an invoice record
+            var invoice = new Invoice
+            {
+                SubscriptionId = subscription.SubscriptionId,
+                InvoiceDate = DateTime.Now,
+                TotalAmount = membershipPlan.Price,
+                PaymentStatus = "Paid",
+                PaymentId = payment.PaymentId
+            };
+
+            _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ViewSubscribedMembershipPlans");
         }
+
+
 
         public async Task<IActionResult> ViewSubscribedMembershipPlans()
         {
@@ -340,7 +362,7 @@ namespace FitnessGymproject.Controllers
                                 on subscription.SubscriptionId equals invoice.SubscriptionId
                                 join payment in _context.Payments
                                 on subscription.SubscriptionId equals payment.SubscriptionId into paymentGroup
-                                from payment in paymentGroup.DefaultIfEmpty()  // Left join to include subscriptions without payments
+                                from payment in paymentGroup.DefaultIfEmpty()
                                 where subscription.MemberId == memberId
                                 select new
                                 {
@@ -349,9 +371,19 @@ namespace FitnessGymproject.Controllers
                                     subscription.EndDate,
                                     invoice.InvoiceId,
                                     invoice.TotalAmount,
-                                    invoice.PaymentStatus,  // Original PaymentStatus from the Invoice table
-                                    CustomPaymentStatus = payment == null ? "No Payment" : (payment.PaymentStatus == "Completed" ? "Paid" : "Pending") // Custom property to avoid duplicate name
+                                    invoice.PaymentStatus,
+                                    CustomPaymentStatus = payment == null ? "No Payment" : (payment.PaymentStatus == "Completed" ? "Paid" : "Pending")
                                 }).ToListAsync();
+
+            // Debugging: Check if result contains any data
+            if (result.Count == 0)
+            {
+                ViewBag.AlertMessage = "No subscriptions found for this member.";
+            }
+            else
+            {
+                Console.WriteLine($"Found {result.Count} subscriptions for member {memberId}");
+            }
 
             bool hasPendingPayments = result.Any(s => s.CustomPaymentStatus == "No Payment");
 
@@ -360,17 +392,20 @@ namespace FitnessGymproject.Controllers
                 ViewBag.AlertMessage = "You have subscriptions without payments. Please complete the payment.";
             }
 
-            return View(result);
+            // Pass result to ViewData or ViewBag
+            ViewBag.Subscriptions = result;
+
+            return View();
         }
 
-   
+
 
 
 
 
         private bool MembershipPlanExists(decimal id)
         {
-          return (_context.MembershipPlans?.Any(e => e.MembershipPlanId == id)).GetValueOrDefault();
+            return (_context.MembershipPlans?.Any(e => e.MembershipPlanId == id)).GetValueOrDefault();
         }
     }
 }
