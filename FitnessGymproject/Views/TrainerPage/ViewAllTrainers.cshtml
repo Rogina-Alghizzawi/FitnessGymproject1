@@ -1,0 +1,47 @@
+﻿@model IEnumerable<FitnessGymproject.Models.Trainer>
+
+@{
+    ViewData["Title"] = "All Trainers";
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
+
+}
+<link rel="stylesheet" href="~/css/stylesheet.css">
+
+<div class="slider-area2">
+    <div class="slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap hero-cap2 text-center pt-70">
+                        <h2>Our Trainers</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="trainers-list">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var trainer in Model)
+        {
+            <div class="trainer-card">
+                <div class="card">
+                    <div class="bg"></div>
+                    <div class="blob"></div>
+                    <div class="trainer-info">
+                        <h3>@trainer.FullName</h3>
+                        <p>Specialization: @trainer.Specialization</p>
+                        <p>Email: @trainer.Email</p>
+                        <p>Phone: @trainer.PhoneNumber</p>
+                        <p>Bio: @trainer.Bio</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No trainers found.</p>
+    }
+</div>

@@ -13,10 +13,10 @@ public partial class Homepage
     public string? Description { get; set; }
 
     public string? LogoUrl { get; set; }
+    
     [NotMapped]
     public virtual IFormFile ImageFile { get; set; }
-    public string? VideoUrl { get; set; }
-
+   
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }

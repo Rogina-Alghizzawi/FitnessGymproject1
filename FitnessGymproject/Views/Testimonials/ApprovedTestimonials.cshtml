@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Client Testimonial";
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
+}
+
+
+<section class="about-area2 testimonial-area section-padding30 fix">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-md-11 col-sm-11">
+                <!-- about-img -->
+                <div class="about-img2">
+                    <img src="~/HomeDesign/assets/img/gallery/about2.png" alt="">
+                    <!-- Shape -->
+                    <div class="shape-qutaion d-none d-sm-block">
+                        <img src="~/HomeDesign/assets/img//gallery/qutaion.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-9 col-sm-9">
+                <div class="about-caption">
+                    <!-- Section Tittle -->
+                    <div class="section-tittle mb-55">
+                        <span>What Our Members Say</span>
+                        <h2>Discover How Our Gym Has Transformed Lives</h2>
+                    </div>
+
+                    <!-- Testimonial Start -->
+                    <div class="h1-testimonial-active">
+                      
+                            @foreach (var testimonial in Model)
+                            {
+                                <div class="single-testimonial">
+                                    <div class="testimonial-caption">
+                                        <p>@testimonial.Content</p>
+                                        <div class="rattiong-caption">
+                                            <span>@testimonial.Member.FullName<span>Gym Member</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        
+                    </div>
+                    <!-- Testimonial End -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

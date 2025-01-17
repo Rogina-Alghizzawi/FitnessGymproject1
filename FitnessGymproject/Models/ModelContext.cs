@@ -189,10 +189,7 @@ public partial class ModelContext : DbContext
                 .HasDefaultValueSql("SYSDATE\n")
                 .HasColumnType("DATE")
                 .HasColumnName("UPDATED_AT");
-            entity.Property(e => e.VideoUrl)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("VIDEO_URL");
+
         });
 
         modelBuilder.Entity<Invoice>(entity =>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FitnessGymproject.Models.Aboutu>
+﻿@* @model IEnumerable<FitnessGymproject.Models.Aboutu>
 
 @{
     ViewData["Title"] = "Index";
@@ -63,3 +63,146 @@
 }
     </tbody>
 </table>
+ *@
+
+@model IEnumerable<FitnessGymproject.Models.Aboutu>
+ @{
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
+
+ }
+
+<main>
+    <!-- Hero Section Start -->
+    <div class="slider-area2">
+        <div class="slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap hero-cap2 text-center pt-70">
+                            <h2>About Us</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero Section End -->
+    <!-- About Section Start -->
+    <section class="about-area section-padding30">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12">
+                    <div class="about-img">
+                        <img src="~/HomeDesign/assets/img/gallery/about.png" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="about-caption">
+                        <div class="section-tittle section-tittle3 mb-35">
+                            <span>ABOUT OUR GYM</span>
+                            <h2>Safe Bodybuilding Solutions That Save Our Valuable Time!</h2>
+                        </div>
+                        <p class="pera-top">Brook presents your services with flexible, convenient, and customized layouts. You can select your favorite layouts and elements with unlimited customization possibilities.</p>
+                        <p class="mb-65 pera-bottom">We present your services with flexible, convenient, and multipurpose layouts. Select your favorite layouts for various purposes.</p>
+                        <a href="membership.html" class="btn">Become a Member</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Section End -->
+    <!-- Gallery Section Start -->
+    <div class="gallery-area">
+        <div class="container-fluid p-0 fix">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="box snake mb-30">
+                        <div class="gallery-img big-img" style="background-image: url('~/HomeDesign/assets/img/gallery/gallery1.png');"></div>
+                        <div class="overlay">
+                            <div class="overlay-content">
+                                <a href="gallery.html"><i class="ti-arrow-top-right"></i></a>
+                                <h3>Best Fitness Gallery</h3>
+                                <p>Fitness, Body</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row">
+                        <!-- Repeat for other gallery images -->
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="box snake mb-30">
+                                <div class="gallery-img small-img" style="background-image: url('~/HomeDesign/assets/img/gallery/gallery2.png');"></div>
+                                <div class="overlay">
+                                    <div class="overlay-content">
+                                        <a href="gallery.html"><i class="ti-arrow-top-right"></i></a>
+                                        <h3>Best Fitness Gallery</h3>
+                                        <p>Fitness, Body</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Add more image boxes as required -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Gallery Section End -->
+    <!-- Client Feedback Section Start -->
+    <section class="about-area2 testimonial-area section-padding30 fix">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5 col-md-11 col-sm-11">
+                    <div class="about-img2">
+                        <img src="~/HomeDesign/assets/img/gallery/about2.png" alt="">
+                        <div class="shape-qutaion d-none d-sm-block">
+                            <img src="~/HomeDesign/assets/img/gallery/qutaion.png" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-9 col-sm-9">
+                    <div class="about-caption">
+                        <div class="section-tittle mb-55">
+                            <span>Client Feedback</span>
+                            <h2>What Our Clients Think About Our Gym</h2>
+                        </div>
+                        <div class="h1-testimonial-active">
+                            
+                            @foreach (var item in Model)
+                            {
+                                <div class="single-testimonial">
+                                    <div class="testimonial-caption">
+                                        <p>@item.Content</p>
+                                        <div class="rattiong-caption">
+                                            <span>@item.Title<span>Gym Trainer</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Client Feedback Section End -->
+    <!-- Our Team Section Start -->
+    @* <section class="wantToWork-area w-padding"> *@
+    @*     <div class="container"> *@
+    @*         <div class="row align-items-end justify-content-between"> *@
+    @*             <div class="col-lg-6 col-md-9 col-sm-9"> *@
+    @*                 <div class="section-tittle"> *@
+    @*                     <span>Our Team Members</span> *@
+    @*                     <h2>Our Most Experienced Trainers</h2> *@
+    @*                 </div> *@
+    @*             </div> *@
+    @*             <div class="col-xl-2 col-lg-2 col-md-3"> *@
+    @*                 <a href="services.html" class="btn wantToWork-btn f-right">More Services</a> *@
+    @*             </div> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* </section> *@
+
+
+</main>

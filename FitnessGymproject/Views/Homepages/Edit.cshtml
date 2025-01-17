@@ -9,8 +9,8 @@
 <h4>Homepage</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-4" >
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="HomepageId" />
             <div class="form-group">
@@ -24,15 +24,12 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LogoUrl" class="control-label"></label>
-                <input asp-for="LogoUrl" class="form-control" />
-                <span asp-validation-for="LogoUrl" class="text-danger"></span>
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="VideoUrl" class="control-label"></label>
-                <input asp-for="VideoUrl" class="form-control" />
-                <span asp-validation-for="VideoUrl" class="text-danger"></span>
-            </div>
+
+            
             <div class="form-group">
                 <label asp-for="CreatedAt" class="control-label"></label>
                 <input asp-for="CreatedAt" class="form-control" />

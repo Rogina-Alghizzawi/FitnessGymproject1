@@ -195,6 +195,15 @@ namespace FitnessGymproject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> ApprovedTestimonials()
+        {
+            var approvedTestimonials = await _context.Testimonials
+                                                     .Where(t => t.Status == "Approved")
+                                                     .Include(t => t.Member)
+                                                     .ToListAsync();
+            return View(approvedTestimonials);
+        }
+
         private bool TestimonialExists(decimal id)
         {
             return (_context.Testimonials?.Any(e => e.TestimonialId == id)).GetValueOrDefault();

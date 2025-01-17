@@ -208,6 +208,20 @@ namespace FitnessGymproject.Controllers
             return View(members);  // Pass members to the view
         }
 
+
+        // GET: Trainers/ViewAll
+        public async Task<IActionResult> ViewAllTrainers()
+        {
+            var trainers = await _context.Trainers.ToListAsync();
+
+            if (trainers == null || !trainers.Any())
+            {
+                return NotFound("No trainers found.");
+            }
+
+            return View(trainers); // Pass all trainers to the view
+        }
+
         private bool TrainerExists(decimal id)
         {
             return (_context.Trainers?.Any(e => e.TrainerId == id)).GetValueOrDefault();
