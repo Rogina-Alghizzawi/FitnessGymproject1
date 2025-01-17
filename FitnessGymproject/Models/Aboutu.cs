@@ -15,7 +15,7 @@ public partial class Aboutu
     public string? ImageUrl { get; set; }
     [NotMapped]
     public virtual IFormFile ImageFile { get; set; }
-    public string? VideoUrl { get; set; }
+
 
     public DateTime? CreatedAt { get; set; }
 

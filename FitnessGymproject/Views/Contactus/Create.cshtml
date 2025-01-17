@@ -1,48 +1,168 @@
 ﻿@model FitnessGymproject.Models.Contactu
 
 @{
-    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Health & Fitness | Contact Us</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="~/HomeDesign/assets/img/favicon.ico">
 
-<h4>Contactu</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FullName" class="control-label"></label>
-                <input asp-for="FullName" class="form-control" />
-                <span asp-validation-for="FullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
-                <input asp-for="Message" class="form-control" />
-                <span asp-validation-for="Message" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+    <!-- CSS here -->
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/slicknav.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/flaticon.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/gijgo.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/animate.min.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/animated-headline.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/slick.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/nice-select.css">
+    <link rel="stylesheet" href="~/HomeDesign/assets/css/style.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+    <style>
+        .contact-form-main {
+            padding: 30px 0;
+        }
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        .form-wrapper {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        .form-box {
+            border-radius: 20px;
+        }
+
+            .form-box input,
+            .form-box textarea {
+                border-radius: 15px;
+                padding: 12px;
+                font-size: 14px;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+                .form-box input::placeholder,
+                .form-box textarea::placeholder {
+                    color: #b0b0b0;
+                }
+
+        .submit-info button {
+            background-color: #D84040; /* Dark Red */
+            color: #fff;
+            border-radius: 20px;
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+        }
+
+            .submit-info button:hover {
+                background-color: #1D1616; /* Black */
+            }
+
+        .contact-form-main .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-tittle {
+            margin-bottom: 40px;
+            text-align: center;
+            color: #8E1616; /* Dark Red */
+        }
+
+        .section-tittle h2 {
+            font-size: 28px;
+            color: #1D1616; /* Black */
+            margin-top: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <section class="contact-form-main">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-7 col-lg-7">
+                    <div class="form-wrapper">
+                        <!-- Section Title -->
+                        <div class="form-tittle">
+                            <div class="row">
+                                <div class="col-lg-11 col-md-10 col-sm-10">
+                                    <div class="section-tittle">
+                                        <span>Contact Form</span>
+                                        <h2>Feel Free to contact with us!</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Section Title -->
+                        <!-- Display success message -->
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success">
+                                @TempData["SuccessMessage"]
+                            </div>
+                        }
+
+                        <form method="post" asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-box user-icon mb-30">
+                                        <label for="FullName" class="control-label"></label>
+                                        <input asp-for="FullName" class="form-control" placeholder="Full Name" />
+                                        <span asp-validation-for="FullName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="form-box email-icon mb-30">
+                                        <label for="Email" class="control-label"></label>
+                                        <input asp-for="Email" class="form-control" placeholder="Email" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 mb-30">
+                                    <div class="form-box phone-icon mb-30">
+                                        <label for="PhoneNumber" class="control-label"></label>
+                                        <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-box message-icon mb-65">
+                                        <label for="Message" class="control-label"></label>
+                                        <textarea asp-for="Message" class="form-control" placeholder="Message" rows="4"></textarea>
+                                        <span asp-validation-for="Message" class="text-danger"></span>
+                                    </div>
+                                    <div class="submit-info">
+                                        <button class="btn" type="submit">Send Message</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

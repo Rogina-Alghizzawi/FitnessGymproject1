@@ -59,6 +59,18 @@ namespace FitnessGymproject.Controllers
         // POST: Contactus/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("ContactId,FullName,Email,PhoneNumber,Message,CreatedAt")] Contactu contactu)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(contactu);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(contactu);
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ContactId,FullName,Email,PhoneNumber,Message,CreatedAt")] Contactu contactu)
@@ -67,10 +79,16 @@ namespace FitnessGymproject.Controllers
             {
                 _context.Add(contactu);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                TempData["SuccessMessage"] = "Your message has been successfully sent!";
+
+                return View();
             }
+
             return View(contactu);
         }
+
+
 
         // GET: Contactus/Edit/5
         public async Task<IActionResult> Edit(decimal? id)

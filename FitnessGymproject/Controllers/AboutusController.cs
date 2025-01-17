@@ -154,6 +154,23 @@ namespace FitnessGymproject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        public async Task<IActionResult> Aboutuspage()
+        {
+            // Check if the Aboutus DbSet is not null
+            if (_context.Aboutus == null)
+            {
+                // Return a problem result if the DbSet is null
+                return Problem("Entity set 'ModelContext.Aboutus' is null.");
+            }
+
+            // Fetch and return the list of "About Us" data asynchronously
+            var aboutUsList = await _context.Aboutus.ToListAsync();
+
+            // Pass the fetched list to the view
+            return View(aboutUsList);
+        }
+
         private bool AboutuExists(decimal id)
         {
           return (_context.Aboutus?.Any(e => e.AboutUsId == id)).GetValueOrDefault();

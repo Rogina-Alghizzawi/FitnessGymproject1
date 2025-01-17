@@ -6,6 +6,13 @@
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/Home_Layout.cshtml";
 }
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <!--? slider Area Start-->
 <div class="slider-area position-relative">
@@ -110,6 +117,8 @@
                                 <img src="@content.LogoUrl" alt="Quality Equipment" style="width: 100px; height: 100px;" />
                             </div>
                             <div class="cat-cap">
+                                <h5>@content.Title</h5>
+
                                 <p>@content.Description</p>
                             </div>
                             <div class="img-cap">
@@ -130,7 +139,7 @@
                                 <img src="@content.LogoUrl" alt="Health caring" style="width: 100px; height: 100px;" />
                             </div>
                             <div class="cat-cap">
-                                <h5><a href="services.html">@content.Title</a></h5>
+                                <h5>@content.Title</h5>
                                 <p>@content.Description</p>
                             </div>
                             <div class="img-cap">
@@ -182,7 +191,7 @@
                         }
                     </div>
                     <!-- Button -->
-                    <li><a href="@Url.Action("ApprovedTestimonials", "Testimonials")" class="btn btn-primary">Testimonials</a></li>
+                    <li><a href="@Url.Action("ApprovedTestimonials", "Testimonials")" class="btn header-btn" style="font-size: 18px; padding: 15px 30px;">Testimonials</a></li>
                 </div>
             </div>
         </div>
@@ -203,11 +212,81 @@
             </div>
         </div>
         <div class="col-lg-12 text-center">
-            <li><a href="@Url.Action("ViewAllTrainers", "TrainerPage")" class="btn btn-primary">Testimonials</a></li>
+            <li><a href="@Url.Action("ViewAllTrainers", "TrainerPage")" class="btn header-btn" style="font-size: 18px; padding: 15px 30px;">Testimonials</a></li>
         </div>
       
     </div>
 </section>
+<!-- Contact Us Button Area Start -->
+<section class="contact-us-area section-padding30">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- Left Column for Images -->
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div id="carouselExample" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <!-- Item 1 -->
+                        <div class="carousel-item active">
+                            @foreach (var content in Model)
+                            {
+                                if (content.Title == "c1")
+                                {
+                                    <img src="@content.LogoUrl" alt="c1" class="d-block w-100" style="border-radius:20px; max-height: 500px; object-fit: contain;" />
+                                }
+                            }
+                        </div>
+                        <!-- Item 2 -->
+                        <div class="carousel-item">
+                            @foreach (var content in Model)
+                            {
+                                if (content.Title == "c2")
+                                {
+                                    <img src="@content.LogoUrl" alt="c2" class="d-block w-100" style="border-radius:20px; max-height: 500px; object-fit: contain;" />
+                                }
+                            }
+                        </div>
+                        <!-- Item 3 -->
+                        <div class="carousel-item">
+                            @foreach (var content in Model)
+                            {
+                                if (content.Title == "c3")
+                                {
+                                    <img src="@content.LogoUrl" alt="c3" class="d-block w-100" style="border-radius:20px; max-height: 500px; object-fit: contain;" />
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Carousel Controls -->
+                    <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column for Text -->
+            <div class="col-lg-6 col-md-6 col-sm-12 d-flex align-items-center">
+                <div class="contact-caption text-left">
+                    <h2>Have Questions? Contact Us!</h2>
+                    <p>Our team is here to help! If you have any questions or need assistance, feel free to reach out to us. We are happy to assist you!</p>
+
+                    <!-- Contact Us Button -->
+                    <a class="nav-link btn header-btn" asp-action="Create" asp-controller="Contactus" style="font-size: 18px; padding: 15px 30px;">Go to Contact Us Form</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 
+
+
+
+
+<!-- Contact Us Button Area End -->
 </main>
