@@ -2,35 +2,42 @@
 
 @{
     ViewData["Title"] = "Create Testimonial";
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
 }
 
-<h1>Submit Your Testimonial</h1>
+<section class="justify-content-center align-items-center" style="padding:300px;">
+    <h1>Submit Your Testimonial</h1>
 
-<h4>We'd love to hear your feedback about our gym!</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div>
+    <h4>We'd love to hear your feedback about our gym!</h4>
 
-            <div class="form-group">
-                <label asp-for="MemberId" class="control-label">Member ID</label>
-                <input asp-for="MemberId" class="form-control" readonly value="@ViewData["MemberId"]" />
-            </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Content" class="control-label">Your Feedback</label>
-                <textarea asp-for="Content" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <input asp-for="MemberId" type="hidden" value="@ViewData["MemberId"]" />
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group mb-3">
+                    <label asp-for="Content" class="control-label">Your Feedback</label>
+                    <textarea asp-for="Content" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Back to Testimonials</a>
-</div>
+  
+</section>

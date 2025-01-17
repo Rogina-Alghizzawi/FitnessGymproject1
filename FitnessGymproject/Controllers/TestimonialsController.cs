@@ -48,7 +48,7 @@ namespace FitnessGymproject.Controllers
 
             if (string.IsNullOrEmpty(memberId))
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "LoginAndRegister");
             }
 
             ViewData["MemberId"] = memberId;
@@ -80,12 +80,15 @@ namespace FitnessGymproject.Controllers
             testimonial.Member = member;
             testimonial.Status = "Pending";
             testimonial.CreatedAt = DateTime.Now;
-
             if (ModelState.IsValid)
             {
                 _context.Add(testimonial);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                // Set success message in TempData
+                TempData["SuccessMessage"] = "Your testimonial has been successfully submitted!";
+
+                return View();
             }
 
             ViewData["MemberId"] = testimonial.MemberId;
