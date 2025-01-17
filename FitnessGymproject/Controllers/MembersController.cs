@@ -200,70 +200,8 @@ namespace FitnessGymproject.Controllers
             return View(member);
         }
 
-        public IActionResult ViewAvailablePlans()
-        {
-            var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+       
 
-            if (loggedInMemberId == null)
-            {
-                return RedirectToAction("Login");
-            }
-
-            decimal memberId = Convert.ToDecimal(loggedInMemberId);
-
-            var availablePlans = _context.Workoutplans.Where(wp => wp.MemberId == null).ToList();
-
-            ViewData["MemberId"] = memberId;
-
-            return View(availablePlans);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> SubscribeToPlan(decimal workoutPlanId)
-        {
-            var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
-
-            if (string.IsNullOrEmpty(memberIdString))
-            {
-                return RedirectToAction("Login", "LoginAndRegister");
-            }
-
-            var memberId = decimal.Parse(memberIdString);
-
-            var workoutPlan = await _context.Workoutplans.FindAsync(workoutPlanId);
-            if (workoutPlan != null)
-            {
-                workoutPlan.MemberId = memberId;
-                _context.Update(workoutPlan);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction("ViewSubscribedPlans", "Members");
-        }
-
-        public IActionResult ViewSubscribedPlans()
-        {
-            string memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
-
-            if (string.IsNullOrEmpty(memberIdString))
-            {
-                return RedirectToAction("Login", "LoginAndRegister");
-            }
-
-            decimal memberId = Convert.ToDecimal(memberIdString);
-
-            var workoutPlans = _context.Workoutplans
-                                       .Where(wp => wp.MemberId == memberId)
-                                       .ToList();
-
-            if (workoutPlans == null || !workoutPlans.Any())
-            {
-                ViewBag.Message = "No workout plans assigned.";
-                return View();
-            }
-
-            return View(workoutPlans);
-        }
 
         public async Task<IActionResult> UpadtaMemberProfile(decimal? id)
         {
