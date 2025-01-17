@@ -75,4 +75,46 @@
             </div>
         </div>
     </section>
+    <section class="about-area section-padding30">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Text Section (Left) -->
+                <div class="col-lg-6 col-md-12">
+                    @foreach (var content in Model)
+                    {
+                        if (content.Title == "Our core values")
+                        {
+                            <div class="section-tittle section-tittle3 mb-35">
+                                <span>@content.Title</span>
+                                <h2>@content.Content</h2>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <!-- Image Section (Right) -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="about-img">
+                        @foreach (var content in Model)
+                        {
+                            if (content.Title == "Our core values")
+                            {
+                                <div id="about-us">
+                                    @if (!string.IsNullOrEmpty(content.ImageUrl))
+                                    {
+                                        <img src="@content.ImageUrl" alt="Core Values Image" style="max-width: 100%; height: auto; border-radius: 20px;" />
+                                    }
+                                    else
+                                    {
+                                        <p>No image available</p>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </main>

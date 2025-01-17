@@ -147,38 +147,28 @@ namespace FitnessGymproject.Controllers
 
         public async Task<IActionResult> ViewAvailableMembershipPlans()
         {
-            var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
-
-            if (loggedInMemberId == null)
-            {
-                return RedirectToAction("Login");
-            }
-
-            decimal memberId = Convert.ToDecimal(loggedInMemberId);
-            var userActiveSubscriptions = await _context.Subscriptions
-                                                        .Where(s => s.MemberId == memberId && s.Status == "Active")
-                                                        .Select(s => s.MembershipPlanId)
-                                                        .ToListAsync();
-
+            // Get all available membership plans that are not already subscribed to by any member
             var availablePlans = await _context.MembershipPlans
                                                .Where(mp => !_context.Subscriptions
-                                                                      .Any(s => s.MembershipPlanId == mp.MembershipPlanId && s.MemberId == memberId && s.Status == "Active")
-                                                       && !userActiveSubscriptions.Contains(mp.MembershipPlanId))
+                                                                      .Any(s => s.MembershipPlanId == mp.MembershipPlanId && s.Status == "Active"))
                                                .ToListAsync();
 
+            // Get all distinct payment methods from the database (not based on specific user anymore)
             var userPaymentMethods = await _context.Payments
-                                                   .Where(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod))
+                                                   .Where(p => !string.IsNullOrEmpty(p.PaymentMethod))
                                                    .Select(p => p.PaymentMethod)
                                                    .Distinct()
                                                    .ToListAsync();
 
+            // Join the payment methods into a string for display
             var paymentMethodsText = userPaymentMethods.Any() ? string.Join(", ", userPaymentMethods) : "No payment methods available";
 
-            ViewData["MemberId"] = memberId;
+            // Pass the payment methods text to the View
             ViewData["UserPaymentMethodsText"] = paymentMethodsText;
 
             return View(availablePlans);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod)

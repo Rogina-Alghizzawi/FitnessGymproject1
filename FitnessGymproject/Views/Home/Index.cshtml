@@ -91,7 +91,7 @@
                     <p class="mb-65 pera-bottom">Brook presents your services with flexible, convefnient and chient anipurpose layouts. You can select your favorite layouts.</p>
                     @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedInMemberId") == null)
                     {
-                        <a class="nav-link btn header-btn" asp-action="Register" asp-controller="LoginAndRegister">became a member</a>
+                        <a class="btn header-btn" style="font-size: 18px; padding: 15px 30px;"  asp-action="Register" asp-controller="LoginAndRegister">became a member</a>
                     }
                     else
                     {
@@ -104,7 +104,7 @@
 </section>
 <!-- About-2 Area End -->
 <!-- Want To work End -->
-<section class="services-area pt-100 pb-150 section-bg" data-background="assets/img/gallery/section_bg01.png">
+<section class="services-area pt-100 pb-150 section-bg" data-background="/HomeDesign/assets/img/gallery/section_bg01.png">
     <div class="container">
         <div class="row d-flex justify-content-center">
             @foreach (var content in Model)
@@ -191,7 +191,27 @@
                         }
                     </div>
                     <!-- Button -->
-                    <li><a href="@Url.Action("ApprovedTestimonials", "Testimonials")" class="btn header-btn" style="font-size: 18px; padding: 15px 30px;">Testimonials</a></li>
+                    @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedInMemberId") == null)
+                    {
+                        <li><a href="@Url.Action("ApprovedTestimonials", "Testimonials")" class="btn header-btn" style="font-size: 18px; padding: 15px 30px;">Testimonials</a></li>
+                    }
+                    else
+                    {
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12 text-center">
+                                <ul class="d-flex justify-content-center">
+                                    <li style="margin-right: 10px;">
+                                        <a href="@Url.Action("ApprovedTestimonials", "Testimonials")" class="btn header-btn" style="font-size: 18px; padding: 15px 30px;">Testimonials</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Create", "Testimonials")" class="btn header-btn" style="font-size: 18px; padding: 15px 30px;">Add Testimonial</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    }
+
                 </div>
             </div>
         </div>
@@ -203,20 +223,39 @@
 <section class="trainers-area w-padding">
     <div class="container">
         <div class="row align-items-center justify-content-between">
-            <div class="col-lg-6 col-md-9 col-sm-9">
+            <!-- Image Section (Left) -->
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="about-img">
+                    @foreach (var content in Model)
+                    {
+                        if (content.Title == "trainers2")
+                        {
+
+                            <img style="max-width: 100%; height: auto; border-radius: 20px;" src="@content.LogoUrl" alt="trainers2" />
+
+
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- Text Section (Right) -->
+            <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="section-title">
                     <h2>OUR TEAM OF TRAINERS</h2>
                     <h2>Meet Our Experienced Trainers</h2>
                     <p>Our trainers are highly experienced and passionate about helping children with special needs. With years of hands-on experience in rehabilitation and behavior modification, our trainers work tirelessly to ensure the best outcomes for every individual. They are dedicated to teaching interactive play, daily life skills, and much more to help children thrive.</p>
+                    <li><a href="@Url.Action("ViewAllTrainers", "TrainerPage")" class="btn header-btn" style="font-size: 18px; padding: 15px 30px;">Our Trainers</a></li>
+
+                
                 </div>
             </div>
         </div>
-        <div class="col-lg-12 text-center">
-            <li><a href="@Url.Action("ViewAllTrainers", "TrainerPage")" class="btn header-btn" style="font-size: 18px; padding: 15px 30px;">Testimonials</a></li>
+            </div>
         </div>
-      
     </div>
 </section>
+
 <!-- Contact Us Button Area Start -->
 <section class="contact-us-area section-padding30">
     <div class="container">
@@ -285,7 +324,7 @@
 
 
 
-<section class="wantToWork-area w-padding section-bg" data-background="/HomeDesign//assets/img/gallery/section_bg02.png">
+<section class="wantToWork-area w-padding section-bg" data-background="/HomeDesign/assets/img/gallery/section_bg02.png">
     <div class="container">
         <div class="row align-items-center justify-content-between">
             <div class="col-xl-6 col-lg-7 col-md-8 col-sm-10">
