@@ -18,14 +18,32 @@ namespace FitnessGymproject.Controllers
             _context = context;
         }
 
-        // GET: Payments
         public async Task<IActionResult> Index()
         {
-            var modelContext = _context.Payments.Include(p => p.Member).Include(p => p.Subscription);
+            // Retrieve the logged-in member's ID from the session
+            var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+
+            // Check if the member is logged in
+            if (loggedInMemberId == null)
+            {
+                // If no member is logged in, redirect to a login page or return an appropriate result
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            // Convert the logged-in member's ID to an integer (or the appropriate type in your case)
+            int memberId = int.Parse(loggedInMemberId);
+
+            // Retrieve the payments for the logged-in member
+            var modelContext = _context.Payments
+                .Include(p => p.Member)
+                .Include(p => p.Subscription)
+                .Where(p => p.MemberId == memberId);  // Filter payments by logged-in member
+
+            // Return the filtered payments list
             return View(await modelContext.ToListAsync());
         }
 
-        // GET: Payments/Details/5
+
         public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null || _context.Payments == null)
@@ -45,72 +63,60 @@ namespace FitnessGymproject.Controllers
             return View(payment);
         }
 
-        // GET: Payments/Create
         public async Task<IActionResult> Create()
         {
-            // Check if the member is logged in by retrieving the session value
             var loggedInMember = HttpContext.Session.GetString("LoggedInMemberId");
 
-            // If the member ID is not present, redirect to the login page
             if (string.IsNullOrEmpty(loggedInMember))
             {
                 return RedirectToAction("Login", "LoginAndRegister");
             }
 
-            // Convert the member ID from the session to decimal
             decimal memberId = Convert.ToDecimal(loggedInMember);
 
-            // Retrieve the member from the database
             var member = await _context.Members.FirstOrDefaultAsync(a => a.MemberId == memberId);
 
-            // If the member doesn't exist, return a NotFound result
             if (member == null)
             {
                 return NotFound();
             }
 
-            // Set the MemberId as a hidden value to be passed with the form submission
-            ViewData["MemberId"] = memberId;  // Pass the logged-in member's ID to the view
+            // Initialize the model if necessary, especially for new fields
+            var payment = new Payment();
+
+            ViewData["MemberId"] = memberId;
             ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId");
 
-            return View();
+            return View(payment); // Pass an initialized Payment object
         }
 
-        // POST: Payments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PaymentId,MemberId,SubscriptionId,PaymentDate,PaymentStatus,Amount,PaymentMethod,CreatedAt")] Payment payment)
         {
             if (ModelState.IsValid)
             {
-                // Check if the member already has an existing payment
                 var existingPayment = await _context.Payments
                                                     .FirstOrDefaultAsync(p => p.MemberId == payment.MemberId && p.PaymentStatus == "Completed");
 
                 if (existingPayment != null)
                 {
-                    // If a completed payment exists for the member, display a message and prevent the creation of a new payment
                     ModelState.AddModelError(string.Empty, "This member already has a completed payment.");
-                    return View(payment);  // Return to the view with the error message
+                    return View(payment);
                 }
 
-                // No existing payment, so proceed with the creation of the new payment
                 _context.Add(payment);
                 await _context.SaveChangesAsync();
 
-                // Redirect to ViewAvailableMembershipPlans action in MembershipPlansController
                 return RedirectToAction("ViewAvailableMembershipPlans", "MembershipPlans");
             }
 
-            // If the model state is invalid, return to the same view
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId", payment.MemberId);
             ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId", payment.SubscriptionId);
 
             return View(payment);
         }
-
 
         // GET: Payments/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
@@ -124,9 +130,17 @@ namespace FitnessGymproject.Controllers
                 .Include(p => p.Member)
                 .Include(p => p.Subscription)
                 .FirstOrDefaultAsync(m => m.PaymentId == id);
+
             if (payment == null)
             {
                 return NotFound();
+            }
+
+            // Check if the logged-in member is the one associated with the payment
+            var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+            if (loggedInMemberId == null || int.Parse(loggedInMemberId) != payment.MemberId)
+            {
+                return Unauthorized(); // Prevent deleting payments of other members
             }
 
             return View(payment);
@@ -141,16 +155,104 @@ namespace FitnessGymproject.Controllers
             {
                 return Problem("Entity set 'ModelContext.Payments'  is null.");
             }
+
             var payment = await _context.Payments.FindAsync(id);
-            if (payment != null)
+
+            if (payment == null)
             {
-                _context.Payments.Remove(payment);
+                return NotFound();
             }
 
+            // Ensure that the logged-in member is the one deleting the payment
+            var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+            if (loggedInMemberId == null || int.Parse(loggedInMemberId) != payment.MemberId)
+            {
+                return Unauthorized(); // Prevent deleting payments of other members
+            }
+
+            // Remove the payment from the database
+            _context.Payments.Remove(payment);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
+
+
+
+        public async Task<IActionResult> Edit(decimal? id)
+        {
+            if (id == null || _context.Payments == null)
+            {
+                return NotFound();
+            }
+
+            // Retrieve the payment for the logged-in member
+            var payment = await _context.Payments
+                .Include(p => p.Member)
+                .Include(p => p.Subscription)
+                .FirstOrDefaultAsync(m => m.PaymentId == id);
+
+            if (payment == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the logged-in member is the one associated with the payment
+            var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+            if (loggedInMemberId == null || int.Parse(loggedInMemberId) != payment.MemberId)
+            {
+                return Unauthorized(); // Prevent editing payments of other members
+            }
+
+            ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId", payment.SubscriptionId);
+            return View(payment);
+        }
+
+        // POST: Payments/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("PaymentId,MemberId,SubscriptionId,PaymentDate,PaymentStatus,Amount,PaymentMethod,CreatedAt")] Payment payment)
+        {
+            if (id != payment.PaymentId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Ensure that the logged-in member is the one editing their payment
+                    var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+                    if (loggedInMemberId == null || int.Parse(loggedInMemberId) != payment.MemberId)
+                    {
+                        return Unauthorized(); // Prevent editing payments of other members
+                    }
+
+                    _context.Update(payment);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PaymentExists(payment.PaymentId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId", payment.SubscriptionId);
+            return View(payment);
+        }
+
+        // Existing methods...
+
+     
         private bool PaymentExists(decimal id)
         {
             return (_context.Payments?.Any(e => e.PaymentId == id)).GetValueOrDefault();

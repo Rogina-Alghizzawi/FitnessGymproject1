@@ -321,6 +321,77 @@ public partial class ModelContext : DbContext
             entity.HasKey(e => e.PaymentId).HasName("SYS_C009017");
 
             entity.ToTable("PAYMENT");
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.HasKey(e => e.PaymentId).HasName("SYS_C009017");
+
+                entity.ToTable("PAYMENT");
+
+                entity.Property(e => e.PaymentId)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("PAYMENT_ID");
+
+                entity.Property(e => e.Amount)
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("AMOUNT");
+
+                entity.Property(e => e.CreatedAt)
+                    .HasDefaultValueSql("SYSDATE")
+                    .HasColumnType("DATE")
+                    .HasColumnName("CREATED_AT");
+
+                entity.Property(e => e.MemberId)
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("MEMBER_ID");
+
+                entity.Property(e => e.PaymentDate)
+                    .HasDefaultValueSql("SYSDATE")
+                    .HasColumnType("DATE")
+                    .HasColumnName("PAYMENT_DATE");
+
+                entity.Property(e => e.PaymentMethod)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("PAYMENT_METHOD");
+
+                entity.Property(e => e.PaymentStatus)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("'Success'")
+                    .HasColumnName("PAYMENT_STATUS");
+
+                entity.Property(e => e.SubscriptionId)
+                    .HasColumnType("NUMBER")
+                    .HasColumnName("SUBSCRIPTION_ID");
+
+                // New properties added for card details
+                entity.Property(e => e.CardNumber)
+                    .HasMaxLength(19)  // Adjust size as needed
+                    .IsUnicode(false)
+                    .HasColumnName("CARD_NUMBER");
+
+                entity.Property(e => e.ExpirationDate)
+                    .HasMaxLength(5)   // Format MM/YY
+                    .IsUnicode(false)
+                    .HasColumnName("EXPIRATION_DATE");
+
+                entity.Property(e => e.SecurityCode)
+                    .HasMaxLength(4)   // CVV can be 3 or 4 digits
+                    .IsUnicode(false)
+                    .HasColumnName("SECURITY_CODE");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.Payments)
+                    .HasForeignKey(d => d.MemberId)
+                    .HasConstraintName("SYS_C009018");
+
+                entity.HasOne(d => d.Subscription)
+                    .WithMany(p => p.Payments)
+                    .HasForeignKey(d => d.SubscriptionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PAYMENT_SUBSCRIPTION");
+            });
 
             entity.Property(e => e.PaymentId)
                 .ValueGeneratedOnAdd()

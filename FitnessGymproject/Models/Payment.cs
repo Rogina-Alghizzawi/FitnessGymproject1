@@ -25,7 +25,9 @@ public partial class Payment
 
     public virtual Member? Member { get; set; } 
 
-    public virtual Subscription? Subscription { get; set; } 
-
+    public virtual Subscription? Subscription { get; set; }
+    public string? CardNumber { get; set; }          
+    public string? ExpirationDate { get; set; }     
+    public string? SecurityCode { get; set; }
     public virtual ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 }

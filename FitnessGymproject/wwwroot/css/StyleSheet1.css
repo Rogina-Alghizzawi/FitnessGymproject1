@@ -1,64 +1,131 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Rakkas&family=Space+Grotesk:wght@300..700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
-html, body {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    place-items: center;
+* {
     margin: 0;
+    padding: 0;
+    outline: none;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    background-image: radial-gradient(whitesmoke, lavenderblush);
-}
-
-.card {
-    width: 300px;
-    height: 350px;
-    background-image: url(https://wallpapershome.com/images/pages/pic_v/864.jpg);
-    background-position: center;
-    background-size: 100%;
-    border-radius: 15px;
-    box-sizing: border-box;
     display: flex;
-    place-items: end;
-    box-shadow: 15px 15px 0px rgba(120, 0, 120, .3);
-    transition: 0.4s;
-    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 10px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(115deg, #8B0000 10%, #d41b2d 90%);
 }
 
-    .card:hover .bottom {
-        height: 195px;
-        cursor: pointer;
+.form-container {
+    max-width: 800px;
+    background: #fff;
+    width: 800px;
+    padding: 25px 40px 10px 40px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+    .form-container h1, h4 {
+        text-align: center;
     }
 
-    .card:hover {
-        transform: scale(1.05, 1.05);
-        box-shadow: -15px -15px 0px rgba(120, 0, 120, .3);
-    }
+.form-row {
+    display: flex;
+    margin: 20px 0;
+}
 
-    .card .bottom {
-        height: 110px;
+.input-data {
+    width: 100%;
+    height: 40px;
+    margin: 0 20px;
+    position: relative;
+}
+
+    .input-data input,
+    .input-data select {
+        display: block;
         width: 100%;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
-        background-image: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, .8), rgba(0, 0, 0, .8), rgba(0, 0, 0, .8));
-        box-sizing: border-box;
-        padding: 15px;
-        transition: 0.5s;
-        overflow: hidden;
+        height: 100%;
+        border: none;
+        font-size: 17px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.12);
     }
 
-        .card .bottom h1 {
-            margin: 0;
-            font-family: 'Space Grotesk', sans-serif;
-            color: white;
+        .input-data input:focus ~ label, .input-data select:focus ~ label {
+            transform: translateY(-20px);
+            font-size: 14px;
+            color: #d41b2d;
         }
 
-        .card .bottom p {
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 300;
-            font-size: .75em;
+    .input-data label {
+        position: absolute;
+        pointer-events: none;
+        bottom: 10px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .input-data .underline {
+        position: absolute;
+        bottom: 0;
+        height: 2px;
+        width: 100%;
+    }
+
+        .input-data .underline:before {
+            position: absolute;
+            content: "";
+            height: 2px;
+            width: 100%;
+            background: #d41b2d;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.3s ease;
         }
+
+    .input-data input:focus ~ .underline:before,
+    .input-data input:valid ~ .underline:before,
+    .input-data select:focus ~ .underline:before {
+        transform: scale(1);
+    }
+
+.submit-btn {
+    text-align: center;
+    margin-top: 20px;
+}
+
+    .submit-btn input {
+        background: #8B0000;
+        color: #fff;
+        font-size: 17px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+        .submit-btn input:hover {
+            background: #d41b2d;
+        }
+
+@media (max-width: 700px) {
+    .form-container {
+        padding: 20px;
+    }
+
+    .form-row {
+        display: block;
+    }
+
+    .input-data {
+        margin: 15px 0;
+    }
+
+    .submit-btn input {
+        widt
