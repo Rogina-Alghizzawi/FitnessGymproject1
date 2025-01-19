@@ -27,12 +27,9 @@
                             <h1 data-animation="fadeInLeft" data-delay="0.4s">Build Perfect body Shape for good and Healthy life.</h1>
                             @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedInMemberId") == null)
                             {
-                                <a class="nav-link btn header-btn" asp-action="Register" asp-controller="LoginAndRegister">became a member</a>
+                                <a class="btn header-btn" style="font-size: 18px; padding: 15px 30px; color:white" asp-action="Register" asp-controller="LoginAndRegister">became a member</a>
                             }
-                            else
-                            {
-                                <p>Welcome, member!</p>
-                            }
+                         
                         </div>
                     </div>
                 </div>
@@ -79,7 +76,7 @@
                     }
                 }
 
-</div>
+            </div>
             <div class="col-lg-6 col-md-12">
                 <div class="about-caption">
                     <!-- Section Tittle -->
@@ -93,17 +90,13 @@
                     {
                         <a class="btn header-btn" style="font-size: 18px; padding: 15px 30px;"  asp-action="Register" asp-controller="LoginAndRegister">became a member</a>
                     }
-                    else
-                    {
-                        <p>Welcome, member!</p>
-                    }
+                  
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- About-2 Area End -->
-<!-- Want To work End -->
+
 <section class="services-area pt-100 pb-150 section-bg" data-background="/HomeDesign/assets/img/gallery/section_bg01.png">
     <div class="container">
         <div class="row d-flex justify-content-center">
@@ -122,7 +115,7 @@
                                 <p>@content.Description</p>
                             </div>
                             <div class="img-cap">
-                                <a class="nav-link" asp-action="Index" asp-controller="Aboutus">Discover More About Us<i class="ti-arrow-right"></i> </a>
+                                <a class="nav-link" asp-action="Aboutuspage" asp-controller="Aboutus">Discover More About Us<i class="ti-arrow-right"></i> </a>
                             </div>
                         </div>
                     </div>
@@ -143,7 +136,7 @@
                                 <p>@content.Description</p>
                             </div>
                             <div class="img-cap">
-                                <a class="nav-link" asp-action="Index" asp-controller="Aboutus">Discover More About Us<i class="ti-arrow-right"></i> </a>
+                                <a class="nav-link" asp-action="Aboutuspage" asp-controller="Aboutus">Discover More About Us<i class="ti-arrow-right"></i> </a>
                             </div>
                         </div>
                     </div>

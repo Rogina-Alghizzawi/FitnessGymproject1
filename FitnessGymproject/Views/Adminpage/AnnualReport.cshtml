@@ -1,11 +1,12 @@
 ﻿@model dynamic
 @{
+    ViewData["Title"] = "Annual Subscription Report";
+
     Layout = "~/Views/Shared/AdminLayout.cshtml";
     var annualSubscriptions = ViewData["AnnualSubscriptions"] as List<FitnessGymproject.Models.Subscription>;
     var annualRevenue = ViewData["AnnualRevenue"] as decimal?;
 }
 
-<h2>Annual Subscription Report</h2>
 
 <table id="annualTable" class="table table-striped">
     <thead>
@@ -15,6 +16,7 @@
             <th>Member Status</th>
             <th>Total Payment</th>
             <th>Payment Status</th>
+            <th>AnnualRevenue</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +30,7 @@
                     <td>@subscription.Status</td>
                     <td>@subscription.TotalPayment?.ToString("C")</td>
                     <td>@subscription.PaymentStatus</td>
+                    <td>@annualRevenue?.ToString("C")</td>
                 </tr>
             }
         }

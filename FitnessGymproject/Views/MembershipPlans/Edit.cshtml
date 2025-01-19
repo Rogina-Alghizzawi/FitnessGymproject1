@@ -2,63 +2,73 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h1>Edit</h1>
+<form asp-action="Edit" enctype="multipart/form-data" class="forms-sample" style="margin-top: 20px;">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="MembershipPlanId" />
 
-<h4>MembershipPlan</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MembershipPlanId" />
-            <div class="form-group">
-                <label asp-for="PlanName" class="control-label"></label>
-                <input asp-for="PlanName" class="form-control" />
-                <span asp-validation-for="PlanName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PlanDescription" class="control-label"></label>
-                <input asp-for="PlanDescription" class="form-control" />
-                <span asp-validation-for="PlanDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IncludedServices" class="control-label"></label>
-                <input asp-for="IncludedServices" class="form-control" />
-                <span asp-validation-for="IncludedServices" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DurationDays" class="control-label"></label>
-                <input asp-for="DurationDays" class="form-control" />
-                <span asp-validation-for="DurationDays" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="PlanName" class="control-label"></label>
+            <input asp-for="PlanName" class="form-control" id="PlanName" placeholder="Plan Name" />
+            <span asp-validation-for="PlanName" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label asp-for="PlanDescription" class="control-label"></label>
+            <input asp-for="PlanDescription" class="form-control" id="PlanDescription" placeholder="Plan Description" />
+            <span asp-validation-for="PlanDescription" class="text-danger"></span>
+        </div>
     </div>
-</div>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="IncludedServices" class="control-label"></label>
+            <input asp-for="IncludedServices" class="form-control" id="IncludedServices" placeholder="Included Services" />
+            <span asp-validation-for="IncludedServices" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <input asp-for="Price" class="form-control" id="Price" placeholder="Price" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="DurationDays" class="control-label"></label>
+            <input asp-for="DurationDays" class="form-control" id="DurationDays" placeholder="Duration Days" />
+            <span asp-validation-for="DurationDays" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label asp-for="CreatedAt" class="control-label"></label>
+            <input asp-for="CreatedAt" class="form-control" id="CreatedAt" placeholder="Created At" />
+            <span asp-validation-for="CreatedAt" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="UpdatedAt" class="control-label"></label>
+            <input asp-for="UpdatedAt" class="form-control" id="UpdatedAt" placeholder="Updated At" />
+            <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+    <button class="btn btn-light">Cancel</button>
+</form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+

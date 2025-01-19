@@ -2,61 +2,51 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Homepage List</h4>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-         
-            <th>
-                Profile Image
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedAt)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-              
-                <td>
-                    <img src="@item.LogoUrl" alt="Profile Image" style="width: 50px; height: 50px; object-fit: cover;">
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedAt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UpdatedAt)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.HomepageId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.HomepageId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.HomepageId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered" style="font-size: 0.7rem; width: 100%; margin: auto;">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                                <th style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@Html.DisplayNameFor(model => model.Description)</th>
+                                <th>Profile Image</th>
+                                <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                                <th>@Html.DisplayNameFor(model => model.UpdatedAt)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                                    <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        <img src="@item.LogoUrl" alt="Profile Image" style="width: 30px; height: 30px; object-fit: cover;">
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.HomepageId" class="btn btn-sm btn-warning p-1">Edit</a>
+                                        <a asp-action="Details" asp-route-id="@item.HomepageId" class="btn btn-sm btn-info p-1">Details</a>
+                                        <a asp-action="Delete" asp-route-id="@item.HomepageId" class="btn btn-sm btn-danger p-1">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

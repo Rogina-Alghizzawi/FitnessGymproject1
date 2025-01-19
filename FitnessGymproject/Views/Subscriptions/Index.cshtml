@@ -1,15 +1,12 @@
-﻿@model IEnumerable<FitnessGymproject.Models.Subscription>
+﻿
+                        @model IEnumerable<FitnessGymproject.Models.Subscription>
 
 @{
     ViewData["Title"] = "Subscriptions";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-
-
-
-<div class="table-responsive ">
-
+<div class="table-responsive">
     <form method="get" asp-action="Index" class="row g-3">
         <div class="col-md-5">
             <label for="startDate" class="form-label">Start Date</label>
@@ -23,6 +20,7 @@
             <button type="submit" class="btn btn-primary w-100">Search</button>
         </div>
     </form>
+
     <table class="table table-hover align-middle">
         <thead class="table-dark">
             <tr>
@@ -31,6 +29,8 @@
                 <th>@Html.DisplayNameFor(model => model.Status)</th>
                 <th>@Html.DisplayNameFor(model => model.PaymentStatus)</th>
                 <th>Member Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 <th class="text-center">Actions</th>
             </tr>
         </thead>
@@ -43,8 +43,9 @@
                     <td>@Html.DisplayFor(modelItem => item.Status)</td>
                     <td>@Html.DisplayFor(modelItem => item.PaymentStatus)</td>
                     <td>@Html.DisplayFor(modelItem => item.Member.FullName)</td>
+                    <td>@item.StartDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@item.EndDate?.ToString("yyyy-MM-dd")</td>
                     <td class="text-center">
-                     
                         <a asp-action="Details" asp-route-id="@item.SubscriptionId" class="btn btn-info btn-sm me-1">
                             <i class="bi bi-info-circle-fill"></i> Details
                         </a>

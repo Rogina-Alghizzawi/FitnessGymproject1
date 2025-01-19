@@ -1,0 +1,64 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&family=Rakkas&family=Space+Grotesk:wght@300..700&display=swap');
+
+html, body {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    margin: 0;
+}
+
+body {
+    background-image: radial-gradient(whitesmoke, lavenderblush);
+}
+
+.card {
+    width: 300px;
+    height: 350px;
+    background-image: url(https://wallpapershome.com/images/pages/pic_v/864.jpg);
+    background-position: center;
+    background-size: 100%;
+    border-radius: 15px;
+    box-sizing: border-box;
+    display: flex;
+    place-items: end;
+    box-shadow: 15px 15px 0px rgba(120, 0, 120, .3);
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+    .card:hover .bottom {
+        height: 195px;
+        cursor: pointer;
+    }
+
+    .card:hover {
+        transform: scale(1.05, 1.05);
+        box-shadow: -15px -15px 0px rgba(120, 0, 120, .3);
+    }
+
+    .card .bottom {
+        height: 110px;
+        width: 100%;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        background-image: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, .8), rgba(0, 0, 0, .8), rgba(0, 0, 0, .8));
+        box-sizing: border-box;
+        padding: 15px;
+        transition: 0.5s;
+        overflow: hidden;
+    }
+
+        .card .bottom h1 {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            color: white;
+        }
+
+        .card .bottom p {
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 300;
+            font-size: .75em;
+        }

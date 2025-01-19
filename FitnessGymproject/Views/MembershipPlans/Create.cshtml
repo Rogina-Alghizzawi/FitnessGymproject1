@@ -1,47 +1,54 @@
 ﻿@model FitnessGymproject.Models.MembershipPlan
 
 @{
-    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h1>Create</h1>
 
-<h4>MembershipPlan</h4>
-<hr />
+
 <div class="row">
-    <div class="col-md-4">
+    <h4>MembershipPlan</h4>
+
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="MembershipPlanId" class="control-label"></label>
-                <input asp-for="MembershipPlanId" class="form-control" />
+                <input asp-for="MembershipPlanId" class="form-control custom-input" />
                 <span asp-validation-for="MembershipPlanId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="PlanName" class="control-label"></label>
-                <input asp-for="PlanName" class="form-control" />
+                <input asp-for="PlanName" class="form-control custom-input" />
                 <span asp-validation-for="PlanName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="PlanDescription" class="control-label"></label>
-                <input asp-for="PlanDescription" class="form-control" />
+                <input asp-for="PlanDescription" class="form-control custom-input" />
                 <span asp-validation-for="PlanDescription" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="IncludedServices" class="control-label"></label>
-                <input asp-for="IncludedServices" class="form-control" />
+                <input asp-for="IncludedServices" class="form-control custom-input" />
                 <span asp-validation-for="IncludedServices" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for="Price" class="form-control custom-input" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="DurationDays" class="control-label"></label>
-                <input asp-for="DurationDays" class="form-control" />
+                <input asp-for="DurationDays" class="form-control custom-input" />
                 <span asp-validation-for="DurationDays" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -49,10 +56,20 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+<style>
+    .custom-input {
+        height: 50px; /* Make input fields taller */
+        font-size: 1.25rem; /* Make the text inside inputs larger */
+        padding: 10px; /* Add more padding for a larger feel */
+        width:300px; /* Ensure inputs span the full width of their container */
+    }
+</style>
+
+

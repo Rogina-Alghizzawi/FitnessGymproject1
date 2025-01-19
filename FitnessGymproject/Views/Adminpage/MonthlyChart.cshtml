@@ -1,18 +1,29 @@
-﻿<!DOCTYPE html>
+﻿@{
+    ViewData["Title"] = "Monthly Revenue Chart";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monthly Revenue Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Optional: Reduce the chart container size */
+        .chart-container {
+            width: 50%; /* Adjust to your preferred size */
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <h2>Monthly Revenue by Plan</h2>
-    <div style="width: 80%; margin: 0 auto;">
-        <canvas id="myChart" width="400" height="200"></canvas>
-    </div>
-
     <h3>Total Monthly Revenue: @ViewData["TotalMonthlyRevenue"]</h3>
+
+    <div class="chart-container">
+        <canvas id="myChart" width="400" height="300"></canvas> <!-- Reduce width/height here -->
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -2,53 +2,91 @@
 
 @{
     ViewData["Title"] = "Available Membership Plans";
+
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
+
 }
 
-<h2>Available Membership Plans</h2>
 
-@if (ViewBag.AlertMessage != null)
-{
-    <div class="alert alert-info">
-        @ViewBag.AlertMessage
+<section style="padding:200px" class="available-membership-plans">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12">
+               
+
+                @if (ViewBag.AlertMessage != null)
+                {
+                    <div class="alert alert-info text-center">
+                        @ViewBag.AlertMessage
+                    </div>
+                }
+
+                @if (!Model.Any())
+                {
+                    <div class="alert alert-warning text-center">
+                        No available membership plans at the moment.
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var plan in Model)
+                        {
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card shadow h-100">
+                                    <img src="~/HomeDesign/assets/img/gallery/gallery4.png" alt="@plan.PlanName" class="card-img-top" />
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">@plan.PlanName</h5>
+                                        <p class="card-text">
+                                            <strong>Duration:</strong> @plan.DurationDays days <br />
+                                            <strong>Total Payment:</strong> $@plan.Price <br />
+                                            <strong>Payment Methods:</strong> <span class="text-muted">@ViewData["UserPaymentMethodsText"]</span>
+                                        </p>
+                                        <div class="text-center">
+                                            <form asp-action="SubscribeToMembershipPlan" method="post">
+                                                <input type="hidden" name="membershipPlanId" value="@plan.MembershipPlanId" />
+                                                <button type="submit" class="btn btn-danger subscribe-btn">Subscribe</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
     </div>
-}
+</section>
 
-@if (!Model.Any())
-{
-    <p>No available membership plans at the moment.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Plan Name</th>
-                <th>Duration (Days)</th>
-                <th>Total Payment</th>
-                <th>Available Payment Methods</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var plan in Model)
-            {
-                <tr>
-                    <td>@plan.PlanName</td>
-                    <td>@plan.DurationDays</td>
-                    <td>@plan.Price</td>
-                    <td>
-                        @* Display the payment methods text *@
-                        <p>@ViewData["UserPaymentMethodsText"]</p>
-                    </td>
-                    <td>
-                        <form asp-action="SubscribeToMembershipPlan" method="post">
-                            <input type="hidden" name="membershipPlanId" value="@plan.MembershipPlanId" />
+<style>
+    .available-membership-plans {
+        padding: 40px 0;
+    }
 
-                            <button type="submit" class="btn btn-primary">Subscribe</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    .card {
+        border-radius: 12px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-img-top {
+        height: 150px;
+        object-fit: cover;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .subscribe-btn {
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+        .subscribe-btn:hover {
+            transform: scale(1.1);
+            background-color: #c82333 !important;
+        }
+</style>

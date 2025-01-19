@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Annual Subscription chart";
+
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+ 
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,12 +15,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h2>Annual Revenue by Plan</h2>
+    <h3>Total Annual Revenue: @ViewData["TotalAnnualRevenue"]</h3>
+
     <div style="width: 80%; margin: 0 auto;">
         <canvas id="annualChart" width="400" height="200"></canvas>
     </div>
 
-    <h3>Total Annual Revenue: @ViewData["TotalAnnualRevenue"]</h3>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -1,52 +1,88 @@
 ﻿@{
     ViewData["Title"] = "Your Subscribed Plans";
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<section style="padding: 200px;">
+    <div class="container mt-5">
+        <h2 class="text-center text-white mb-4">@ViewData["Title"]</h2>
 
-@if (ViewBag.AlertMessage != null)
-{
-    <div class="alert alert-warning">
-        @ViewBag.AlertMessage
+        @if (ViewBag.AlertMessage != null)
+        {
+            <div class="alert alert-warning text-center">
+                @ViewBag.AlertMessage
+            </div>
+        }
+
+        @if (ViewBag.Subscriptions != null && ViewBag.Subscriptions.Count > 0)
+        {
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover" style="width: 100%; font-size: 1.2em;">
+                    <thead>
+                        <tr>
+                            <th>Plan Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Amount</th>
+                            <th>Payment Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ViewBag.Subscriptions)
+                        {
+                            <tr>
+                                <td>@item.PlanName</td>
+                                <td>@item.StartDate?.ToString("d")</td>
+                                <td>@item.EndDate?.ToString("d")</td>
+                                <td>@item.TotalAmount?.ToString("C")</td>
+                                <td>
+                                    @if (item.CustomPaymentStatus == "Paid")
+                                    {
+                                        <span class="badge bg-success">@item.CustomPaymentStatus</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">@item.CustomPaymentStatus</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-white">No subscriptions found.</p>
+        }
     </div>
-}
+</section>
 
-@if (ViewBag.Subscriptions != null && ViewBag.Subscriptions.Count > 0)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Plan Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Amount</th>
-                <th>Payment Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in ViewBag.Subscriptions)
-            {
-                <tr>
-                    <td>@item.PlanName</td>
-                    <td>@item.StartDate?.ToString("d")</td>
-                    <td>@item.EndDate?.ToString("d")</td>
-                    <td>@item.TotalAmount?.ToString("C")</td>
-                    <td>
-                        @if (item.CustomPaymentStatus == "Paid")
-                        {
-                            <span class="badge bg-success">@item.CustomPaymentStatus</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">@item.CustomPaymentStatus</span>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No subscriptions found.</p>
-}
+<style>
+    body {
+        background-color: #121212; /* Dark background */
+        color: #ffffff; /* White text for contrast */
+    }
+
+    .table-dark th, .table-dark td {
+        vertical-align: middle; /* Center text vertically */
+    }
+
+    .table-dark thead th {
+        background-color: #1E1E1E; /* Slightly lighter for header */
+        color: #ffffff;
+    }
+
+    .table {
+        width: 100%; /* Make the table take full width */
+    }
+
+        .table td, .table th {
+            padding: 15px; /* Increase padding for larger cells */
+        }
+
+    .alert {
+        background-color: #FFCC00; /* Accent color */
+        color: #333366; /* Contrast for text */
+    }
+</style>

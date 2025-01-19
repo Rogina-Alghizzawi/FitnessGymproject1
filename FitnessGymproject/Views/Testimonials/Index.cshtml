@@ -23,16 +23,17 @@
                 <td>
                     @if (item.Status == "Pending")
                     {
-                        <form asp-action="Approve" asp-route-id="@item.TestimonialId" method="post">
-                            <button type="submit" class="btn btn-success">Approve</button>
-                        </form>
-                        <form asp-action="Reject" asp-route-id="@item.TestimonialId" method="post">
-                            <button type="submit" class="btn btn-danger">Reject</button>
-                        </form>
+                        <div class="d-flex">
+                            <form asp-action="Approve" asp-route-id="@item.TestimonialId" method="post" class="me-2">
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                            <form asp-action="Reject" asp-route-id="@item.TestimonialId" method="post">
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+                        </div>
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
-

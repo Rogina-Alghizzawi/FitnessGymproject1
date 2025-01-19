@@ -2,25 +2,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Purple Admin</title>
-    <!-- plugins:css -->
     <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/ti-icons/css/themify-icons.css">
     <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/font-awesome/css/font-awesome.min.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
     <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
     <link rel="stylesheet" href="~/AdminDesign1/assets/css/style.css">
-    <!-- End layout styles -->
     <link rel="shortcut icon" href="~/AdminDesign1/assets/images/favicon.png" />
     <style>
         footer {
@@ -28,10 +19,10 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #f8f9fa; /* Adjust as needed */
-            padding: 10px 20px; /* Adjust padding */
+            background-color: #f8f9fa; 
+            padding: 10px 20px; 
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000; /* Ensure it stays on top */
+            z-index: 1000; 
         }
     </style>
 </head>
@@ -56,7 +47,6 @@
                 </div>
             </div>
         </div>
-        <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <a class="navbar-brand brand-logo" href="index.html"><img src="~/AdminDesign1/assets/images/logo.svg" alt="logo" /></a>
@@ -66,16 +56,7 @@
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
                     <span class="mdi mdi-menu"></span>
                 </button>
-                <div class="search-field d-none d-md-block">
-                    <form class="d-flex align-items-center h-100" action="#">
-                        <div class="input-group">
-                            <div class="input-group-prepend bg-transparent">
-                                <i class="input-group-text border-0 mdi mdi-magnify"></i>
-                            </div>
-                            <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
-                        </div>
-                    </form>
-                </div>
+                
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
                         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -117,9 +98,7 @@
                 </button>
             </div>
         </nav>
-        <!-- partial -->
         <div class="container-fluid page-body-wrapper">
-            <!-- partial:partials/_sidebar.html -->
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item nav-profile">
@@ -139,7 +118,7 @@
                     <li class="nav-item">
                       
                         <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                            <span class="menu-title">Testimonials</span>
+                            <span class="menu-title">Members And Gustes</span>
                             <i class="menu-arrow"></i>
                             <i class="mdi mdi-crosshairs-gps menu-icon"></i>
                         </a>
@@ -149,10 +128,10 @@
                                 <li class="nav-item">
                                     <a class="nav-link" asp-action="Index" asp-controller="Testimonials">View Testimonials List</a>
                                 </li>
-                   
                                 <li class="nav-item">
-                                    <a class="nav-link" href="~/AdminDesign1/pages/ui-features/typography.html">Typography</a>
+                                    <a class="nav-link" asp-action="Index" asp-controller="Contactus">Contact us</a>
                                 </li>
+                               
                             </ul>
                         </div>
                     </li>
@@ -178,16 +157,15 @@
                         <div class="collapse" id="charts">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link" asp-action="Index" asp-controller="Subscriptions">View  Subscriptions List</a></li>
-                                @* <li class="nav-item"> <a class="nav-link" asp-action="SubscriptionReport" asp-controller="Adminpage">Report</a></li> *@
 
-                                <li class="nav-item"> <a class="nav-link" asp-action="MonthlyReport" asp-controller="Adminpage">Report</a></li>
-                                <li class="nav-item"> <a class="nav-link" asp-action="AnnualReport" asp-controller="Adminpage">Report</a></li>
-                                <li class="nav-item"> <a class="nav-link" asp-action="Subscribe" asp-controller="Subscriptions">Report</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-action="MonthlyReport" asp-controller="Adminpage"> Monthly Report</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-action="AnnualReport" asp-controller="Adminpage"> Annual Report</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-action="MonthlyChart" asp-controller="Adminpage">Monthly Chart</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-action="AnnualChart" asp-controller="Adminpage">Annual Chart</a></li>
+
 
                                 
-                                <li class="nav-item">
-                                    <a class="nav-link" href="~/AdminDesign1/pages/charts/chartjs.html">Report and Chart</a>
-                                </li>
+                              
                             </ul>
                         </div>
                     </li>
@@ -200,7 +178,7 @@
                         </a>
                         <div class="collapse" id="auth">
                             <ul class="nav flex-column sub-menu">
-                                  
+
 
                                 <li class="nav-item"> <a class="nav-link" asp-action="Index" asp-controller="Trainers">View  Trainer List</a></li>
                                 <li class="nav-item"> <a class="nav-link" asp-action="Create" asp-controller="Trainers">Create New Trainer </a></li>
@@ -210,7 +188,42 @@
                             </ul>
                         </div>
                     </li>
-                  
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                            <span class="menu-title">Membership Plan</span>
+                        </a>
+                        <div class="collapse" id="auth">
+                            <ul class="nav flex-column sub-menu">
+
+
+                                <li class="nav-item"> <a class="nav-link" asp-controller="MembershipPlans" asp-action="Create">Create</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-controller="MembershipPlans" asp-action="Index">Membership plans list</a></li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                            <span class="menu-title">Static Pages</span>
+                            <i class="menu-arrow"></i>
+                            <i class="mdi mdi-lock menu-icon"></i>
+                        </a>
+                        <div class="collapse" id="auth">
+                            <ul class="nav flex-column sub-menu">
+
+
+                                <li class="nav-item"> <a class="nav-link" asp-action="Index" asp-controller="Aboutus"> About us</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-action="Create" asp-controller="Aboutus">Create About us </a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-action="Index" asp-controller="Homepages">Home pages</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-action="Create" asp-controller="Homepages">Create Homepages </a></li>
+
+                            </ul>
+                        </div>
+                    </li>
+
                 </ul>
             </nav>
             @RenderBody()

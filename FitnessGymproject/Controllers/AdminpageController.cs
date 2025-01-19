@@ -325,6 +325,80 @@ namespace FitnessGymproject.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Details()
+        {
+            var loggedInAdminId = HttpContext.Session.GetString("LoggedInAdminId");
+
+            if (string.IsNullOrEmpty(loggedInAdminId))
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            if (!decimal.TryParse(loggedInAdminId, out var adminId))
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            var admin = await _context.Admins.FirstOrDefaultAsync(a => a.AdminId == adminId);
+
+            if (admin == null)
+            {
+                return NotFound();
+            }
+
+            return View(admin);
+        }
+
+
+        // GET: Admin/Delete/{id}
+        public async Task<IActionResult> Delete(decimal? id)
+        {
+            if (id == null || _context.Admins == null)
+            {
+                return NotFound();
+            }
+
+            var admin = await _context.Admins.FirstOrDefaultAsync(m => m.AdminId == id);
+            if (admin == null)
+            {
+                return NotFound();
+            }
+
+            // Ensure the admin attempting to delete is logged in
+            var loggedInAdminId = HttpContext.Session.GetString("LoggedInAdminId");
+            if (string.IsNullOrEmpty(loggedInAdminId))
+            {
+                return Unauthorized();
+            }
+
+            return View(admin); // Returns the delete confirmation view
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(decimal id)
+        {
+            var loggedInAdminId = HttpContext.Session.GetString("LoggedInAdminId");
+
+            if (string.IsNullOrEmpty(loggedInAdminId) || Convert.ToDecimal(loggedInAdminId) != id)
+            {
+                return Unauthorized(); // Return 401 if not authorized
+            }
+
+            var admin = await _context.Admins.FindAsync(id);
+            if (admin == null)
+            {
+                return NotFound(); // Return 404 if admin not found
+            }
+
+            _context.Admins.Remove(admin); // Remove admin from database
+            await _context.SaveChangesAsync();
+
+            // Clear session if the admin is deleting their own account
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "LoginAndRegister");
+        }
+
         private bool AdminExists(decimal id)
         {
             return _context.Admins?.Any(e => e.AdminId == id) ?? false;
