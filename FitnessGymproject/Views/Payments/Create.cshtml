@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="SubscriptionId" class="control-label"></label>
-                <select asp-for="SubscriptionId" class="form-control" asp-items="ViewBag.SubscriptionId"></select>
+                <select type="hidden"  asp-for="SubscriptionId" class="form-control" asp-items="ViewBag.SubscriptionId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Amount" class="control-label"></label>

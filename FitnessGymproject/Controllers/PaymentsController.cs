@@ -18,12 +18,14 @@ namespace FitnessGymproject.Controllers
             _context = context;
         }
 
+        // GET: Payments
         public async Task<IActionResult> Index()
         {
             var modelContext = _context.Payments.Include(p => p.Member).Include(p => p.Subscription);
             return View(await modelContext.ToListAsync());
         }
 
+        // GET: Payments/Details/5
         public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null || _context.Payments == null)
@@ -43,57 +45,74 @@ namespace FitnessGymproject.Controllers
             return View(payment);
         }
 
+        // GET: Payments/Create
         public async Task<IActionResult> Create()
         {
+            // Check if the member is logged in by retrieving the session value
             var loggedInMember = HttpContext.Session.GetString("LoggedInMemberId");
 
+            // If the member ID is not present, redirect to the login page
             if (string.IsNullOrEmpty(loggedInMember))
             {
                 return RedirectToAction("Login", "LoginAndRegister");
             }
 
+            // Convert the member ID from the session to decimal
             decimal memberId = Convert.ToDecimal(loggedInMember);
 
+            // Retrieve the member from the database
             var member = await _context.Members.FirstOrDefaultAsync(a => a.MemberId == memberId);
 
+            // If the member doesn't exist, return a NotFound result
             if (member == null)
             {
                 return NotFound();
             }
 
-            ViewData["MemberId"] = memberId;
+            // Set the MemberId as a hidden value to be passed with the form submission
+            ViewData["MemberId"] = memberId;  // Pass the logged-in member's ID to the view
             ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId");
 
             return View();
         }
 
+        // POST: Payments/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PaymentId,MemberId,SubscriptionId,PaymentDate,PaymentStatus,Amount,PaymentMethod,CreatedAt")] Payment payment)
         {
             if (ModelState.IsValid)
             {
+                // Check if the member already has an existing payment
                 var existingPayment = await _context.Payments
                                                     .FirstOrDefaultAsync(p => p.MemberId == payment.MemberId && p.PaymentStatus == "Completed");
 
                 if (existingPayment != null)
                 {
+                    // If a completed payment exists for the member, display a message and prevent the creation of a new payment
                     ModelState.AddModelError(string.Empty, "This member already has a completed payment.");
-                    return View(payment);
+                    return View(payment);  // Return to the view with the error message
                 }
 
+                // No existing payment, so proceed with the creation of the new payment
                 _context.Add(payment);
                 await _context.SaveChangesAsync();
 
+                // Redirect to ViewAvailableMembershipPlans action in MembershipPlansController
                 return RedirectToAction("ViewAvailableMembershipPlans", "MembershipPlans");
             }
 
+            // If the model state is invalid, return to the same view
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId", payment.MemberId);
             ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId", payment.SubscriptionId);
 
             return View(payment);
         }
 
+
+        // GET: Payments/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
         {
             if (id == null || _context.Payments == null)
@@ -113,6 +132,7 @@ namespace FitnessGymproject.Controllers
             return View(payment);
         }
 
+        // POST: Payments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(decimal id)
@@ -129,49 +149,6 @@ namespace FitnessGymproject.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePaymentForWorkout([Bind("PaymentId,MemberId,SubscriptionId,PaymentDate,PaymentStatus,Amount,PaymentMethod,CreatedAt")] Payment payment)
-        {
-            if (ModelState.IsValid)
-            {
-                // Ensure the member is not already having a completed payment
-                var existingPayment = await _context.Payments
-                                                     .FirstOrDefaultAsync(p => p.MemberId == payment.MemberId && p.PaymentStatus == "Completed");
-
-                if (existingPayment != null)
-                {
-                    ModelState.AddModelError(string.Empty, "This member already has a completed payment.");
-                    return View(payment);
-                }
-
-                // Ensure the subscription exists and the member is valid
-                var subscription = await _context.Subscriptions.FindAsync(payment.SubscriptionId);
-                var member = await _context.Members.FindAsync(payment.MemberId);
-
-                if (subscription == null || member == null)
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid subscription or member.");
-                    return View(payment);
-                }
-
-                // Add the payment
-                _context.Add(payment);
-                await _context.SaveChangesAsync();
-
-                // Redirect to the appropriate action after successful payment creation
-                return RedirectToAction("ViewAvailablePlans", "Members");
-            }
-
-            // Re-populate dropdowns in case of validation failure
-            ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId", payment.MemberId);
-            ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId", payment.SubscriptionId);
-
-            return View(payment);
         }
 
         private bool PaymentExists(decimal id)
