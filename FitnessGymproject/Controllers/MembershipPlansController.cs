@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessGymproject.Models;
 using Microsoft.Extensions.Configuration;
+using System.IO;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
+using System.Net;
+using System.Net.Mail;
 
 namespace FitnessGymproject.Controllers
 {
@@ -171,8 +176,10 @@ namespace FitnessGymproject.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod)
+        public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod )
         {
+            QuestPDF.Settings.License = LicenseType.Community;
+
             var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
 
             if (string.IsNullOrEmpty(memberIdString))
@@ -181,6 +188,9 @@ namespace FitnessGymproject.Controllers
             }
 
             decimal memberId = decimal.Parse(memberIdString);
+            var member = _context.Members.SingleOrDefault(m => m.MemberId == memberId);
+
+
 
             var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
 
@@ -251,7 +261,68 @@ namespace FitnessGymproject.Controllers
 
             _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();
+            if (payment.PaymentStatus == "Completed")
+            {
+                string content = $"Dear {member.FullName},\n\n" +
+                    $"Your payment has been successfully completed for the {subscription.MembershipPlan.PlanName} subscription on Fitness .\n\n" +
+                    "Thank you for choosing us!\n\n" +
+                    "Best Regards,\n Fitness Team";
 
+
+                var document = Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Margin(50);
+                        page.Content().Column(column =>
+                        {
+                            column.Item().Text("Payment Confirmation").FontSize(20).Bold().AlignCenter();
+                            column.Item().Text(content).FontSize(12);
+                        });
+                    });
+                });
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    document.GeneratePdf(memoryStream);
+                    var pdfBytes = memoryStream.ToArray();
+
+                    var smtpServer = _configuration["SmtpSettings:Host"];
+                    var smtpPort = int.Parse(_configuration["SmtpSettings:Port"]);
+                    var senderEmail = _configuration["SmtpSettings:Username"];
+                    var senderPassword = _configuration["SmtpSettings:Password"];
+                    try
+                    {
+                        using (var smtpClient = new SmtpClient(smtpServer, smtpPort))
+                        {
+                            smtpClient.Credentials = new NetworkCredential(senderEmail, senderPassword);
+                            smtpClient.EnableSsl = true;
+
+                            var mailMessage = new MailMessage
+                            {
+                                From = new MailAddress(senderEmail),
+                                Subject = "Payment Confirmation",
+                                Body = $"Dear {member.FullName},\n\nYour payment for {subscription.MembershipPlan.PlanName} has been confirmed.\n\nBest Regards,\nStriveFit Team",
+                                IsBodyHtml = false
+                            };
+
+                            mailMessage.To.Add(member.Email);
+                            mailMessage.Attachments.Add(new Attachment(new MemoryStream(pdfBytes), "PaymentConfirmation.pdf"));
+
+                            smtpClient.Send(mailMessage);
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["Message"] = $"Payment successful, but the email could not be sent. Error: {ex.Message}";
+                    }
+                    TempData["Message"] = "Payment completed and confirmation email sent.";
+                    return File(pdfBytes, "application/pdf", "PaymentConfirmation.pdf");
+                }
+
+
+            }
             return RedirectToAction("ViewSubscribedMembershipPlans");
         }
 

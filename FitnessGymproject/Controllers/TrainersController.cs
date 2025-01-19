@@ -6,16 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessGymproject.Models;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FitnessGymproject.Controllers
 {
     public class TrainersController : Controller
     {
         private readonly ModelContext _context;
-
-        public TrainersController(ModelContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public TrainersController(ModelContext context , IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Trainers
@@ -55,10 +57,24 @@ namespace FitnessGymproject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TrainerId,FullName,Email,Password,PhoneNumber,Specialization,Bio,CreatedAt,UpdatedAt,Imageprofileurl,Gender")] Trainer trainer)
+        public async Task<IActionResult> Create([Bind("TrainerId,ImageFile,FullName,Email,Password,PhoneNumber,Specialization,Bio,CreatedAt,UpdatedAt,Imageprofileurl,Gender")] Trainer trainer)
         {
             if (ModelState.IsValid)
             {
+                if (trainer.ImageFile != null)
+                {
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(trainer.ImageFile.FileName);
+                    string path = Path.Combine(wwwRootPath + "/images/", fileName);
+
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await trainer.ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    trainer.Imageprofileurl = "/images/" + fileName;
+                }
+
                 _context.Add(trainer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +103,7 @@ namespace FitnessGymproject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("TrainerId,FullName,Email,Password,PhoneNumber,Specialization,Bio,CreatedAt,UpdatedAt,Imageprofileurl,Gender")] Trainer trainer)
+        public async Task<IActionResult> Edit(decimal id, [Bind("TrainerId,FullName,Email,Password,PhoneNumber,Specialization,Bio,CreatedAt,UpdatedAt,ImageFile,Imageprofileurl,Gender")] Trainer trainer)
         {
             if (id != trainer.TrainerId)
             {
@@ -98,7 +114,20 @@ namespace FitnessGymproject.Controllers
             {
                 try
                 {
-                    _context.Update(trainer);
+                    if (trainer.ImageFile != null)
+                    {
+                        string wwwRootPath = _webHostEnvironment.WebRootPath;
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(trainer.ImageFile.FileName);
+                        string path = Path.Combine(wwwRootPath + "/images/", fileName);
+
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await trainer.ImageFile.CopyToAsync(fileStream);
+                        }
+
+                        trainer.Imageprofileurl = "/images/" + fileName;
+                    }
+                _context.Update(trainer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
