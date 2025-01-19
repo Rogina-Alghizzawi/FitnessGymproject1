@@ -117,7 +117,7 @@
                     <li class="nav-item">
 
                         <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                            <span class="menu-title">Members And Gustes</span>
+                            <span class="menu-title">Workout</span>
                             <i class="menu-arrow"></i>
                             <i class="mdi mdi-crosshairs-gps menu-icon"></i>
                         </a>
@@ -130,6 +130,15 @@
                                     <a class="nav-link" asp-action="Create" asp-controller="Workoutplans"><i class="icon-arrow-right"></i>Create Workout Plans</a>
                                 </li>
 
+                            </ul>
+                        </div>
+
+
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="ViewMembers" asp-controller="TrainerPage"><i class="icon-arrow-right"></i>Members</a>
+                                </li>
                             </ul>
                         </div>
                     </li>

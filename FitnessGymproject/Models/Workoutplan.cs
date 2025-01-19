@@ -23,7 +23,7 @@ public partial class Workoutplan
 
     public DateTime? UpdatedAt { get; set; }
 
-    public decimal? Price { get; set; }
+    public decimal? Price { get; set; } 
 
     public decimal? MembershipPlanId { get; set; }
 

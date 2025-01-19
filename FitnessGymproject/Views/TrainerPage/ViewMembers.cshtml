@@ -8,13 +8,73 @@
 <style>
     body {
         background-color: white;
+        font-family: Arial, sans-serif;
     }
 
     .centered-card {
         margin: 0 auto;
+        max-width: 1200px;
         width: 100%;
         margin-top: 80px;
-        margin-left: 400px; 
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        padding: 16px;
+    }
+
+    .card-header-text {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+        .table th, .table td {
+            text-align: center;
+            padding: 12px;
+        }
+
+        .table th {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .table td {
+            border-top: 1px solid #ddd;
+        }
+
+        .table img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .table .table-info {
+            background-color: #d1ecf1;
+        }
+
+        .table .table-success {
+            background-color: #c3e6cb;
+        }
+
+    .no-image {
+        color: #999;
+        font-style: italic;
+    }
+
+    
+  
+    .centered-card {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
     }
 </style>
 
@@ -22,45 +82,42 @@
     <div class="card-header">
         <h5 class="card-header-text">Member List</h5>
     </div>
-    <div class="card-block">
-        <div class="row justify-content-center">
-            <div class="col-sm-12 col-md-8">
-                <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Full Name</th>
-                                <th>Phone Number</th>
-                                <th>Gender</th>
-                                <th>Profile Image</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr class="@(item.Gender == "Female" ? "table-success" : item.Gender == "Male" ? "table-info" : "")">
-                                    <td>@item.FullName</td>
-                                    <td>@item.PhoneNumber</td>
-                                    <td>@item.Gender</td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Imageprofileurl))
-                                        {
-                                            <img src="@Url.Content("~/Images/" + item.Imageprofileurl)" alt="Profile Image" class="img-sm rounded-circle" style="width: 50px; height: 50px;" />
-                                        }
-                                        else
-                                        {
-                                            <span>No Image</span>
-                                        }
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Phone Number</th>
+                        <th>Gender</th>
+                        <th>Profile Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="@(item.Gender == "Female" ? "table-success" : item.Gender == "Male" ? "table-info" : "")">
+                            <td>@item.FullName</td>
+                            <td>@item.PhoneNumber</td>
+                            <td>@item.Gender</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Imageprofileurl))
+                                {
+                                    <img src="@Url.Content("~/Images/" + item.Imageprofileurl)" alt="Profile Image" />
+                                }
+                                else
+                                {
+                                    <span class="no-image">No Image</span>
+                                }
+                            </td>
+                            <td>
+                                <!-- Actions will go here -->
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

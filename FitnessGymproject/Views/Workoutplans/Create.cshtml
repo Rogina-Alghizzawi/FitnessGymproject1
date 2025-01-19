@@ -2,55 +2,66 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/TrainerLayout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Create Workout Plan</h4>
+            <p class="card-description">Fill in the details to create a new workout plan</p>
+            <form asp-action="Create" class="forms-sample">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h4>Workoutplan</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TrainerId" class="control-label"></label>
-                <select asp-for="TrainerId" class ="form-control" asp-items="ViewBag.TrainerId"></select>
-            </div>
-          
-            <div class="form-group">
-                <label asp-for="PlanName" class="control-label"></label>
-                <input asp-for="PlanName" class="form-control" />
-                <span asp-validation-for="PlanName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Exercises" class="control-label"></label>
-                <input asp-for="Exercises" class="form-control" />
-                <span asp-validation-for="Exercises" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Schedule" class="control-label"></label>
-                <input asp-for="Schedule" class="form-control" />
-                <span asp-validation-for="Schedule" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Goals" class="control-label"></label>
-                <input asp-for="Goals" class="form-control" />
-                <span asp-validation-for="Goals" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="TrainerId" class="control-label"></label>
+                    <select asp-for="TrainerId" class="form-select" asp-items="ViewBag.TrainerId">
+                        <option value="">Select Trainer</option>
+                    </select>
+                    <span asp-validation-for="TrainerId" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <label asp-for="MemberId" class="control-label"></label>
+                    <select asp-for="MemberId" class="form-select" asp-items="ViewBag.MemberId">
+                        <option value="">Select Member</option>
+                    </select>
+                    <span asp-validation-for="MemberId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PlanName" class="control-label"></label>
+                    <input asp-for="PlanName" class="form-control" placeholder="Plan Name" />
+                    <span asp-validation-for="PlanName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Exercises" class="control-label"></label>
+                    <input asp-for="Exercises" class="form-control" placeholder="Exercises" />
+                    <span asp-validation-for="Exercises" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Schedule" class="control-label"></label>
+                    <input asp-for="Schedule" class="form-control" placeholder="Schedule" />
+                    <span asp-validation-for="Schedule" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Goals" class="control-label"></label>
+                    <input asp-for="Goals" class="form-control" placeholder="Goals" />
+                    <span asp-validation-for="Goals" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-gradient-primary me-2">Create</button>
+                <a asp-action="Index" class="btn btn-light">Cancel</a>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -19,12 +19,15 @@ namespace FitnessGymproject.Controllers
         }
 
         // GET: Workoutplans
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var modelContext = _context.Workoutplans.Include(w => w.Member).Include(w => w.MembershipPlan).Include(w => w.Trainer);
-            return View(await modelContext.ToListAsync());
+            var workoutPlans = _context.Workoutplans.ToList();
+            if (workoutPlans == null)
+            {
+                Console.WriteLine("workoutPlans is null!");
+            }
+            return View(workoutPlans);
         }
-
         // GET: Workoutplans/Details/5
         public async Task<IActionResult> Details(decimal? id)
         {
@@ -35,7 +38,6 @@ namespace FitnessGymproject.Controllers
 
             var workoutplan = await _context.Workoutplans
                 .Include(w => w.Member)
-                .Include(w => w.MembershipPlan)
                 .Include(w => w.Trainer)
                 .FirstOrDefaultAsync(m => m.WorkoutPlanId == id);
             if (workoutplan == null)
@@ -50,7 +52,6 @@ namespace FitnessGymproject.Controllers
         public IActionResult Create()
         {
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId");
-            ViewData["MembershipPlanId"] = new SelectList(_context.MembershipPlans, "MembershipPlanId", "MembershipPlanId");
             ViewData["TrainerId"] = new SelectList(_context.Trainers, "TrainerId", "TrainerId");
             return View();
         }
@@ -60,7 +61,7 @@ namespace FitnessGymproject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WorkoutPlanId,TrainerId,MemberId,PlanName,Exercises,Schedule,Goals,CreatedAt,UpdatedAt,Price,MembershipPlanId")] Workoutplan workoutplan)
+        public async Task<IActionResult> Create([Bind("WorkoutPlanId,TrainerId,MemberId,PlanName,Exercises,Schedule,Goals,CreatedAt,UpdatedAt")] Workoutplan workoutplan)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +70,6 @@ namespace FitnessGymproject.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId", workoutplan.MemberId);
-            ViewData["MembershipPlanId"] = new SelectList(_context.MembershipPlans, "MembershipPlanId", "MembershipPlanId", workoutplan.MembershipPlanId);
             ViewData["TrainerId"] = new SelectList(_context.Trainers, "TrainerId", "TrainerId", workoutplan.TrainerId);
             return View(workoutplan);
         }
@@ -88,7 +88,6 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId", workoutplan.MemberId);
-            ViewData["MembershipPlanId"] = new SelectList(_context.MembershipPlans, "MembershipPlanId", "MembershipPlanId", workoutplan.MembershipPlanId);
             ViewData["TrainerId"] = new SelectList(_context.Trainers, "TrainerId", "TrainerId", workoutplan.TrainerId);
             return View(workoutplan);
         }
@@ -98,7 +97,7 @@ namespace FitnessGymproject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("WorkoutPlanId,TrainerId,MemberId,PlanName,Exercises,Schedule,Goals,CreatedAt,UpdatedAt,Price,MembershipPlanId")] Workoutplan workoutplan)
+        public async Task<IActionResult> Edit(decimal id, [Bind("WorkoutPlanId,TrainerId,MemberId,PlanName,Exercises,Schedule,Goals,CreatedAt,UpdatedAt")] Workoutplan workoutplan)
         {
             if (id != workoutplan.WorkoutPlanId)
             {
@@ -126,7 +125,6 @@ namespace FitnessGymproject.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId", workoutplan.MemberId);
-            ViewData["MembershipPlanId"] = new SelectList(_context.MembershipPlans, "MembershipPlanId", "MembershipPlanId", workoutplan.MembershipPlanId);
             ViewData["TrainerId"] = new SelectList(_context.Trainers, "TrainerId", "TrainerId", workoutplan.TrainerId);
             return View(workoutplan);
         }
@@ -141,7 +139,6 @@ namespace FitnessGymproject.Controllers
 
             var workoutplan = await _context.Workoutplans
                 .Include(w => w.Member)
-                .Include(w => w.MembershipPlan)
                 .Include(w => w.Trainer)
                 .FirstOrDefaultAsync(m => m.WorkoutPlanId == id);
             if (workoutplan == null)
@@ -166,14 +163,14 @@ namespace FitnessGymproject.Controllers
             {
                 _context.Workoutplans.Remove(workoutplan);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+ 
         private bool WorkoutplanExists(decimal id)
         {
-          return (_context.Workoutplans?.Any(e => e.WorkoutPlanId == id)).GetValueOrDefault();
+            return (_context.Workoutplans?.Any(e => e.WorkoutPlanId == id)).GetValueOrDefault();
         }
     }
 }

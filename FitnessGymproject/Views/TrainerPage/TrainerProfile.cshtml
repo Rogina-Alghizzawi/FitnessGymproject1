@@ -1,82 +1,58 @@
 ﻿@model FitnessGymproject.Models.Trainer
 
 @{
+    ViewData["Title"] = "Trainer Profile";
     Layout = "~/Views/Shared/TrainerLayout.cshtml";
-    Layout = "~/Views/Shared/Home_Layout.cshtml";
-
 }
 
-<style>
-    body {
-        background-color: white;
-    }
-
-    section {
-        margin-top: 100px; 
-        padding: 20px;
-    }
-
-    .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-    }
-
-    .card-body {
-        width: 100%;
-        max-width: 900px; 
-    }
-
-    h5 {
-        font-size: 1.5rem;
-        color: #333;
-    }
-</style>
-
-<section>
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card mb-4 border-0">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-4 text-center">
+<section class="vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-lg-8 mb-4 mb-lg-0">
+                <div class="card trainer-profile-card" style="border-radius: 1rem; overflow: hidden;">
+                    <div class="row g-0">
+                        <div class="col-md-4 gradient-custom text-center text-white d-flex flex-column align-items-center justify-content-center">
+                            @if (!string.IsNullOrEmpty(Model.Imageprofileurl))
+                            {
                                 <img src="@Model.Imageprofileurl"
                                      alt="Avatar" class="img-fluid my-4 rounded-circle" style="width: 120px; height: 120px; object-fit: cover;" />
-                                <h5 class="my-3">@ViewData["TrainerName"]</h5> 
-                                <p class="text-muted mb-1">@ViewData["TrainerSpecialization"]</p>
-
-                                <a asp-controller="TrainerPage" asp-action="Edit">Edit Trainer</a>
-                            </div>
-                            <div class="col-lg-8">
-                                <hr>
-                                <div class="row mb-3">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0 font-weight-bold">Email</p>
+                            }
+                            else
+                            {
+                                <span class="text-white my-4 d-block rounded-circle bg-dark" style="font-size: 80px; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center;">&#128100;</span>
+                            }
+                            <h5 class="mt-3">@ViewData["TrainerName"]</h5>
+                            <p class="mb-2">@ViewData["TrainerSpecialization"]</p>
+                            <a asp-controller="TrainerPage" asp-action="Edit" class="text-white btn btn-outline-light btn-sm">
+                                Edit Trainer
+                            </a>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body p-5">
+                                <h6 class="text-primary mb-3">Personal Information</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <h6>Email</h6>
+                                        <p class="text-muted">@ViewData["TrainerEmail"]</p>
                                     </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@ViewData["TrainerEmail"] </p>
+                                    <div class="col-6 mb-3">
+                                        <h6>Phone</h6>
+                                        <p class="text-muted">@ViewData["TrainerPhoneNumber"]</p>
                                     </div>
                                 </div>
-                                <hr>
-                                <div class="row mb-3">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0 font-weight-bold">Phone</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@ViewData["TrainerPhoneNumber"]</p>
+                                <h6 class="text-primary mt-4 mb-3">Biography</h6>
+                                <hr class="mt-0 mb-4">
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <h6>Bio</h6>
+                                        <p class="text-muted">@ViewData["TrainerBio"]</p>
                                     </div>
                                 </div>
-
-                                <hr>
-                                <div class="row mb-3">
-                                    <div class="col-sm-3">
-                                        <p class="mb-0 font-weight-bold">Bio</p>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <p class="text-muted mb-0">@ViewData["TrainerBio"]</p>
-                                    </div>
+                                <div class="d-flex justify-content-start mt-4">
+                                    <a asp-controller="TrainerPage" asp-action="Details" class="btn btn-outline-primary me-3">
+                                        <i class="mdi mdi-information-outline"></i> Details
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -86,3 +62,40 @@
         </div>
     </div>
 </section>
+
+<style>
+    .trainer-profile-card {
+        width: 1000px;
+        margin: 0 auto;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+    }
+
+    .gradient-custom {
+        background: linear-gradient(to right bottom, #f6d365, #fd7e84);
+        min-height: 100%;
+    }
+
+    .trainer-profile-card img {
+        border: 3px solid white;
+    }
+
+    .trainer-profile-card h5 {
+        font-weight: bold;
+    }
+
+    .trainer-profile-card p {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .btn-outline-light {
+        border-color: white;
+        color: white;
+    }
+
+        .btn-outline-light:hover {
+            background-color: white;
+            color: #fd7e84;
+        }
+</style>
