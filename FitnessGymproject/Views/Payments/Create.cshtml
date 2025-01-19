@@ -2,9 +2,11 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
+
 }
 
-<h1>Create</h1>
+<h1 class="text-center">Create</h1>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -13,13 +15,13 @@
     </div>
 }
 
-<h4>Payment</h4>
+<h4 class="text-center">Payment</h4>
 <hr />
 
-<section>
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Create" method="post">
+<section style="padding:200px">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" method="post" class="border p-4 rounded shadow-lg">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 @if (ViewBag.ErrorMessage != null)
                 {
@@ -32,9 +34,9 @@
                     <input type="hidden" asp-for="MemberId" value="@ViewData["MemberId"]" /> <!-- Hidden field to store logged-in member's ID -->
                 </div>
                 <div class="form-group">
-                    <label asp-for="SubscriptionId" class="control-label"></label>
-                    <select type="hidden" asp-for="SubscriptionId" class="form-control" asp-items="ViewBag.SubscriptionId"></select>
+                    <input type="hidden" asp-for="SubscriptionId" value="@ViewData["SubscriptionId"]" />
                 </div>
+
                 <div class="form-group">
                     <label asp-for="Amount" class="control-label"></label>
                     <input asp-for="Amount" class="form-control" />
@@ -61,17 +63,14 @@
                     <input type="text" class="form-control" id="SecurityCode" name="SecurityCode" maxlength="4" value="@Model.SecurityCode" />
                 </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                <div class="form-group text-center">
+                    <input type="submit" value="Create" class="btn btn-dark" style="background-color: #8B0000; border-color: #8B0000;" />
                 </div>
 
             </form>
         </div>
     </div>
 </section>
-
-<div>
-</div>
 
 @section Scripts {
     @{

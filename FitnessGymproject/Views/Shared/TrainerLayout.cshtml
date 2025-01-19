@@ -1,203 +1,164 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>Quantum Able Bootstrap 4 Admin Dashboard Template</title>
-    <!-- HTML5 Shim and Respond.js IE9 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-      <![endif]-->
-
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <!-- Favicon icon -->
-    <link rel="shortcut icon" href="~/TrainerDesign/assets/images/favicon.png" type="image/x-icon">
-    <link rel="icon" href="~/TrainerDesign/assets/images/favicon.ico" type="image/x-icon">
-
-    <!-- Google font-->
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet">
-
-    <!-- themify -->
-    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/icon/themify-icons/themify-icons.css">
-
-    <!-- iconfont -->
-    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/icon/icofont/css/icofont.css">
-
-    <!-- simple line icon -->
-    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/icon/simple-line-icons/css/simple-line-icons.css">
-
-    <!-- Required Fremwork -->
-    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/plugins/bootstrap/css/bootstrap.min.css">
-
-    <!-- Chartlist chart css -->
-    <link rel="stylesheet" href="~/TrainerDesign/assets/plugins/chartist/dist/chartist.css" type="text/css" media="all">
-
-    <!-- Weather css -->
-    <link href="~/TrainerDesign/assets/css/svg-weather.css" rel="stylesheet">
-
-
-    <!-- Style.css -->
-    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/css/main.css">
-
-    <!-- Responsive.css-->
-    <link rel="stylesheet" type="text/css" href="~/TrainerDesign/assets/css/responsive.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/AdminDesign1/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="~/AdminDesign1/assets/css/style.css">
+    <link rel="shortcut icon" href="~/AdminDesign1/assets/images/favicon.png" />
     <style>
         footer {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #f8f9fa; /* Adjust as needed */
-            padding: 10px 20px; /* Adjust padding */
+            background-color: #f8f9fa;
+            padding: 10px 20px;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000; /* Ensure it stays on top */
+            z-index: 1000;
         }
     </style>
 </head>
-<body class="sidebar-mini fixed">
-    <div class="loader-bg">
-        <div class="loader-bar">
+<body>
+
+    <div class="container-scroller">
+        <div class="row p-0 m-0 proBanner" id="proBanner">
+            <div class="col-md-12 p-0 m-0">
+                <div class="card-body card-body-padding d-flex align-items-center justify-content-between">
+                    <div class="ps-lg-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <p class="mb-0 font-weight-medium me-3 buy-now-text">Free 24/7 customer support, updates, and more with this template!</p>
+                            <a href="https://www.bootstrapdash.com/product/purple-bootstrap-admin-template/" target="_blank" class="btn me-2 buy-now-btn border-0">Buy Now</a>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a href="https://www.bootstrapdash.com/product/purple-bootstrap-admin-template/"><i class="mdi mdi-home me-3 text-white"></i></a>
+                        <button id="bannerClose" class="btn border-0 p-0">
+                            <i class="mdi mdi-close text-white mr-0"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="wrapper">
-        <!-- Navbar-->
-        <header class="main-header-top hidden-print">
-            <a href="index.html" class="logo"><img class="img-fluid able-logo" src="~/TrainerDesign/assets/images/logo.png" alt="Theme-logo"></a>
-            <nav class="navbar navbar-static-top">
-                <!-- Sidebar toggle button-->
-                <a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
-                    <ul class="top-nav">
-                      
-                     
+        <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+                <a class="navbar-brand brand-logo" href="index.html"><img src="~/AdminDesign1/assets/images/logo.svg" alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini" href="~/AdminDesign1/index.html"><img src="~/AdminDesign1/assets/images/logo-mini.svg" alt="logo" /></a>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-stretch">
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                    <span class="mdi mdi-menu"></span>
+                </button>
 
-                        <!-- window screen -->
-                        <li class="pc-rheader-submenu">
-                            <a href="#!" class="drop icon-circle" onclick="javascript:toggleFullScreen()">
-                                <i class="icon-size-fullscreen"></i>
+                <ul class="navbar-nav navbar-nav-right">
+                    <li class="nav-item nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+
+
+                            <div class="nav-profile-text">
+                                <p class="mb-1 text-black">@ViewData["TrainerName"]</p>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+                          <li> <a class="nav-link" asp-action="TrainerProfile" asp-controller="TrainerPage"><i class="icon-user"></i>Profile</a></li>
+                            <i class="mdi mdi-cached me-2 text-success"></i> My Profile
                             </a>
-
-                        </li>
-                        <!-- User Menu-->
-                        <li class="dropdown">
-                            <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
-                                <span>John <b>Doe</b> <i class=" icofont icofont-simple-down"></i></span>
-
-                            </a>
-                            <ul class="dropdown-menu settings-menu">
-                             
-                            <li> <a class="nav-link" asp-action="TrainerProfile" asp-controller="TrainerPage"><i class="icon-user"></i>Profile</a></li>
-
-                                <li class="p-0">
-                                    <div class="dropdown-divider m-0"></div>
-                                </li>
-<li>                            <a  class="icon-logout" href="@Url.Action("Logout", "LoginAndRegister")">
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="@Url.Action("Logout", "LoginAndRegister")">
                                 Logout
                             </a>
-                            </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    </div>
-            </nav>
-        </header>
-        <!-- Side-Nav-->
-        <aside class="main-sidebar hidden-print ">
-            <section class="sidebar" id="sidebar-scroll">
-                <!-- Sidebar Menu-->
-                <ul class="sidebar-menu">
-                    <li class="nav-level">--- Navigation</li>
-                    <li class="active treeview">
-                    <a class="nav-link" asp-controller="TrainerPage" asp-action="Index">
-                        <i class="icon-speedometer"></i><span> Dashboard</span>
+
+                    </li>
+                    <li class="nav-item d-none d-lg-block full-screen-link">
+                        <a class="nav-link">
+                            <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
                         </a>
                     </li>
-                    <li class="nav-level">Components</li>
-                    <li class="treeview">
-                        <a class="waves-effect waves-dark" href="#!"><i class="icon-briefcase"></i><span>Member</span><i class="icon-arrow-down"></i></a>
-                        <ul class="treeview-menu">
-                          <li> <a class="waves-effect waves-dark" asp-action="ViewMembers" asp-controller="TrainerPage"><i class="icon-arrow-right"></i>Member list</a></li>
-
-                        </ul>
+                    <li class="nav-item nav-logout d-none d-lg-block">
+                        <a class="nav-link" href="@Url.Action("Logout", "LoginAndRegister")">
+                            <i class="mdi mdi-power"></i>
+                        </a>
                     </li>
 
-                    <li class="treeview">
-                        <a class="waves-effect waves-dark" href="#!"><i class="icon-chart"></i><span>WorkOut</span><span class="label label-success menu-caption">New</span><i class="icon-arrow-down"></i></a>
-                        <ul class="treeview-menu">
-                        <li> <a class="waves-effect waves-dark" asp-action="Create" asp-controller="Workoutplans"><i class="icon-arrow-right"></i>Create Workout plane</a></li>
-                        <li> <a class="waves-effect waves-dark" asp-action="Index" asp-controller="Workoutplans"><i class="icon-arrow-right"></i>Workout Plans</a></li>
-
-
-                        </ul>
+                    <li class="nav-item nav-settings d-none d-lg-block">
+                        <a class="nav-link" href="#">
+                            <i class="mdi mdi-format-line-spacing"></i>
+                        </a>
                     </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <div class="container-fluid page-body-wrapper">
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item nav-profile">
+                        <a href="#" class="nav-link">
+                            <div class="nav-profile-text d-flex flex-column">
+                                <span class="font-weight-bold mb-2">@ViewData["TrainerName"]</span>
+                            </div>
+                            <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" asp-controller="TrainerPage" asp-action="Index">
+                        <span class="menu-title">Dashboard</span>
+                            <i class="mdi mdi-home menu-icon"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
 
-                    
-            </section>
-        </aside>
-        @RenderBody()
-    <footer>
-        <div class="container text-center">
-            <p>&copy; 2025 Your Company Name. All rights reserved.</p>
-        </div>
-    </footer>
-        <!-- Required Jqurey -->
-        <script src="~/TrainerDesign/assets/plugins/Jquery/dist/jquery.min.js"></script>
-        <script src="~/TrainerDesign/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
-        <script src="~/TrainerDesign/assets/plugins/tether/dist/js/tether.min.js"></script>
+                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                            <span class="menu-title">Members And Gustes</span>
+                            <i class="menu-arrow"></i>
+                            <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Index" asp-controller="Workoutplans"><i class="icon-arrow-right"></i>Workout Plans</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-action="Create" asp-controller="Workoutplans"><i class="icon-arrow-right"></i>Create Workout Plans</a>
+                                </li>
 
-        <!-- Required Fremwork -->
-        <script src="~/TrainerDesign/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-
-        <!-- Scrollbar JS-->
-        <script src="~/TrainerDesign/assets/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-        <script src="~/TrainerDesign/assets/plugins/jquery.nicescroll/jquery.nicescroll.min.js"></script>
-
-        <!--classic JS-->
-        <script src="~/TrainerDesign/assets/plugins/classie/classie.js"></script>
-
-        <!-- notification -->
-        <script src="~/TrainerDesign/assets/plugins/notification/js/bootstrap-growl.min.js"></script>
-
-        <!-- Sparkline charts -->
-        <script src="~/TrainerDesign/assets/plugins/jquery-sparkline/dist/jquery.sparkline.js"></script>
-
-        <!-- Counter js  -->
-        <script src="~/TrainerDesign/assets/plugins/waypoints/jquery.waypoints.min.js"></script>
-        <script src="~/TrainerDesign/assets/plugins/countdown/js/jquery.counterup.js"></script>
-
-        <!-- Echart js -->
-        <script src="~/TrainerDesign/assets/plugins/charts/echarts/js/echarts-all.js"></script>
-
-        <script src="https://code.highcharts.com/highcharts.js"></script>
-        <script src="https://code.highcharts.com/modules/exporting.js"></script>
-        <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-
-        <!-- custom js -->
-        <script type="text/javascript" src="~/TrainerDesign/assets/js/main.min.js"></script>
-        <script type="text/javascript" src="~/TrainerDesign/assets/pages/dashboard.js"></script>
-        <script type="text/javascript" src="~/TrainerDesign/assets/pages/elements.js"></script>
-        <script src="~/TrainerDesign/assets/js/menu.min.js"></script>
-        <script>
-            var $window = $(window);
-            var nav = $('.fixed-button');
-            $window.scroll(function(){
-                if ($window.scrollTop() >= 200) {
-                   nav.addClass('active');
-                }
-                else {
-                   nav.removeClass('active');
-                }
-            });
-        </script>
-    @RenderSection("Scripts", required: false)
-
+                            </ul>
+                        </div>
+                    </li>
+                  </ul>
+                  
+            </nav>
+            @RenderBody()
+            <footer>
+                <div class="container text-center">
+                    <p>&copy; 2025 Fitness. All rights reserved.</p>
+                </div>
+            </footer>
+            <!-- plugins:js -->
+            <script src="~/AdminDesign1/assets/vendors/js/vendor.bundle.base.js"></script>
+            <!-- endinject -->
+            <!-- Plugin js for this page -->
+            <script src="~/AdminDesign1/assets/vendors/chart.js/chart.umd.js"></script>
+            <script src="~/AdminDesign1/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+            <!-- End plugin js for this page -->
+            <!-- inject:js -->
+            <script src="~/AdminDesign1/assets/js/off-canvas.js"></script>
+            <script src="~/AdminDesign1/assets/js/misc.js"></script>
+            <script src="~/AdminDesign1/assets/js/settings.js"></script>
+            <script src="~/AdminDesign1/assets/js/todolist.js"></script>
+            <script src="~/AdminDesign1/assets/js/jquery.cookie.js"></script>
+            <!-- endinject -->
+            <!-- Custom js for this page -->
+            <script src="~/AdminDesign1/assets/js/dashboard.js"></script>
+            <!-- End custom js for this page -->
+            @RenderSection("Scripts", required: false)
 </body>
-
 </html>

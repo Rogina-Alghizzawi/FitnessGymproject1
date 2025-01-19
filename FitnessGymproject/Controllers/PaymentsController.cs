@@ -85,7 +85,7 @@ namespace FitnessGymproject.Controllers
             var payment = new Payment();
 
             ViewData["MemberId"] = memberId;
-            ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId");
+            ViewData["SubscriptionId"] = _context.Subscriptions.FirstOrDefault()?.SubscriptionId; // Or any logic for default SubscriptionId
 
             return View(payment); // Pass an initialized Payment object
         }
@@ -113,7 +113,7 @@ namespace FitnessGymproject.Controllers
             }
 
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId", payment.MemberId);
-            ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId", payment.SubscriptionId);
+            ViewData["SubscriptionId"] = _context.Subscriptions.FirstOrDefault()?.SubscriptionId; // Or any logic for default SubscriptionId
 
             return View(payment);
         }
