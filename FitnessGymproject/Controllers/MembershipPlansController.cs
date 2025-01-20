@@ -152,23 +152,19 @@ namespace FitnessGymproject.Controllers
 
         public async Task<IActionResult> ViewAvailableMembershipPlans()
         {
-            // Get all available membership plans that are not already subscribed to by any member
             var availablePlans = await _context.MembershipPlans
                                                .Where(mp => !_context.Subscriptions
                                                                       .Any(s => s.MembershipPlanId == mp.MembershipPlanId && s.Status == "Active"))
                                                .ToListAsync();
 
-            // Get all distinct payment methods from the database (not based on specific user anymore)
             var userPaymentMethods = await _context.Payments
                                                    .Where(p => !string.IsNullOrEmpty(p.PaymentMethod))
                                                    .Select(p => p.PaymentMethod)
                                                    .Distinct()
                                                    .ToListAsync();
 
-            // Join the payment methods into a string for display
             var paymentMethodsText = userPaymentMethods.Any() ? string.Join(", ", userPaymentMethods) : "No payment methods available";
 
-            // Pass the payment methods text to the View
             ViewData["UserPaymentMethodsText"] = paymentMethodsText;
 
             return View(availablePlans);
@@ -187,7 +183,6 @@ public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPla
 
     decimal memberId = decimal.Parse(memberIdString);
 
-    // Check if the user already has an active subscription
     var existingSubscription = await _context.Subscriptions
                                              .FirstOrDefaultAsync(s => s.MemberId == memberId && s.Status == "Active");
 
@@ -271,14 +266,14 @@ public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPla
             if (payment.PaymentStatus == "Completed")
             {
                 string content = $"Dear {member.FullName},\n\n" +
-$"We are pleased to inform you that your payment for the {subscription.MembershipPlan.PlanName} subscription has been successfully completed.\n\n" +
-$"Plan Details:\n" +
-$"- Description: {subscription.MembershipPlan.PlanDescription}\n" +
-$"- Included Services: {subscription.MembershipPlan.IncludedServices ?? "Not specified"}\n" +
-$"- Duration: {subscription.MembershipPlan.DurationDays} days\n" +
-$"- Price: ${subscription.MembershipPlan.Price}\n\n" +
-"Thank you for choosing Fitness Gym. We are excited to have you with us and look forward to supporting you on your fitness journey!\n\n" +
-"Best Regards,\nFitness Team";
+                                $"We are pleased to inform you that your payment for the {subscription.MembershipPlan.PlanName} subscription has been successfully completed.\n\n" +
+                                        $"Plan Details:\n" +
+                                $"- Description: {subscription.MembershipPlan.PlanDescription}\n" +
+                            $"- Included Services: {subscription.MembershipPlan.IncludedServices ?? "Not specified"}\n" +
+                                    $"- Duration: {subscription.MembershipPlan.DurationDays} days\n" +
+                            $"- Price: ${subscription.MembershipPlan.Price}\n\n" +
+                                        "Thank you for choosing Fitness Gym. We are excited to have you with us and look forward to supporting you on your fitness journey!\n\n" +
+                                    "Best Regards,\nFitness Team";
 
 
 

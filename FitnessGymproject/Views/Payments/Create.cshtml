@@ -31,7 +31,7 @@
                 }
                 <div class="form-group">
                     <label asp-for="MemberId" class="control-label"></label>
-                    <input  asp-for="MemberId" value="@ViewData["MemberId"]" /> <!-- Hidden field to store logged-in member's ID -->
+                    <input type="hidden"  asp-for="MemberId" value="@ViewData["MemberId"]" /> <!-- Hidden field to store logged-in member's ID -->
                 </div>
          
                 <div class="form-group">

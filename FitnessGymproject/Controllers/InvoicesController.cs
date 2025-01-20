@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FitnessGymproject.Models;
-using Microsoft.IdentityModel.Tokens;
 
 namespace FitnessGymproject.Controllers
 {
@@ -19,27 +17,23 @@ namespace FitnessGymproject.Controllers
             _context = context;
         }
 
-        // GET: Invoices
         public async Task<IActionResult> Index()
         {
             var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
             if (loggedInMemberId == null)
             {
-                return RedirectToAction("Login", "LoginAndRegister");  // Redirect to login page if no user is logged in
+                return RedirectToAction("Login", "LoginAndRegister");
             }
 
-            var memberId = Convert.ToDecimal(loggedInMemberId);  // Assuming MemberId is decimal, adjust if necessary
-
+            var memberId = Convert.ToDecimal(loggedInMemberId);
             var invoices = _context.Invoices
-                                    .Where(i => i.Subscription.MemberId == memberId)  // Filter invoices by the logged-in user
+                                    .Where(i => i.Subscription.MemberId == memberId)
                                     .Include(i => i.Payment)
                                     .Include(i => i.Subscription);
 
             return View(await invoices.ToListAsync());
         }
 
-
-        // GET: Invoices/Details/5
         public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null || _context.Invoices == null)
@@ -59,7 +53,6 @@ namespace FitnessGymproject.Controllers
             return View(invoice);
         }
 
-        // GET: Invoices/Create
         public IActionResult Create()
         {
             ViewData["PaymentId"] = new SelectList(_context.Payments, "PaymentId", "PaymentId");
@@ -67,9 +60,6 @@ namespace FitnessGymproject.Controllers
             return View();
         }
 
-        // POST: Invoices/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("InvoiceId,SubscriptionId,InvoiceDate,TotalAmount,PaymentStatus,InvoicePdf,PaymentId")] Invoice invoice)
@@ -85,7 +75,6 @@ namespace FitnessGymproject.Controllers
             return View(invoice);
         }
 
-        // GET: Invoices/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
             if (id == null || _context.Invoices == null)
@@ -103,9 +92,6 @@ namespace FitnessGymproject.Controllers
             return View(invoice);
         }
 
-        // POST: Invoices/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(decimal id, [Bind("InvoiceId,SubscriptionId,InvoiceDate,TotalAmount,PaymentStatus,InvoicePdf,PaymentId")] Invoice invoice)
@@ -140,7 +126,6 @@ namespace FitnessGymproject.Controllers
             return View(invoice);
         }
 
-        // GET: Invoices/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
         {
             if (id == null || _context.Invoices == null)
@@ -160,28 +145,27 @@ namespace FitnessGymproject.Controllers
             return View(invoice);
         }
 
-        // POST: Invoices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(decimal id)
         {
             if (_context.Invoices == null)
             {
-                return Problem("Entity set 'ModelContext.Invoices'  is null.");
+                return Problem("Entity set 'ModelContext.Invoices' is null.");
             }
             var invoice = await _context.Invoices.FindAsync(id);
             if (invoice != null)
             {
                 _context.Invoices.Remove(invoice);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool InvoiceExists(decimal id)
         {
-          return (_context.Invoices?.Any(e => e.InvoiceId == id)).GetValueOrDefault();
+            return (_context.Invoices?.Any(e => e.InvoiceId == id)).GetValueOrDefault();
         }
     }
 }

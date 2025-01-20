@@ -364,14 +364,13 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            // Ensure the admin attempting to delete is logged in
             var loggedInAdminId = HttpContext.Session.GetString("LoggedInAdminId");
             if (string.IsNullOrEmpty(loggedInAdminId))
             {
                 return Unauthorized();
             }
 
-            return View(admin); // Returns the delete confirmation view
+            return View(admin); 
         }
 
         [HttpPost, ActionName("Delete")]
@@ -382,19 +381,18 @@ namespace FitnessGymproject.Controllers
 
             if (string.IsNullOrEmpty(loggedInAdminId) || Convert.ToDecimal(loggedInAdminId) != id)
             {
-                return Unauthorized(); // Return 401 if not authorized
+                return Unauthorized(); 
             }
 
             var admin = await _context.Admins.FindAsync(id);
             if (admin == null)
             {
-                return NotFound(); // Return 404 if admin not found
+                return NotFound(); 
             }
 
-            _context.Admins.Remove(admin); // Remove admin from database
+            _context.Admins.Remove(admin); 
             await _context.SaveChangesAsync();
 
-            // Clear session if the admin is deleting their own account
             HttpContext.Session.Clear();
             return RedirectToAction("Login", "LoginAndRegister");
         }

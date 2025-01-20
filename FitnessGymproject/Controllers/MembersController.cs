@@ -220,19 +220,15 @@ namespace FitnessGymproject.Controllers
 
             if (loggedInMemberId == null)
             {
-                // Handle the case where the member is not logged in
-                return RedirectToAction("Login");  // Redirect to login page or show an error
+                return RedirectToAction("Login");  
             }
 
             decimal memberId = Convert.ToDecimal(loggedInMemberId);
 
-            // Fetch available workout plans (where MemberId is null)
             var availablePlans = _context.Workoutplans.Where(wp => wp.MemberId == null).ToList();
 
-            // Pass the memberId to the view through ViewData
             ViewData["MemberId"] = memberId;
 
-            // Return the view with available plans
             return View(availablePlans);
         }
 
@@ -264,32 +260,26 @@ namespace FitnessGymproject.Controllers
 
         public IActionResult ViewSubscribedPlans()
         {
-            // Retrieve the member ID from the session
             string memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
 
             if (string.IsNullOrEmpty(memberIdString))
             {
-                // If no member is logged in, handle appropriately (e.g., redirect to login page)
                 return RedirectToAction("Login", "LoginAndRegister");
 
             }
 
-            // Convert the string to a decimal (since MemberId is decimal)
             decimal memberId = Convert.ToDecimal(memberIdString);
 
-            // Query the database for all workout plans assigned to the member
             var workoutPlans = _context.Workoutplans
                                        .Where(wp => wp.MemberId == memberId)
                                        .ToList();
 
             if (workoutPlans == null || !workoutPlans.Any())
             {
-                // Handle case where no workout plans are assigned (e.g., show a message)
                 ViewBag.Message = "No workout plans assigned.";
                 return View();
             }
 
-            // Return the list of workout plans to the view
             return View(workoutPlans);
         }
 

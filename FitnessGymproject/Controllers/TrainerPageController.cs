@@ -146,7 +146,7 @@ namespace FitnessGymproject.Controllers
                             }
                         }
 
-                        // Save new image
+                    
                         string fileName = Guid.NewGuid().ToString() + Path.GetExtension(trainer.ImageFile.FileName);
                         string path = Path.Combine(wwwRootPath, "images", fileName);
 
@@ -218,7 +218,7 @@ namespace FitnessGymproject.Controllers
                 return NotFound("No trainers found.");
             }
 
-            return View(trainers); // Pass all trainers to the view
+            return View(trainers); 
         }
 
         private bool TrainerExists(decimal id)

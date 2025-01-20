@@ -17,7 +17,6 @@
         {
             <div class="payment-card">
                 <div class="flip">
-                    <!-- Front Side of Card -->
                     <div class="front">
                         <div class="payment-info">
                             <h3>Payment ID: @item.PaymentId</h3>
@@ -28,7 +27,6 @@
                         </div>
                     </div>
 
-                    <!-- Back Side of Card -->
                     <div class="back">
                         <div class="strip"></div>
                         <div class="card-holder">
@@ -49,10 +47,9 @@
         justify-content: center;
     }
 
-    /* Payment Card */
     .payment-card {
-        width: 400px; /* Increased card width */
-        height: 250px; /* Increased card height */
+        width: 400px;
+        height: 250px; 
         position: relative;
         perspective: 1000px;
     }
@@ -80,14 +77,14 @@
 
         .payment-card .front {
             background-color: darkred;
-            padding: 30px; /* Adjusted padding for larger card */
+            padding: 30px; 
             color: #fff;
         }
 
         .payment-card .back {
             background: darkred;
-            color: white; /* Set text color to white */
-            padding: 30px; /* Adjusted padding for larger card */
+            color: white; 
+            padding: 30px; 
             transform: rotateY(180deg);
         }
 
@@ -97,26 +94,26 @@
     }
 
         .payment-info h3 {
-            font-size: 1.8em; /* Increased font size */
-            margin-bottom: 15px; /* Increased margin */
-            color: white; /* Ensure heading text is white */
+            font-size: 1.8em; 
+            margin-bottom: 15px; 
+            color: white; 
         }
 
         .payment-info p {
-            margin: 8px 0; /* Increased margin */
-            font-size: 1.2em; /* Adjusted font size */
-            color: white; /* Ensure paragraph text is white */
+            margin: 8px 0;
+            font-size: 1.2em; 
+            color: white; 
         }
 
     .additional-info p {
-        margin: 8px 0; /* Increased margin */
-        font-size: 1.2em; /* Adjusted font size */
-        color: white; /* Ensure additional info text is white */
+        margin: 8px 0; 
+        font-size: 1.2em; 
+        color: white; 
     }
 
-    /* Add this rule to change the color of the Member and Subscription information */
+    
     .card-holder p {
-        color: white; /* Set text color for Member and Subscription info */
+        color: white; 
     }
 </style>
 

@@ -9,7 +9,7 @@ namespace FitnessGymproject.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ModelContext _context;
-        public HomeController(ILogger<HomeController> logger , ModelContext context)
+        public HomeController(ILogger<HomeController> logger, ModelContext context)
         {
             _logger = logger;
             _context = context;
@@ -18,24 +18,18 @@ namespace FitnessGymproject.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var homePageContents = await _context.Homepages.ToListAsync(); // Fetch data from database
-
-            // Check if homePageContents is null or empty, to handle any data retrieval issues
+            var homePageContents = await _context.Homepages.ToListAsync();
             if (homePageContents == null)
             {
-                homePageContents = new List<Homepage>(); // Prevent null reference by providing an empty list
+                homePageContents = new List<Homepage>();
             }
-
-            return View(homePageContents); // Pass the data to the view
+            return View(homePageContents);
         }
-
 
         public IActionResult Privacy()
         {
             return View();
         }
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

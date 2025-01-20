@@ -20,26 +20,20 @@ namespace FitnessGymproject.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Retrieve the logged-in member's ID from the session
             var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
 
-            // Check if the member is logged in
             if (loggedInMemberId == null)
             {
-                // If no member is logged in, redirect to a login page or return an appropriate result
                 return RedirectToAction("Login", "LoginAndRegister");
             }
 
-            // Convert the logged-in member's ID to an integer (or the appropriate type in your case)
             int memberId = int.Parse(loggedInMemberId);
 
-            // Retrieve the payments for the logged-in member
             var modelContext = _context.Payments
                 .Include(p => p.Member)
                 .Include(p => p.Subscription)
-                .Where(p => p.MemberId == memberId);  // Filter payments by logged-in member
+                .Where(p => p.MemberId == memberId);  
 
-            // Return the filtered payments list
             return View(await modelContext.ToListAsync());
         }
 
@@ -81,12 +75,11 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            // Initialize the model if necessary, especially for new fields
             var payment = new Payment();
 
             ViewData["MemberId"] = memberId;
 
-            return View(payment); // Pass an initialized Payment object
+            return View(payment); 
         }
 
 
@@ -136,11 +129,10 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            // Check if the logged-in member is the one associated with the payment
             var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
             if (loggedInMemberId == null || int.Parse(loggedInMemberId) != payment.MemberId)
             {
-                return Unauthorized(); // Prevent deleting payments of other members
+                return Unauthorized(); 
             }
 
             return View(payment);
@@ -163,14 +155,12 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            // Ensure that the logged-in member is the one deleting the payment
             var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
             if (loggedInMemberId == null || int.Parse(loggedInMemberId) != payment.MemberId)
             {
-                return Unauthorized(); // Prevent deleting payments of other members
+                return Unauthorized(); 
             }
 
-            // Remove the payment from the database
             _context.Payments.Remove(payment);
             await _context.SaveChangesAsync();
 
@@ -187,7 +177,6 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            // Retrieve the payment for the logged-in member
             var payment = await _context.Payments
                 .Include(p => p.Member)
                 .Include(p => p.Subscription)
@@ -198,11 +187,10 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            // Check if the logged-in member is the one associated with the payment
             var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
             if (loggedInMemberId == null || int.Parse(loggedInMemberId) != payment.MemberId)
             {
-                return Unauthorized(); // Prevent editing payments of other members
+                return Unauthorized(); 
             }
 
             ViewData["SubscriptionId"] = new SelectList(_context.Subscriptions, "SubscriptionId", "SubscriptionId", payment.SubscriptionId);
@@ -223,11 +211,10 @@ namespace FitnessGymproject.Controllers
             {
                 try
                 {
-                    // Ensure that the logged-in member is the one editing their payment
                     var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
                     if (loggedInMemberId == null || int.Parse(loggedInMemberId) != payment.MemberId)
                     {
-                        return Unauthorized(); // Prevent editing payments of other members
+                        return Unauthorized(); 
                     }
 
                     _context.Update(payment);
@@ -250,7 +237,6 @@ namespace FitnessGymproject.Controllers
             return View(payment);
         }
 
-        // Existing methods...
 
 
         private bool PaymentExists(decimal id)

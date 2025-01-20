@@ -18,21 +18,19 @@ namespace FitnessGymproject.Controllers
             _context = context;
         }
 
-
         public IActionResult ContactUsForm()
         {
             var contactModel = new Contactu();  // Create an empty instance of the model
             return View(contactModel);  // Pass the model to the view
         }
-        // GET: Contactus
+
         public async Task<IActionResult> Index()
         {
-              return _context.Contactus != null ? 
-                          View(await _context.Contactus.ToListAsync()) :
-                          Problem("Entity set 'ModelContext.Contactus'  is null.");
+            return _context.Contactus != null ?
+                        View(await _context.Contactus.ToListAsync()) :
+                        Problem("Entity set 'ModelContext.Contactus'  is null.");
         }
 
-        // GET: Contactus/Details/5
         public async Task<IActionResult> Details(decimal? id)
         {
             if (id == null || _context.Contactus == null)
@@ -50,27 +48,11 @@ namespace FitnessGymproject.Controllers
             return View(contactu);
         }
 
-        // GET: Contactus/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Contactus/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ContactId,FullName,Email,PhoneNumber,Message,CreatedAt")] Contactu contactu)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(contactu);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(contactu);
-        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ContactId,FullName,Email,PhoneNumber,Message,CreatedAt")] Contactu contactu)
@@ -88,9 +70,6 @@ namespace FitnessGymproject.Controllers
             return View(contactu);
         }
 
-
-
-        // GET: Contactus/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
             if (id == null || _context.Contactus == null)
@@ -106,9 +85,6 @@ namespace FitnessGymproject.Controllers
             return View(contactu);
         }
 
-        // POST: Contactus/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(decimal id, [Bind("ContactId,FullName,Email,PhoneNumber,Message,CreatedAt")] Contactu contactu)
@@ -141,7 +117,6 @@ namespace FitnessGymproject.Controllers
             return View(contactu);
         }
 
-        // GET: Contactus/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
         {
             if (id == null || _context.Contactus == null)
@@ -159,7 +134,6 @@ namespace FitnessGymproject.Controllers
             return View(contactu);
         }
 
-        // POST: Contactus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(decimal id)
@@ -173,14 +147,14 @@ namespace FitnessGymproject.Controllers
             {
                 _context.Contactus.Remove(contactu);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ContactuExists(decimal id)
         {
-          return (_context.Contactus?.Any(e => e.ContactId == id)).GetValueOrDefault();
+            return (_context.Contactus?.Any(e => e.ContactId == id)).GetValueOrDefault();
         }
     }
 }

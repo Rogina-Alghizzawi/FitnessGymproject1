@@ -62,7 +62,7 @@ namespace FitnessGymproject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(aboutu); // Return the view with validation errors
+                return View(aboutu); 
             }
 
             try
@@ -73,37 +73,33 @@ namespace FitnessGymproject.Controllers
                     string fileName = $"{Guid.NewGuid()}{Path.GetExtension(aboutu.ImageFile.FileName)}";
                     string imagePath = Path.Combine(wwwRootPath, "images", fileName);
 
-                    // Ensure the images directory exists
                     Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
 
-                    // Save the uploaded image to the specified path
                     using (var fileStream = new FileStream(imagePath, FileMode.Create))
                     {
                         await aboutu.ImageFile.CopyToAsync(fileStream);
                     }
 
-                    // Save the relative path to the ImageUrl property
+
                     aboutu.ImageUrl = $"/images/{fileName}";
                 }
 
-                // Set creation and update timestamps
+
                 aboutu.CreatedAt = DateTime.Now;
                 aboutu.UpdatedAt = DateTime.Now;
 
-                // Add the record to the database
+
                 _context.Add(aboutu);
                 await _context.SaveChangesAsync();
 
-                // Redirect to the index action upon successful creation
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                // Log the exception (optional)
                 ModelState.AddModelError(string.Empty, "An error occurred while processing your request. Please try again later.");
             }
 
-            return View(aboutu); // Return the view if any errors occur
+            return View(aboutu); 
         }
 
 
@@ -139,7 +135,6 @@ namespace FitnessGymproject.Controllers
             {
                 try
                 {
-                    // Handling the Image File upload for Edit
                     if (aboutu.ImageFile != null)
                     {
                         string wwwRootPath = _webHostEnvironment.WebRootPath;
@@ -151,10 +146,10 @@ namespace FitnessGymproject.Controllers
                             await aboutu.ImageFile.CopyToAsync(fileStream);
                         }
 
-                        aboutu.ImageUrl = "/images/" + fileName;  // Update the image URL
+                        aboutu.ImageUrl = "/images/" + fileName;  
                     }
 
-                    aboutu.UpdatedAt = DateTime.Now;  // Set the updated timestamp
+                    aboutu.UpdatedAt = DateTime.Now; 
 
                     _context.Update(aboutu);
                     await _context.SaveChangesAsync();
@@ -215,17 +210,13 @@ namespace FitnessGymproject.Controllers
 
         public async Task<IActionResult> Aboutuspage()
         {
-            // Check if the Aboutus DbSet is not null
             if (_context.Aboutus == null)
             {
-                // Return a problem result if the DbSet is null
                 return Problem("Entity set 'ModelContext.Aboutus' is null.");
             }
 
-            // Fetch and return the list of "About Us" data asynchronously
             var aboutUsList = await _context.Aboutus.ToListAsync();
 
-            // Pass the fetched list to the view
             return View(aboutUsList);
         }
 
