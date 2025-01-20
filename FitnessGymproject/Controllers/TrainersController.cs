@@ -83,24 +83,27 @@ namespace FitnessGymproject.Controllers
         }
 
         // GET: Trainers/Edit/5
+        // GET: Trainers/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
-            if (id == null || _context.Trainers == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var trainer = await _context.Trainers.FindAsync(id);
+            decimal TrainerId = Convert.ToDecimal(HttpContext.Session.GetString("TrainerId"));
+            var trainer = await _context.Admins.FindAsync(TrainerId);
+
             if (trainer == null)
             {
                 return NotFound();
             }
+
+            ViewData["TrainerId"] = TrainerId.ToString(); // Pass the correct value to ViewData
             return View(trainer);
         }
 
         // POST: Trainers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(decimal id, [Bind("TrainerId,FullName,Email,Password,PhoneNumber,Specialization,Bio,CreatedAt,UpdatedAt,ImageFile,Imageprofileurl,Gender")] Trainer trainer)
@@ -114,11 +117,24 @@ namespace FitnessGymproject.Controllers
             {
                 try
                 {
+                    decimal TrainerId = Convert.ToDecimal(HttpContext.Session.GetString("TrainerId"));
+
+                    if (TrainerId != trainer.TrainerId)
+                    {
+                        return Unauthorized();
+                    }
+
                     if (trainer.ImageFile != null)
                     {
                         string wwwRootPath = _webHostEnvironment.WebRootPath;
                         string fileName = Guid.NewGuid().ToString() + Path.GetExtension(trainer.ImageFile.FileName);
-                        string path = Path.Combine(wwwRootPath + "/images/", fileName);
+                        string path = Path.Combine(wwwRootPath, "images", fileName);
+
+                        // Ensure the directory exists before saving the file
+                        if (!Directory.Exists(Path.Combine(wwwRootPath, "images")))
+                        {
+                            Directory.CreateDirectory(Path.Combine(wwwRootPath, "images"));
+                        }
 
                         using (var fileStream = new FileStream(path, FileMode.Create))
                         {
@@ -127,7 +143,8 @@ namespace FitnessGymproject.Controllers
 
                         trainer.Imageprofileurl = "/images/" + fileName;
                     }
-                _context.Update(trainer);
+
+                    _context.Update(trainer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -145,6 +162,7 @@ namespace FitnessGymproject.Controllers
             }
             return View(trainer);
         }
+
 
         // GET: Trainers/Delete/5
         public async Task<IActionResult> Delete(decimal? id)

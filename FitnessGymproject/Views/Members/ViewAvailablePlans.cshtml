@@ -1,0 +1,89 @@
+﻿@model IEnumerable<FitnessGymproject.Models.Workoutplan>
+
+@{
+    ViewData["Title"] = "Available Workout Plans";
+    Layout = "~/Views/Shared/Home_Layout.cshtml";
+}
+
+<section style="padding:200px" class="available-workout-plans">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12">
+
+                @if (ViewBag.AlertMessage != null)
+                {
+                    <div class="alert alert-info text-center">
+                        @ViewBag.AlertMessage
+                    </div>
+                }
+
+                @if (!Model.Any())
+                {
+                    <div class="alert alert-warning text-center">
+                        No available workout plans at the moment.
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var plan in Model)
+                        {
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card shadow h-100">
+                                    <img src="~/HomeDesign/assets/img/gallery/gallery4.png" alt="@plan.PlanName" class="card-img-top" />
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">@plan.PlanName</h5>
+                                        <p class="card-text">
+                                            <strong>Exercises:</strong> @plan.Exercises <br />
+                                            <strong>Schedule:</strong> @plan.Schedule <br />
+                                            <strong>Goals:</strong> @plan.Goals <br />
+                                        </p>
+                                        <div class="text-center">
+                                            <form asp-action="SubscribeToPlan" method="post">
+                                                <input type="hidden" name="workoutPlanId" value="@plan.WorkoutPlanId" />
+                                                <input type="hidden" name="memberId" value="@ViewData["MemberId"]" />
+                                                <button type="submit" class="btn btn-danger subscribe-btn">Subscribe</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .available-workout-plans {
+        padding: 40px 0;
+    }
+
+    .card {
+        border-radius: 12px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-img-top {
+        height: 150px;
+        object-fit: cover;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .subscribe-btn {
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+        .subscribe-btn:hover {
+            transform: scale(1.1);
+            background-color: #c82333 !important;
+        }
+</style>

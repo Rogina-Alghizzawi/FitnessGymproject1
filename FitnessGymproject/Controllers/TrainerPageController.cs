@@ -202,10 +202,9 @@ namespace FitnessGymproject.Controllers
                 return NotFound();
             }
 
-            // Assuming you want to display all members
             var members = await _context.Members.ToListAsync();
 
-            return View(members);  // Pass members to the view
+            return View(members);  
         }
 
 

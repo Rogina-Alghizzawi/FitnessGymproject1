@@ -173,100 +173,113 @@ namespace FitnessGymproject.Controllers
 
             return View(availablePlans);
         }
-
-
         [HttpPost]
-        public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod )
-        {
-            QuestPDF.Settings.License = LicenseType.Community;
+public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod)
+{
+    QuestPDF.Settings.License = LicenseType.Community;
 
-            var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
+    var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
 
-            if (string.IsNullOrEmpty(memberIdString))
-            {
-                return RedirectToAction("Login", "LoginAndRegister");
-            }
+    if (string.IsNullOrEmpty(memberIdString))
+    {
+        return RedirectToAction("Login", "LoginAndRegister");
+    }
 
-            decimal memberId = decimal.Parse(memberIdString);
+    decimal memberId = decimal.Parse(memberIdString);
+
+    // Check if the user already has an active subscription
+    var existingSubscription = await _context.Subscriptions
+                                             .FirstOrDefaultAsync(s => s.MemberId == memberId && s.Status == "Active");
+
+    if (existingSubscription != null)
+    {
+        TempData["ErrorMessage"] = $"You already have an active subscription to the {existingSubscription.PlanName} plan.";
+        return RedirectToAction("ViewSubscribedMembershipPlans");
+    }
+
+    var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
+
+    if (membershipPlan == null)
+    {
+        return RedirectToAction("ViewAvailableMembershipPlans");
+    }
+
+    var currentPayment = await _context.Payments
+                                       .Where(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod))
+                                       .OrderByDescending(p => p.PaymentDate)
+                                       .FirstOrDefaultAsync();
+
+    if (currentPayment == null)
+    {
+        TempData["ErrorMessage"] = "Please add a payment method to proceed.";
+        return RedirectToAction("Create", "Payments");
+    }
+
+    if (currentPayment.Amount < membershipPlan.Price)
+    {
+        ViewBag.ErrorMessage = "Your payment balance is insufficient. Please add more funds to proceed.";
+        return View("ViewSubscribedMembershipPlans");
+    }
+
+    currentPayment.Amount -= membershipPlan.Price;
+    _context.Payments.Update(currentPayment);
+    await _context.SaveChangesAsync();
+
+    var subscription = new Subscription
+    {
+        MemberId = memberId,
+        MembershipPlanId = membershipPlanId,
+        PlanName = membershipPlan.PlanName,
+        StartDate = DateTime.Now,
+        EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays),
+        Status = "Active",
+        CreatedAt = DateTime.Now,
+        PaymentStatus = "Completed",
+        TotalPayment = membershipPlan.Price
+    };
+
+    _context.Subscriptions.Add(subscription);
+    await _context.SaveChangesAsync();
+
+    var payment = new Payment
+    {
+        MemberId = memberId,
+        SubscriptionId = subscription.SubscriptionId,
+        PaymentDate = DateTime.Now,
+        PaymentStatus = "Completed",
+        Amount = membershipPlan.Price,
+        PaymentMethod = paymentMethod,
+        CreatedAt = DateTime.Now
+    };
+
+    _context.Payments.Add(payment);
+    await _context.SaveChangesAsync();
+
+    var invoice = new Invoice
+    {
+        SubscriptionId = subscription.SubscriptionId,
+        InvoiceDate = DateTime.Now,
+        TotalAmount = membershipPlan.Price,
+        PaymentStatus = "Paid",
+        PaymentId = payment.PaymentId
+    };
             var member = _context.Members.SingleOrDefault(m => m.MemberId == memberId);
 
-
-
-            var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
-
-            if (membershipPlan == null)
-            {
-                return RedirectToAction("ViewAvailableMembershipPlans");
-            }
-
-            var currentPayment = await _context.Payments
-                                               .Where(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod))
-                                               .OrderByDescending(p => p.PaymentDate)
-                                               .FirstOrDefaultAsync();
-
-            if (currentPayment == null)
-            {
-                TempData["ErrorMessage"] = "Please add a payment method to proceed.";
-                return RedirectToAction("Create", "Payments");
-            }
-
-            if (currentPayment.Amount < membershipPlan.Price)
-            {
-                ViewBag.ErrorMessage = "Your payment balance is insufficient. Please add more funds to proceed.";
-                return View("ViewSubscribedMembershipPlans");
-            }
-
-            currentPayment.Amount -= membershipPlan.Price;
-            _context.Payments.Update(currentPayment);
-            await _context.SaveChangesAsync();
-
-            var subscription = new Subscription
-            {
-                MemberId = memberId,
-                MembershipPlanId = membershipPlanId,
-                PlanName = membershipPlan.PlanName,
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays),
-                Status = "Active",
-                CreatedAt = DateTime.Now,
-                PaymentStatus = "Completed",
-                TotalPayment = membershipPlan.Price
-            };
-
-            _context.Subscriptions.Add(subscription);
-            await _context.SaveChangesAsync();
-
-            var payment = new Payment
-            {
-                MemberId = memberId,
-                SubscriptionId = subscription.SubscriptionId,
-                PaymentDate = DateTime.Now,
-                PaymentStatus = "Completed",
-                Amount = membershipPlan.Price,
-                PaymentMethod = paymentMethod,
-                CreatedAt = DateTime.Now
-            };
-
-            _context.Payments.Add(payment);
-            await _context.SaveChangesAsync();
-
-            var invoice = new Invoice
-            {
-                SubscriptionId = subscription.SubscriptionId,
-                InvoiceDate = DateTime.Now,
-                TotalAmount = membershipPlan.Price,
-                PaymentStatus = "Paid",
-                PaymentId = payment.PaymentId
-            };
-
             _context.Invoices.Add(invoice);
-            await _context.SaveChangesAsync();
+    await _context.SaveChangesAsync();
+
             if (payment.PaymentStatus == "Completed")
             {
                 string content = $"Dear {member.FullName},\n\n" +
-                    $"Your payment has been successfully completed for the {subscription.MembershipPlan.PlanName} subscription on Fitness .\n\n" +
-                    "Thank you for choosing us!\n\n" +
-                    "Best Regards,\n Fitness Team";
+$"We are pleased to inform you that your payment for the {subscription.MembershipPlan.PlanName} subscription has been successfully completed.\n\n" +
+$"Plan Details:\n" +
+$"- Description: {subscription.MembershipPlan.PlanDescription}\n" +
+$"- Included Services: {subscription.MembershipPlan.IncludedServices ?? "Not specified"}\n" +
+$"- Duration: {subscription.MembershipPlan.DurationDays} days\n" +
+$"- Price: ${subscription.MembershipPlan.Price}\n\n" +
+"Thank you for choosing Fitness Gym. We are excited to have you with us and look forward to supporting you on your fitness journey!\n\n" +
+"Best Regards,\nFitness Team";
+
 
 
                 var document = Document.Create(container =>
@@ -325,6 +338,160 @@ namespace FitnessGymproject.Controllers
             }
             return RedirectToAction("ViewSubscribedMembershipPlans");
         }
+
+    
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> SubscribeToMembershipPlan(decimal membershipPlanId, string paymentMethod )
+        //{
+        //    QuestPDF.Settings.License = LicenseType.Community;
+
+        //    var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
+
+        //    if (string.IsNullOrEmpty(memberIdString))
+        //    {
+        //        return RedirectToAction("Login", "LoginAndRegister");
+        //    }
+
+        //    decimal memberId = decimal.Parse(memberIdString);
+        //    var member = _context.Members.SingleOrDefault(m => m.MemberId == memberId);
+
+
+
+        //    var membershipPlan = await _context.MembershipPlans.FindAsync(membershipPlanId);
+
+        //    if (membershipPlan == null)
+        //    {
+        //        return RedirectToAction("ViewAvailableMembershipPlans");
+        //    }
+
+        //    var currentPayment = await _context.Payments
+        //                                       .Where(p => p.MemberId == memberId && !string.IsNullOrEmpty(p.PaymentMethod))
+        //                                       .OrderByDescending(p => p.PaymentDate)
+        //                                       .FirstOrDefaultAsync();
+
+        //    if (currentPayment == null)
+        //    {
+        //        TempData["ErrorMessage"] = "Please add a payment method to proceed.";
+        //        return RedirectToAction("Create", "Payments");
+        //    }
+
+        //    if (currentPayment.Amount < membershipPlan.Price)
+        //    {
+        //        ViewBag.ErrorMessage = "Your payment balance is insufficient. Please add more funds to proceed.";
+        //        return View("ViewSubscribedMembershipPlans");
+        //    }
+
+        //    currentPayment.Amount -= membershipPlan.Price;
+        //    _context.Payments.Update(currentPayment);
+        //    await _context.SaveChangesAsync();
+
+        //    var subscription = new Subscription
+        //    {
+        //        MemberId = memberId,
+        //        MembershipPlanId = membershipPlanId,
+        //        PlanName = membershipPlan.PlanName,
+        //        StartDate = DateTime.Now,
+        //        EndDate = DateTime.Now.AddDays(membershipPlan.DurationDays),
+        //        Status = "Active",
+        //        CreatedAt = DateTime.Now,
+        //        PaymentStatus = "Completed",
+        //        TotalPayment = membershipPlan.Price
+        //    };
+
+        //    _context.Subscriptions.Add(subscription);
+        //    await _context.SaveChangesAsync();
+
+        //    var payment = new Payment
+        //    {
+        //        MemberId = memberId,
+        //        SubscriptionId = subscription.SubscriptionId,
+        //        PaymentDate = DateTime.Now,
+        //        PaymentStatus = "Completed",
+        //        Amount = membershipPlan.Price,
+        //        PaymentMethod = paymentMethod,
+        //        CreatedAt = DateTime.Now
+        //    };
+
+        //    _context.Payments.Add(payment);
+        //    await _context.SaveChangesAsync();
+
+        //    var invoice = new Invoice
+        //    {
+        //        SubscriptionId = subscription.SubscriptionId,
+        //        InvoiceDate = DateTime.Now,
+        //        TotalAmount = membershipPlan.Price,
+        //        PaymentStatus = "Paid",
+        //        PaymentId = payment.PaymentId
+        //    };
+
+        //    _context.Invoices.Add(invoice);
+        //    await _context.SaveChangesAsync();
+        //    if (payment.PaymentStatus == "Completed")
+        //    {
+        //        string content = $"Dear {member.FullName},\n\n" +
+        //            $"Your payment has been successfully completed for the {subscription.MembershipPlan.PlanName} subscription on Fitness .\n\n" +
+        //            "Thank you for choosing us!\n\n" +
+        //            "Best Regards,\n Fitness Team";
+
+
+        //        var document = Document.Create(container =>
+        //        {
+        //            container.Page(page =>
+        //            {
+        //                page.Margin(50);
+        //                page.Content().Column(column =>
+        //                {
+        //                    column.Item().Text("Payment Confirmation").FontSize(20).Bold().AlignCenter();
+        //                    column.Item().Text(content).FontSize(12);
+        //                });
+        //            });
+        //        });
+
+        //        using (var memoryStream = new MemoryStream())
+        //        {
+        //            document.GeneratePdf(memoryStream);
+        //            var pdfBytes = memoryStream.ToArray();
+
+        //            var smtpServer = _configuration["SmtpSettings:Host"];
+        //            var smtpPort = int.Parse(_configuration["SmtpSettings:Port"]);
+        //            var senderEmail = _configuration["SmtpSettings:Username"];
+        //            var senderPassword = _configuration["SmtpSettings:Password"];
+        //            try
+        //            {
+        //                using (var smtpClient = new SmtpClient(smtpServer, smtpPort))
+        //                {
+        //                    smtpClient.Credentials = new NetworkCredential(senderEmail, senderPassword);
+        //                    smtpClient.EnableSsl = true;
+
+        //                    var mailMessage = new MailMessage
+        //                    {
+        //                        From = new MailAddress(senderEmail),
+        //                        Subject = "Payment Confirmation",
+        //                        Body = $"Dear {member.FullName},\n\nYour payment for {subscription.MembershipPlan.PlanName} has been confirmed.\n\nBest Regards,\nStriveFit Team",
+        //                        IsBodyHtml = false
+        //                    };
+
+        //                    mailMessage.To.Add(member.Email);
+        //                    mailMessage.Attachments.Add(new Attachment(new MemoryStream(pdfBytes), "PaymentConfirmation.pdf"));
+
+        //                    smtpClient.Send(mailMessage);
+
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                TempData["Message"] = $"Payment successful, but the email could not be sent. Error: {ex.Message}";
+        //            }
+        //            TempData["Message"] = "Payment completed and confirmation email sent.";
+        //            return File(pdfBytes, "application/pdf", "PaymentConfirmation.pdf");
+        //        }
+
+
+        //    }
+        //    return RedirectToAction("ViewSubscribedMembershipPlans");
+        //}
 
         public async Task<IActionResult> ViewSubscribedMembershipPlans()
         {

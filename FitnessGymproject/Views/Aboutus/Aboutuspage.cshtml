@@ -62,14 +62,7 @@
                             }
                         }
 
-                        @if (HttpContextAccessor.HttpContext.Session.GetString("LoggedInMemberId") == null)
-                        {
-                            <a class="btn" asp-action="Register" asp-controller="LoginAndRegister">Become a Member</a>
-                        }
-                        else
-                        {
-                            <p>Welcome, member!</p>
-                        }
+                     
                     </div>
                 </div>
             </div>

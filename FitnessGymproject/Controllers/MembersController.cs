@@ -56,10 +56,63 @@ namespace FitnessGymproject.Controllers
             {
                 try
                 {
-                    if (member.ImageFile != null)
+                    if (member.ImageFile != null && member.ImageFile.Length > 0)
                     {
                         string wwwRootPath = _webHostEnvironment.WebRootPath;
-                        string fileName = Guid.NewGuid().ToString() + "_" + member.ImageFile.FileName;
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(member.ImageFile.FileName);
+                        string filePath = Path.Combine(wwwRootPath, "Images", fileName);
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await member.ImageFile.CopyToAsync(fileStream);
+                        }
+
+                        member.Imageprofileurl = fileName;
+                    }
+
+                    _context.Add(member);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "An error occurred while saving the member profile: " + ex.Message);
+                }
+            }
+            return View(member);
+        }
+        public async Task<IActionResult> Edit(decimal? id)
+        {
+            if (id == null || _context.Members == null)
+            {
+                return NotFound();
+            }
+
+            var member = await _context.Members.FindAsync(id);
+            if (member == null)
+            {
+                return NotFound();
+            }
+            return View(member);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(decimal id, [Bind("MemberId,FullName,Email,Password,PhoneNumber,Address,CreatedAt,UpdatedAt,Imageprofileurl,Gender,ImageFile")] Member member)
+        {
+            if (id != member.MemberId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (member.ImageFile != null && member.ImageFile.Length > 0)
+                    {
+                        string wwwRootPath = _webHostEnvironment.WebRootPath;
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(member.ImageFile.FileName);
                         string filePath = Path.Combine(wwwRootPath, "Images", fileName);
 
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -79,49 +132,9 @@ namespace FitnessGymproject.Controllers
                         member.Imageprofileurl = fileName;
                     }
 
-                    _context.Add(member);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "An error occurred while saving the member profile: " + ex.Message);
-                    return View(member);
-                }
-            }
-            return View(member);
-        }
-
-        public async Task<IActionResult> Edit(decimal? id)
-        {
-            if (id == null || _context.Members == null)
-            {
-                return NotFound();
-            }
-
-            var member = await _context.Members.FindAsync(id);
-            if (member == null)
-            {
-                return NotFound();
-            }
-            return View(member);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("MemberId,FullName,Email,Password,PhoneNumber,Address,CreatedAt,UpdatedAt,Imageprofileurl,Gender")] Member member)
-        {
-            if (id != member.MemberId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
                     _context.Update(member);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -134,10 +147,10 @@ namespace FitnessGymproject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(member);
         }
+
 
         public async Task<IActionResult> Delete(decimal? id)
         {
@@ -200,7 +213,85 @@ namespace FitnessGymproject.Controllers
             return View(member);
         }
 
-       
+        public IActionResult ViewAvailablePlans()
+        {
+            // Get the memberId from the session
+            var loggedInMemberId = HttpContext.Session.GetString("LoggedInMemberId");
+
+            if (loggedInMemberId == null)
+            {
+                // Handle the case where the member is not logged in
+                return RedirectToAction("Login");  // Redirect to login page or show an error
+            }
+
+            decimal memberId = Convert.ToDecimal(loggedInMemberId);
+
+            // Fetch available workout plans (where MemberId is null)
+            var availablePlans = _context.Workoutplans.Where(wp => wp.MemberId == null).ToList();
+
+            // Pass the memberId to the view through ViewData
+            ViewData["MemberId"] = memberId;
+
+            // Return the view with available plans
+            return View(availablePlans);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubscribeToPlan(decimal workoutPlanId)
+        {
+            var memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
+
+            if (string.IsNullOrEmpty(memberIdString))
+            {
+                return RedirectToAction("Login", "LoginAndRegister");
+            }
+
+            var memberId = decimal.Parse(memberIdString);
+
+            var workoutPlan = await _context.Workoutplans.FindAsync(workoutPlanId);
+            if (workoutPlan != null)
+            {
+                workoutPlan.MemberId = memberId;
+                _context.Update(workoutPlan);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("ViewSubscribedPlans", "Members");
+        }
+
+
+
+
+        public IActionResult ViewSubscribedPlans()
+        {
+            // Retrieve the member ID from the session
+            string memberIdString = HttpContext.Session.GetString("LoggedInMemberId");
+
+            if (string.IsNullOrEmpty(memberIdString))
+            {
+                // If no member is logged in, handle appropriately (e.g., redirect to login page)
+                return RedirectToAction("Login", "LoginAndRegister");
+
+            }
+
+            // Convert the string to a decimal (since MemberId is decimal)
+            decimal memberId = Convert.ToDecimal(memberIdString);
+
+            // Query the database for all workout plans assigned to the member
+            var workoutPlans = _context.Workoutplans
+                                       .Where(wp => wp.MemberId == memberId)
+                                       .ToList();
+
+            if (workoutPlans == null || !workoutPlans.Any())
+            {
+                // Handle case where no workout plans are assigned (e.g., show a message)
+                ViewBag.Message = "No workout plans assigned.";
+                return View();
+            }
+
+            // Return the list of workout plans to the view
+            return View(workoutPlans);
+        }
 
 
         public async Task<IActionResult> UpadtaMemberProfile(decimal? id)

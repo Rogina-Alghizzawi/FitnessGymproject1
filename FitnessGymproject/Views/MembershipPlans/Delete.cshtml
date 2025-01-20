@@ -2,62 +2,87 @@
 
 @{
     ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<h1>Delete</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Delete Membership Plan</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>MembershipPlan</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PlanName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PlanName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PlanDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PlanDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IncludedServices)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IncludedServices)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DurationDays)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DurationDays)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="MembershipPlanId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4>Are you sure you want to delete this membership plan?</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-sm-2">
+                    <strong>@Html.DisplayNameFor(model => model.PlanName)</strong>
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.PlanName)
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-2">
+                    <strong>@Html.DisplayNameFor(model => model.PlanDescription)</strong>
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.PlanDescription)
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-2">
+                    <strong>@Html.DisplayNameFor(model => model.IncludedServices)</strong>
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.IncludedServices)
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-2">
+                    <strong>@Html.DisplayNameFor(model => model.Price)</strong>
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Price)
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-2">
+                    <strong>@Html.DisplayNameFor(model => model.DurationDays)</strong>
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.DurationDays)
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-2">
+                    <strong>@Html.DisplayNameFor(model => model.CreatedAt)</strong>
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.CreatedAt)
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-2">
+                    <strong>@Html.DisplayNameFor(model => model.UpdatedAt)</strong>
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.UpdatedAt)
+                </div>
+            </div>
+
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="MembershipPlanId" />
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a asp-action="Index" class="btn btn-light ml-2">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

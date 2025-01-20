@@ -9,7 +9,7 @@ public partial class Payment
 
     public decimal MemberId { get; set; }
 
-    public decimal SubscriptionId { get; set; }
+    public decimal? SubscriptionId { get; set; } 
 
     public DateTime? PaymentDate { get; set; }
 

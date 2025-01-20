@@ -85,7 +85,6 @@ namespace FitnessGymproject.Controllers
             var payment = new Payment();
 
             ViewData["MemberId"] = memberId;
-            ViewData["SubscriptionId"] = _context.Subscriptions.FirstOrDefault()?.SubscriptionId; // Or any logic for default SubscriptionId
 
             return View(payment); // Pass an initialized Payment object
         }
@@ -93,10 +92,12 @@ namespace FitnessGymproject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PaymentId,MemberId,SubscriptionId,PaymentDate,PaymentStatus,Amount,PaymentMethod,CreatedAt")] Payment payment)
+        public async Task<IActionResult> Create([Bind("PaymentId,MemberId,PaymentDate,PaymentStatus,Amount,PaymentMethod,CreatedAt")] Payment payment)
         {
             if (ModelState.IsValid)
             {
+           
+
                 var existingPayment = await _context.Payments
                                                     .FirstOrDefaultAsync(p => p.MemberId == payment.MemberId && p.PaymentStatus == "Completed");
 
@@ -108,15 +109,14 @@ namespace FitnessGymproject.Controllers
 
                 _context.Add(payment);
                 await _context.SaveChangesAsync();
-
                 return RedirectToAction("ViewAvailableMembershipPlans", "MembershipPlans");
             }
 
             ViewData["MemberId"] = new SelectList(_context.Members, "MemberId", "MemberId", payment.MemberId);
-            ViewData["SubscriptionId"] = _context.Subscriptions.FirstOrDefault()?.SubscriptionId; // Or any logic for default SubscriptionId
 
             return View(payment);
         }
+
 
         // GET: Payments/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
@@ -252,7 +252,7 @@ namespace FitnessGymproject.Controllers
 
         // Existing methods...
 
-     
+
         private bool PaymentExists(decimal id)
         {
             return (_context.Payments?.Any(e => e.PaymentId == id)).GetValueOrDefault();

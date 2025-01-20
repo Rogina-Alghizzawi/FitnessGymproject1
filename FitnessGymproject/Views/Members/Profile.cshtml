@@ -11,7 +11,7 @@
                 <div class="card admin-profile-card" style="border-radius: 1rem; overflow: hidden;">
                     <div class="row g-0">
                         <div class="col-md-4 gradient-custom text-center text-white d-flex flex-column align-items-center justify-content-center">
-                            <img src="@Model.Imageprofileurl" alt="Profile Image" class="rounded-circle" width="50" height="50" />
+                            <img src="@Url.Content("~/Images/" + Model.Imageprofileurl)" alt="Profile Image" class="rounded-circle" width="50" height="50" />
 
                             <h5 class="mt-3">@ViewData["FullName"]</h5>
                             <p class="mb-2">@ViewData["Gender"]</p>
